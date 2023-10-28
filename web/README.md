@@ -11,7 +11,7 @@ En su versión inicial, he construido un login simple para poder visualizar las 
 Mi opción ha sido usar xampp, así que comenzaremos con una instalación limpia de este en C:.
 
 1. Clonar el repositorio de este proyecto.
-2. Colocar los archivos del repositorio en la siguiente ruta C:\xampp\htdocs
+2. Colocar los archivos del apartado web del repositorio en la siguiente ruta C:\xampp\htdocs
 3. Arrancar xampp con permisos de administrador.
 4. En el panel de xampp, empezar los servicios de Apache y MYSQL.
 5. En MYSQL, pulsar en admin para abrir phpmyadmin.
