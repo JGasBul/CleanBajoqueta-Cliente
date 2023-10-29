@@ -43,13 +43,15 @@ if($_POST){
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1"> Usuario </label>
-                                <input type="text" class="form-control" name="usuariologin"
-                                    placeholder="Escribe tu usuario">
+                                <input type="email" class="form-control" name="usuariologin"
+                                    placeholder="Escribe tu email de usuario">
                                 <small id="emailHelp" class="form-text text-muted"> </small>
                             </div>
 
+                            <br>
+
                             <div class="form-group">
-                                <label>Contraseña: </label>
+                                <label>Contraseña </label>
                                 <input type="password" class="form-control" name="contrasenialogin"
                                     placeholder="Escribe tu contraseña">
                             </div>
@@ -59,6 +61,8 @@ if($_POST){
                                 <label class="form-check-label" for="exampleCheck1">Recuérdame</label>
                             </div>
 
+                            <br>
+
                             <div class="form-group">
                                 <label>¿No estás registrado?</label>
                                 <a href="registroPage.php">Registrate</a>
@@ -67,6 +71,7 @@ if($_POST){
                             <?php
                             include("../bd/bd.php");
                             ?>
+                            <br>
                             <input name="ingresar" type="submit" class="btn btn-primary" value="Iniciar Sesión">
                         </form>
 

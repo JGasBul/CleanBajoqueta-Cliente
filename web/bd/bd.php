@@ -10,7 +10,7 @@
 session_start();
 
 //Iniciar conexión con la db
-$conexionbd = new mysqli("localhost", "root", "", "proyecto3a");
+$conexionbd = new mysqli("localhost", "root", "", "bbdd_cleanbajoqueta");
 $conexionbd->set_charset("utf8");
 
 //Se consulta si el usuario pertenece a la bd y se obtiene su nombre
@@ -20,12 +20,12 @@ if (!empty($_POST["ingresar"])) {
     } else {
         $usuario = $_POST["usuariologin"];
         $contrasenia = $_POST["contrasenialogin"];
-        $sql = $conexionbd->query("select * from usuarios where usuario = '$usuario' and contraseña = '$contrasenia'");
-        $nombre = $conexionbd->query("select nombre FROM usuarios");
+        $sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$usuario' AND contraseña = '$contrasenia'");
+        $nombreApellido = $conexionbd->query("SELECT nombreApellido FROM usuario");
 
         if ($datos = $sql->fetch_object()) {
             // Almacenamos el nombre del usuario en una variable de sesión
-            $_SESSION['usuario'] = $datos->nombre;
+            $_SESSION['usuario'] = $datos->nombreApellido;
 
             //Si existe el usuario, se ridirige a su pagina
             header("location:../user/inicio.php");
