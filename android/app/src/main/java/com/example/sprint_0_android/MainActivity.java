@@ -272,7 +272,9 @@ public class MainActivity extends AppCompatActivity {
         startService( this.elIntentDelServicio );
 
         Log.d(ETIQUETA_LOG, " iniciamos la buscaqueda epsg-gti" );
-        this.buscarEsteDispositivoBTLE( "GTI-3A_CHEN" );
+
+        // aqui va el codigo para identificar la uudi_____________________________________________________________________
+        this.buscarEsteDispositivoBTLE( "BAJOQUETA");
         //this.buscarEsteDispositivoBTLE("fistro");
 
     }
