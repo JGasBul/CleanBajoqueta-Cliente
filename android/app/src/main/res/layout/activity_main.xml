@@ -76,4 +76,11 @@
         android:onClick="boton_prueba_pulsado"
         android:text="Prueba" />
 
+    <Button
+        android:id="@+id/elBotonSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="boton_sign_up"
+        android:text="sign up" />
+
 </android.widget.LinearLayout>

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText temperaturaInput;
     private EditText co2Input;
     private Button elBotonEnviar;
-
+    private Button elBotonRegistrar;
     private Button elBotonPrueba;
 
     // _______________________________________________________________
@@ -355,6 +355,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // _______________________________________________________________
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -362,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.elBotonEnviar =(Button) findViewById(R.id.elBotonEnviar);
         this.elBotonPrueba =(Button) findViewById(R.id.elBotonPrueba);
+        this.elBotonRegistrar= (Button) findViewById(R.id.elBotonSignUp);
         this.elTextoMinor = (TextView) findViewById(R.id.elTextoMinor);
         this.elTextoMajor =(TextView) findViewById(R.id.elTextoMajor);
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
@@ -528,7 +530,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-
     }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    public void boton_sign_up(View v) {
+        Intent intent = new Intent(MainActivity.this, SignUp.class);
+        startActivity(intent);
+    }
+
 }
