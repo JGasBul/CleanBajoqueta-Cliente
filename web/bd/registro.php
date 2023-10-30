@@ -5,6 +5,9 @@
 //Gestiona la página del registro
 //----------------------------------------------------------------
 
+//Variables
+$segundos_espera = 3; //tiempo de espera antes de redirigir al Login
+
 //Iniciar conexión con la db
 $conexionbd = new mysqli("localhost", "root", "", "bbdd_cleanbajoqueta");
 $conexionbd->set_charset("utf8");
@@ -50,7 +53,10 @@ if (!empty($_POST["registrar"])) {
 
                 //Si se pudo registrar, lo llevamos a la página de Login
                 if ($registrarUsuario AND $registrarTelefono) {
-                    header("location:../user/login.php");
+                    echo '<div class="alert alert-success">Registro Completado</div>';
+                    
+                    //header("location:../user/login.php");
+                    header('refresh:'.$segundos_espera.'; url=../user/login.php');
                 } else {
                     echo '<div class="alert alert-danger">Hubo problemas al registrar el usuario</div>';
                 }
