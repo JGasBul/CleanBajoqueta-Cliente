@@ -5,6 +5,9 @@
 //Gestiona la página del registro
 //----------------------------------------------------------------
 
+//Clases
+include("../clases/CifrarDescifrarAES.php");
+
 //Variables
 $segundos_espera = 3; //tiempo de espera antes de redirigir al Login
 
@@ -44,19 +47,25 @@ if (!empty($_POST["registrar"])) {
                 echo '<div class="alert alert-danger">Actualmente registrado. Intentelo con otro email</div>';
 
             } else {
+                //Encriptamos datos
+
+                $cifrado = new CifrarDescifrarAES($contrasenia);
+                print(var_dump($cifrado));
+                $encryptedPassword = $cifrado->encriptar();
+                
                 //Registramos Usuario
                 $registrarUsuario = $conexionbd->query("INSERT INTO usuario (email, contraseña, nombreApellido)
-                VALUES ('$email', '$contrasenia', '$nombreApellidos')");
+                VALUES ('$email', '$encryptedPassword', '$nombreApellidos')");
 
                 $registrarTelefono = $conexionbd->query("INSERT INTO telefono (email, telefono)
                 VALUES ('$email', '$telefono')");
 
                 //Si se pudo registrar, lo llevamos a la página de Login
-                if ($registrarUsuario AND $registrarTelefono) {
+                if ($registrarUsuario and $registrarTelefono) {
                     echo '<div class="alert alert-success">Registro Completado</div>';
-                    
+
                     //header("location:../user/login.php");
-                    header('refresh:'.$segundos_espera.'; url=../user/login.php');
+                    header('refresh:' . $segundos_espera . '; url=../user/login.php');
                 } else {
                     echo '<div class="alert alert-danger">Hubo problemas al registrar el usuario</div>';
                 }
