@@ -47,6 +47,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CaptureActivity;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
     private Button elBotonEnviar;
 
     private Button elBotonPrueba;
+    private Button btnQR;
+
+
+    private String uuidEscaneado ="";
 
     // _______________________________________________________________
     // Diseño: buscarTodosLosDispositivosBTLE()
@@ -266,16 +275,22 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+
+
         Log.d(ETIQUETA_LOG, " MainActivity.constructor : voy a arrancar el servicio");
         this.elIntentDelServicio = new Intent(this, ServicioEscuharBeacons.class);
         this.elIntentDelServicio.putExtra("tiempoDeEspera", (long) 5000);
         startService( this.elIntentDelServicio );
 
-        Log.d(ETIQUETA_LOG, " iniciamos la buscaqueda epsg-gti" );
+        if (uuidEscaneado != "") {
+            Log.d(ETIQUETA_LOG, " iniciamos la buscaqueda epsg-gti");
 
-        // aqui va el codigo para identificar la uudi_____________________________________________________________________
-        this.buscarEsteDispositivoBTLE( "BAJOQUETA");
-        //this.buscarEsteDispositivoBTLE("fistro");
+            // aqui va el codigo para identificar la uudi_____________________________________________________________________
+            this.buscarEsteDispositivoBTLE(uuidEscaneado);
+            //this.buscarEsteDispositivoBTLE("fistro");
+        }else {
+            Toast.makeText(this, "NO HAY NINGUNA SONDA VINCULADA", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -390,6 +405,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
         Log.d("clienterestandroid", "fin onCreate()");
+
+        // QR SCAN
+        Button btnQR = findViewById(R.id.btnQR);
+        btnQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iniciarEscaneo();
+            }
+        });
+
+
     }
 
     // _______________________________________________________________
@@ -532,5 +558,70 @@ public class MainActivity extends AppCompatActivity {
                     });
 
 
+
+
+
+
+
+    }
+    //ESCANEO DE QR
+
+    private void iniciarEscaneo() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Escanea un código");
+        integrator.setCameraId(0);
+        integrator.setBeepEnabled(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.setCaptureActivity(CaptureActivity.class); // Utiliza la actividad de captura personalizada
+        integrator.initiateScan();
+
+        //Detener el escaneo si se esta haciendo
+        stopService( this.elIntentDelServicio );
+        Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado" );
+
+        this.elIntentDelServicio = null;
+        Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            return;
+        }
+        this.detenerBusquedaDispositivosBTLE();
+
+    }
+
+    //Aqui es donde se obtiene la respuesta del analisis del codigo qr, se muestra en un toast
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Escaneo cancelado", Toast.LENGTH_LONG).show();
+            } else {
+
+                // AQUI ES DONDE ESTA LA INFORMACÓN ESCANEADA: result.getContents()
+                Toast.makeText(this, "Se va a intentar contactar con la sonda: " + result.getContents(), Toast.LENGTH_LONG).show();
+                uuidEscaneado = result.getContents(); //Asignar lo escaneado a la variable para poderse usar en otras partes del codigo
+                this.buscarEsteDispositivoBTLE( uuidEscaneado); //Iniciar el escaneo
+                Button btnQR = findViewById(R.id.btnQR); //Asignar el nombre de la sonda al boton
+                btnQR.setText(uuidEscaneado);
+
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
