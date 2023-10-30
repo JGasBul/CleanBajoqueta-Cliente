@@ -50,7 +50,6 @@ if (!empty($_POST["registrar"])) {
                 //Encriptamos datos
 
                 $cifrado = new CifrarDescifrarAES($contrasenia);
-                print(var_dump($cifrado));
                 $encryptedPassword = $cifrado->encriptar();
                 
                 //Registramos Usuario
