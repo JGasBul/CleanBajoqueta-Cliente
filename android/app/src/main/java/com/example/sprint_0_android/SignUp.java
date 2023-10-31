@@ -165,7 +165,7 @@ public class SignUp extends AppCompatActivity {
         digest.update(frase.getBytes("UTF-8"));
         final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
 
-        final Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        final Cipher aes = Cipher.getInstance("AES-256-CBC");
         if (paraCifrar) {
             aes.init(Cipher.ENCRYPT_MODE, key);
         } else {
