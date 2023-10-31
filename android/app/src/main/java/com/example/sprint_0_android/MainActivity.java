@@ -577,11 +577,13 @@ public class MainActivity extends AppCompatActivity {
         integrator.initiateScan();
 
         //Detener el escaneo si se esta haciendo
-        stopService( this.elIntentDelServicio );
-        Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado" );
+        if (this.elIntentDelServicio != null) {
+            stopService(this.elIntentDelServicio);
+            Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado");
+            this.elIntentDelServicio = null;
+            Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
+        }
 
-        this.elIntentDelServicio = null;
-        Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
