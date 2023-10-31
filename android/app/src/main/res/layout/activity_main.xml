@@ -75,5 +75,11 @@
         android:layout_height="wrap_content"
         android:onClick="boton_prueba_pulsado"
         android:text="Prueba" />
+    <Button
+        android:id="@+id/btnQR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Escanear QR de la sonda" />
 
 </android.widget.LinearLayout>
