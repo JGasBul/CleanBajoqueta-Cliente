@@ -42,7 +42,7 @@ public class SignUp extends AppCompatActivity {
     }
     public void boton_registrar(View v){
         //URL de destino para mandar
-        String urlDestino = "http://192.168.1.106/CleanBajoqueta-Cliente/web/bd/registroApp.php";
+        String urlDestino = "http://172.20.10.11/bd/registroApp.php";
 
         //Objecto JSON para enviar
         JSONObject postData = new JSONObject();
