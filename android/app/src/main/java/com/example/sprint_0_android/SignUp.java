@@ -29,6 +29,7 @@ public class SignUp extends AppCompatActivity {
     private EditText correo;
     private EditText telefono;
     private EditText contrasenia;
+    private EditText contraseniaVer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class SignUp extends AppCompatActivity {
         this.correo=(EditText) findViewById(R.id.inputCorreo);
         this.telefono=(EditText) findViewById(R.id.inputTelefono);
         this.contrasenia=(EditText) findViewById(R.id.inputContrasenia);
+        this.contraseniaVer=(EditText) findViewById(R.id.inputContraseniaVer);
 
     }
     public void boton_registrar(View v){
@@ -47,7 +49,8 @@ public class SignUp extends AppCompatActivity {
         //Objecto JSON para enviar
         JSONObject postData = new JSONObject();
 
-        byte[] datosCifrados;
+        String textContrasenia = contrasenia.getText().toString();
+        String textContraseniaVer = contraseniaVer.getText().toString();
 
         //Comprobacion si algún campo esta nulo
         if (nombreApellido.getText().toString().isEmpty()
@@ -57,11 +60,14 @@ public class SignUp extends AppCompatActivity {
         {
             //Si algun campo esta nulo, un mensaje de error
             Toast.makeText(getApplicationContext(), "Campo nulo", Toast.LENGTH_SHORT).show();
-        }else if (correo.getText().toString().contains("@")==false)
+        }else if (!correo.getText().toString().contains("@"))
         {
             //Si el correo no lleva "@"
             Toast.makeText(getApplicationContext(), "El formato de correo es incorrecto", Toast.LENGTH_SHORT).show();
-        }else {
+        }else if (!textContrasenia.equals(textContraseniaVer)){
+            //Si dos campo de contraseña no son las mismas
+            Toast.makeText(getApplicationContext(), "La contraseña no son mismas", Toast.LENGTH_SHORT).show();
+        } else {
             try {
 
                 CifrarDescifrarAES cifrador = new CifrarDescifrarAES(contrasenia.getText().toString());
