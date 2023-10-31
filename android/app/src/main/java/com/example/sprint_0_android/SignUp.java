@@ -63,17 +63,18 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "El formato de correo es incorrecto", Toast.LENGTH_SHORT).show();
         }else {
             try {
-                datosCifrados = cifra(contrasenia.getText().toString());
-                Log.d(ETIQUETA_LOG, "cifrado = " +datosCifrados);
 
-                String textoDescifrado = descifra(datosCifrados);
-                Log.d(ETIQUETA_LOG, "decifrado = " +textoDescifrado);
+                CifrarDescifrarAES cifrador = new CifrarDescifrarAES(contrasenia.getText().toString());
+                String textoEncriptado = cifrador.encriptar(contrasenia.getText().toString());
+                String textoDencriptado = cifrador.desencriptar(textoEncriptado);
+                Log.d(ETIQUETA_LOG, "encriptado= "+textoEncriptado);
+                Log.d(ETIQUETA_LOG, "dencriptado= "+textoDencriptado);
 
                 //Si no hay campo nulo, guarda valor en objeto JSON
                 postData.put("nombreApellido", nombreApellido.getText().toString());
                 postData.put("email", correo.getText().toString());
                 postData.put("telefono", formatearTelefono(telefono.getText().toString()));
-                postData.put("contraseña",datosCifrados);
+                postData.put("contraseña",textoEncriptado);
 
                 AndroidNetworking.post(urlDestino)
                         .addHeaders("Content-Type", "application/json; charset=utf-8")
@@ -145,34 +146,6 @@ public class SignUp extends AppCompatActivity {
             // Si el número no coincide con el formato esperado, simplemente devuelve el número original
             return numero;
         }
-    }
-    public byte[] cifra(String sinCifrar) throws Exception {
-        final byte[] bytes = sinCifrar.getBytes("UTF-8");
-        final Cipher aes = obtieneCipher(true);
-        final byte[] cifrado = aes.doFinal(bytes);
-        return cifrado;
-    }
-
-    public String descifra(byte[] cifrado) throws Exception {
-        final Cipher aes = obtieneCipher(false);
-        final byte[] bytes = aes.doFinal(cifrado);
-        final String sinCifrar = new String(bytes, "UTF-8");
-        return sinCifrar;
-    }
-    private Cipher obtieneCipher(boolean paraCifrar) throws Exception {
-        final String frase = "CleanBajoquetaClientChiperAESKey";
-        final MessageDigest digest = MessageDigest.getInstance("SHA");
-        digest.update(frase.getBytes("UTF-8"));
-        final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
-
-        final Cipher aes = Cipher.getInstance("AES-256-CBC");
-        if (paraCifrar) {
-            aes.init(Cipher.ENCRYPT_MODE, key);
-        } else {
-            aes.init(Cipher.DECRYPT_MODE, key);
-        }
-
-        return aes;
     }
 
 }
