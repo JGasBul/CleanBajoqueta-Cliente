@@ -20,7 +20,7 @@ class CifrarDescifrarAES
     public function __construct($text)
     {
         $this->text = $text;
-        $this->iv = str_repeat("0", openssl_cipher_iv_length($this->cipher));
+        $this->iv = str_repeat("\0", openssl_cipher_iv_length($this->cipher));
     }
     //---------------------------------------------------------------------------------------------------
     // obj:CifrarDescifrarAES --> desencriptar() --> res:Txt
