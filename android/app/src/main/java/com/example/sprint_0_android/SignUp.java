@@ -160,7 +160,7 @@ public class SignUp extends AppCompatActivity {
         return sinCifrar;
     }
     private Cipher obtieneCipher(boolean paraCifrar) throws Exception {
-        final String frase = "comprobadoyconpermiso";
+        final String frase = "CleanBajoquetaClientChiperAESKey";
         final MessageDigest digest = MessageDigest.getInstance("SHA");
         digest.update(frase.getBytes("UTF-8"));
         final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
