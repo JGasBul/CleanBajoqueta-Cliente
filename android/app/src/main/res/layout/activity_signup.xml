@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="157dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="52dp"
+        android:text="Sign Up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/inputNombreApellido"
+        android:layout_width="267dp"
+        android:layout_height="65dp"
+        android:ems="10"
+        android:hint="nombre y apellido"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/inputCorreo"
+        android:layout_width="270dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="correo"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/inputNombreApellido"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/inputNombreApellido"
+        app:layout_constraintTop_toBottomOf="@+id/inputNombreApellido" />
+
+    <EditText
+        android:id="@+id/inputTelefono"
+        android:layout_width="271dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="telefono"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="@+id/inputCorreo"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputCorreo"
+        app:layout_constraintTop_toBottomOf="@+id/inputCorreo" />
+
+    <EditText
+        android:id="@+id/inputContrasenia"
+        android:layout_width="265dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/inputTelefono"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputTelefono"
+        app:layout_constraintTop_toBottomOf="@+id/inputTelefono" />
+
+    <EditText
+        android:id="@+id/inputContraseniaVer"
+        android:layout_width="261dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="Escribe otra vez contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/inputTelefono"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputTelefono"
+        app:layout_constraintTop_toBottomOf="@+id/inputContrasenia" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="boton_registrar"
+        android:text="Registrar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inputContrasenia"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toStartOf="@+id/inputContrasenia"
+        app:layout_constraintTop_toBottomOf="@+id/inputContraseniaVer"
+        app:layout_constraintVertical_bias="0.055" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
