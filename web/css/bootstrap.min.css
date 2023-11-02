@@ -15,7 +15,7 @@
 
 :root,
 [data-bs-theme=light] {
-    --bs-blue: #007bff;
+    --bs-blue: #C8E2ED;
     --bs-indigo: #6610f2;
     --bs-purple: #6f42c1;
     --bs-pink: #e83e8c;
@@ -23,7 +23,7 @@
     --bs-orange: #fd7e14;
     --bs-yellow: #ffce67;
     --bs-green: #56cc9d;
-    --bs-teal: #20c997;
+    --bs-teal: #C8E2ED;
     --bs-cyan: #6cc3d5;
     --bs-black: #000;
     --bs-white: #fff;
@@ -38,18 +38,18 @@
     --bs-gray-700: #5a5a5a;
     --bs-gray-800: #343a40;
     --bs-gray-900: #212529;
-    --bs-primary: #78c2ad;
-    --bs-secondary: #f3969a;
-    --bs-success: #56cc9d;
-    --bs-info: #6cc3d5;
+    --bs-primary: #465F7F;
+    --bs-secondary: #8FD79F;
+    --bs-success: #8FD79F;
+    --bs-info: #C8E2ED;
     --bs-warning: #ffce67;
     --bs-danger: #ff7851;
     --bs-light: #f8f9fa;
     --bs-dark: #343a40;
-    --bs-primary-rgb: 120, 194, 173;
+    --bs-primary-rgb: 70, 95, 125;
     --bs-secondary-rgb: 243, 150, 154;
-    --bs-success-rgb: 86, 204, 157;
-    --bs-info-rgb: 108, 195, 213;
+    --bs-success-rgb: 143, 215, 159;
+    --bs-info-rgb: 200, 226, 237;
     --bs-warning-rgb: 255, 206, 103;
     --bs-danger-rgb: 255, 120, 81;
     --bs-light-rgb: 248, 249, 250;
@@ -65,7 +65,7 @@
     --bs-primary-bg-subtle: #e4f3ef;
     --bs-secondary-bg-subtle: #fdeaeb;
     --bs-success-bg-subtle: #ddf5eb;
-    --bs-info-bg-subtle: #e2f3f7;
+    --bs-info-bg-subtle: #C8E2ED;
     --bs-warning-bg-subtle: #fff5e1;
     --bs-danger-bg-subtle: #ffe4dc;
     --bs-light-bg-subtle: #fcfcfd;
@@ -82,8 +82,9 @@
     --bs-black-rgb: 0, 0, 0;
     --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-font-oxygen: Oxygen;
     --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-    --bs-body-font-family: var(--bs-font-sans-serif);
+    --bs-body-font-family: var(--bs-font-oxygen);
     --bs-body-font-size: 1rem;
     --bs-body-font-weight: 400;
     --bs-body-line-height: 1.5;
@@ -237,7 +238,7 @@ h5,
 h6 {
     margin-top: 0;
     margin-bottom: .5rem;
-    font-family: Montserrat, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: Montserrat, -apple-system, Oxygen,  system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-weight: 500;
     line-height: 1.2;
     color: var(--bs-heading-color)
@@ -783,6 +784,15 @@ progress {
 .figure-caption {
     font-size: .875em;
     color: var(--bs-secondary-color)
+}
+
+.fondo {
+    
+    background-image: url(../assets/banner2.jpg);
+    background-size: 100% auto;        
+    height: 100vh;
+    background-position: center top;
+    background-repeat: no-repeat;
 }
 
 .container,
@@ -3521,11 +3531,11 @@ fieldset:disabled .btn {
 
 .btn-primary {
     --bs-btn-color: #fff;
-    --bs-btn-bg: #78c2ad;
-    --bs-btn-border-color: #78c2ad;
+    --bs-btn-bg: #465F7F;
+    --bs-btn-border-color: #465F7F;
     --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #66a593;
-    --bs-btn-hover-border-color: #609b8a;
+    --bs-btn-hover-bg: #374f6e;
+    --bs-btn-hover-border-color: #374f6e;
     --bs-btn-focus-shadow-rgb: 140, 203, 185;
     --bs-btn-active-color: #fff;
     --bs-btn-active-bg: #609b8a;
@@ -3555,11 +3565,11 @@ fieldset:disabled .btn {
 
 .btn-success {
     --bs-btn-color: #fff;
-    --bs-btn-bg: #56cc9d;
-    --bs-btn-border-color: #56cc9d;
+    --bs-btn-bg: #8FD79F;
+    --bs-btn-border-color: #8FD79F;
     --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #49ad85;
-    --bs-btn-hover-border-color: #45a37e;
+    --bs-btn-hover-bg: #66aa75;
+    --bs-btn-hover-border-color:  #66aa75;
     --bs-btn-focus-shadow-rgb: 111, 212, 172;
     --bs-btn-active-color: #fff;
     --bs-btn-active-bg: #45a37e;
@@ -4521,6 +4531,7 @@ fieldset:disabled .btn {
     --bs-navbar-toggler-border-radius: var(--bs-border-radius);
     --bs-navbar-toggler-focus-width: 0.25rem;
     --bs-navbar-toggler-transition: box-shadow 0.15s ease-in-out;
+    
     position: relative;
     display: flex;
     flex-wrap: wrap;
