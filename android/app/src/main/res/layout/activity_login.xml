@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/inputEmailTelefonoLogin"
+        android:layout_width="313dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="212dp"
+        android:ems="10"
+        android:hint="Introduce el correo"
+        android:inputType="text|textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/inputContraseniaLogin"
+        android:layout_width="313dp"
+        android:layout_height="56dp"
+        android:ems="10"
+        android:hint="Introduce la contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/inputEmailTelefonoLogin"
+        app:layout_constraintStart_toStartOf="@+id/inputEmailTelefonoLogin"
+        app:layout_constraintTop_toBottomOf="@+id/inputEmailTelefonoLogin" />
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:onClick="boton_login_aceptar"
+        android:text="Aceptar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inputContraseniaLogin"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/inputContraseniaLogin"
+        app:layout_constraintTop_toBottomOf="@+id/buttonToSignUp"
+        app:layout_constraintVertical_bias="0.063" />
+
+    <Button
+        android:id="@+id/buttonToSignUp"
+        android:layout_width="121dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:backgroundTint="#66FFFFFF"
+        android:fallbackLineSpacing="false"
+        android:onClick="boton_sign_up"
+        android:text="Registrate"
+        android:textColor="#2196F3"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/inputContraseniaLogin"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/inputContraseniaLogin"
+        app:layout_constraintTop_toBottomOf="@+id/inputContraseniaLogin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

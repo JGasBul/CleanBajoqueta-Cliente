@@ -33,6 +33,7 @@ android {
 
 dependencies {
 
+    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation ("com.amitshekhar.android:jackson-android-networking:1.0.2")
     implementation("com.google.android.material:material:1.9.0")
