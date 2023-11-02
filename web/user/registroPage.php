@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-
+<?php include("../bd/registro.php"); ?>
 <head>
     <meta charset="UTF-8">
     <title>Proyecto 3A - Registro</title>
@@ -144,7 +144,7 @@
                                             </div>
 
                                             <div class="col  align-middle">
-                                                    <input type="password" class="form-control  border-0" name="confirmarcontraseniaregistro" placeholder="Vuelva a escribir tu contraseña" required>
+                                                    <input type="email" class="form-control  border-0" name="emailregistro" placeholder="Escriba su email" required>
                                             </div>
 
                                         </div>
@@ -175,8 +175,6 @@
                                 <p><small>Formato: 900-45-67-81</small></p>
                             </div>
                              <!--Fin Campo Telefono de Contacto -->
-
-                             <?php include("../bd/registro.php"); ?>
 
                              </form>
                         <!--Fin Formulario de Registro -->

@@ -1,6 +1,6 @@
 <?php
+include("../bd/bd.php");
 /*Si no has iniciado sesión, no puedes entrar a la página de inicio del login
-session_start();
 if($_POST){
     if($_POST['usuariologin']== $_SESSION['nombre'] && $_POST['contrasenialogin']== $_SESSION['contraseña']){
         $_SESSION['usuario']=ok;
@@ -103,7 +103,7 @@ if($_POST){
                                 </div>
                             </div>
 
-                            <?php include("../bd/bd.php");?><br>
+                            <br>
                             
                             <div class="text-center">
                                 <input name="ingresar" type="submit" class="btn btn-success fs-5 rounded-pill" value="  Enviar  ">
