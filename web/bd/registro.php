@@ -1,6 +1,6 @@
 <?php
 //----------------------------------------------------------------
-// Arnau Soler Tomás
+//CleanBajoqueta
 //registro.php
 //Gestiona la página del registro
 //----------------------------------------------------------------
@@ -12,8 +12,6 @@ include("../clases/CifrarDescifrarAES.php");
 $segundos_espera = 3; //tiempo de espera antes de redirigir al Login
 
 //Iniciar conexión con la db
-$conexionbd = new mysqli("localhost", "root", "", "bbdd_cleanbajoqueta");
-$conexionbd->set_charset("utf8");
 
 //Se consulta el contenido del POST
 if (!empty($_POST["registrar"])) {
@@ -41,28 +39,61 @@ if (!empty($_POST["registrar"])) {
 
             $nombreApellidos = $nombre . " " . $apellidos;
 
-            $sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
-
-            if ($datos = $sql->fetch_object()) {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://localhost:8080/login/getUserByEmail",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET"
+            ));
+            $headers = [
+                'accept: applicaction/json',
+                'email: '. $email .''
+            ];
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            $res = curl_exec($curl);
+            $res = json_decode($res, true); //because of true, it's in an array
+            $err = curl_error($curl);
+            curl_close($curl);
+            //$sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
+            if (in_array( $email, $res)) {
                 echo '<div class="alert alert-danger">Actualmente registrado. Intentelo con otro email</div>';
-
             } else {
                 //Encriptamos datos
 
                 $cifrado = new CifrarDescifrarAES($contrasenia);
                 $encryptedPassword = $cifrado->encriptar();
-                
-                //Registramos Usuario
-                $registrarUsuario = $conexionbd->query("INSERT INTO usuario (email, contraseña, nombreApellido)
-                VALUES ('$email', '$encryptedPassword', '$nombreApellidos')");
 
-                $registrarTelefono = $conexionbd->query("INSERT INTO telefono (email, telefono)
-                VALUES ('$email', '$telefono')");
+                //Registramos Usuario
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "http://localhost:8080/login/insertUser",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST"
+                ));
+                $headers = [
+                    'accept: applicaction/json',
+                    'Content-Type: application/json'
+                ];
+                $fields = [
+                    'email'      => $email,
+                    'contraseña' => $encryptedPassword,
+                    'nombreApellido'         => $nombreApellidos,
+                    'telefono' => $telefono
+                ];
+                curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
+                $res = curl_exec($curl);
+                $res = json_decode($res, true); //because of true, it's in an array
+                $err = curl_error($curl);
+                curl_close($curl);
 
                 //Si se pudo registrar, lo llevamos a la página de Login
-                if ($registrarUsuario and $registrarTelefono) {
+                if (!$err) {
                     echo '<div class="alert alert-success">Registro Completado</div>';
-
                     //header("location:../user/login.php");
                     header('refresh:' . $segundos_espera . '; url=../user/login.php');
                 } else {
@@ -74,5 +105,3 @@ if (!empty($_POST["registrar"])) {
         }
     }
 }
-
-?>

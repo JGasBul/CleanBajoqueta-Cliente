@@ -1,6 +1,6 @@
 <?php
 //----------------------------------------------------------------
-// Zaida Pastor González y Arnau Soler Tomás
+//CleanBajoqueta 
 //bd.php
 //Gestiona el acceso del login y guarda el nombre del usuario
 //----------------------------------------------------------------
@@ -10,10 +10,6 @@ include("../clases/CifrarDescifrarAES.php");
 
 //Guardamos el nomnre del usuario logeado en una vvble global
 session_start();
-
-//Iniciar conexión con la db
-$conexionbd = new mysqli("localhost", "root", "", "bbdd_cleanbajoqueta");
-$conexionbd->set_charset("utf8");
 
 //Se consulta si el usuario pertenece a la bd y se obtiene su nombre
 if (!empty($_POST["ingresar"])) {
@@ -25,39 +21,44 @@ if (!empty($_POST["ingresar"])) {
         $contraseniaLogin = $_POST["contrasenialogin"];
 
         //Recogemos la contraseña del usuario
-        $res = $conexionbd->query("SELECT contraseña FROM usuario WHERE email = '$usuario'");
-        $contraseniaCifrada = $res->fetch_object()->contraseña;
-
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://localhost:8080/login/getUserByEmail",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET"
+        ));
+        $headers = [
+            'accept: applicaction/json',
+            'email: ' . $usuario . ''
+        ];
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        $res = curl_exec($curl);
+        $res = json_decode($res, true); //because of true, it's in an array
+        $err = curl_error($curl);
+        curl_close($curl);
         //Si existe...
-        if ($contraseniaCifrada) {
+        if (!empty($res)) {
+            if (in_array($usuario, $res[0])) {
+                $contraseniaCifrada = $res[0]["contraseña"];
+                //Desciframos la contraseña
+                $cifrado = new CifrarDescifrarAES($contraseniaCifrada);
+                $contraseniaDesCifrada = $cifrado->desencriptar();
 
-            //Desciframos la contraseña
-            $cifrado = new CifrarDescifrarAES($contraseniaCifrada);
-            $contraseniaDesCifrada = $cifrado->desencriptar();
-
-            //Si ambas contraseñas son iguales, consultamos los datos del usuario de la BBDD
-            if ($contraseniaLogin == $contraseniaDesCifrada) {
-                $sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$usuario' AND contraseña = '$contraseniaCifrada'");
-                $nombreApellido = $conexionbd->query("SELECT nombreApellido FROM usuario");
-
-                //Si está registrado...
-                if ($datos = $sql->fetch_object()) {
-                    // Almacenamos el nombre del usuario en una variable de sesión
+                //Si ambas contraseñas son iguales, consultamos los datos del usuario de la BBDD
+                if ($contraseniaLogin == $contraseniaDesCifrada) {
                     $_SESSION['usuario'] = $datos->nombreApellido;
-
                     //Si existe el usuario, se ridirige a su pagina
                     header("location:../user/inicio.php");
-
                 } else {
-                    echo '<div class="alert alert-danger">No estás registrado en el servidor</div>';
+                    echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
                 }
             } else {
-                echo '<div class="alert alert-danger">Contraseña incorrecta</div>';
+                echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
             }
         } else {
             echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
         }
     }
 }
-
-?>
