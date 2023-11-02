@@ -45,14 +45,21 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
+        //URL de destino
         String urlDestino = "http://172.20.10.11/bd/loginApp.php";
+
+        //Json para enviar
         JSONObject postData = new JSONObject();
 
+        //Check si hay algún campo nulo
         if (loginEmail.getText().toString().isEmpty()||loginContrasenia.getText().toString().isEmpty()){
             Toast.makeText(getApplicationContext(), "Campo nulo", Toast.LENGTH_SHORT).show();
-        }else if(!loginEmail.getText().toString().contains("@")){
+        }
+        //Verificar el formato de correo
+        else if(!loginEmail.getText().toString().contains("@")){
             Toast.makeText(getApplicationContext(), "El formato de correo es incorrecto", Toast.LENGTH_SHORT).show();
         }else {
+            //Si todos estan correcto, envio la peticion
             try {
                 postData.put("emailTelefono", loginEmail.getText().toString());
                 postData.put("contrasenia", loginContrasenia.getText().toString());
@@ -74,11 +81,14 @@ public class Login extends AppCompatActivity {
                                         String success = response.getString("success");
                                         String message = response.getString("message");
 
-                                        //Si success me responde con un 1, un toast con el message
+                                        //Si success me responde con un 1, mando el nombre de usuario,
+                                        //termino la actividad y arracar mainActivity
                                         if ("1".equals(success)) {
                                             Log.d(ETIQUETA_LOG, "Login Correcto " + message);
+                                            String nombreApellido = response.getString("nombreUsuario");
                                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                             finish();
+                                            intentToMain.putExtra("nombreUsuario",nombreApellido);
                                             startActivity(intentToMain);
                                         }
                                         //Si success me responde con un 0, un toast con el message

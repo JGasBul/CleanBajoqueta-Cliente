@@ -369,9 +369,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            String nombreUsuario = intent.getStringExtra("nombreUsuario");
+            salidaTexto.setText("Bienvenido "+nombreUsuario);
+        }
 
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
