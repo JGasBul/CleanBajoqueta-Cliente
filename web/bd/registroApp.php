@@ -1,4 +1,5 @@
 <?php
+//Conexion a la base de datos
 $conn = mysqli_connect("localhost", "root", "", "bbdd_cleanbajoqueta");
 
 //Si la petición es de metodo POST
@@ -22,16 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($comprobacionEmail && $comprobacionTelefono) {
 
+            //Si existe resultado en la comprobación
             $numRowsEmail = mysqli_num_rows($comprobacionEmail);
             $numRowsTelefono = mysqli_num_rows($comprobacionTelefono);
 
-            //Si repite, un mensaje de error
+            //Si repite, un mensaje alerta de cuenta ya existe
             if ($numRowsEmail > 0 || $numRowsTelefono > 0) {
 
                 switch (true) {
+                    //Caso de ya tiene un email registrado
                     case $numRowsEmail > 0:
                         $result = ["success" => "0", "message" => "Ya tiene un email registrado"];
                         break;
+                    //Caso de ya tiene un telefono registrado
                     case $numRowsTelefono > 0:
                         $result = ["success" => "0", "message" => "Ya tiene un telefono registrado"];
                         break;
@@ -46,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sqlInsertTelefono = "INSERT INTO telefono (`email`, `telefono`) VALUES ('$email','$telefono')";
                 if (mysqli_query($conn, $sqlInsertUsuario) && mysqli_query($conn, $sqlInsertTelefono)) {
 
+                    //Insertacion exito, devuelvo el resultado
                     $result = ["success" => "1", "message" => "success"];
 
                 } else {
