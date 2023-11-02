@@ -14,10 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
     private Button elBotonRegistrar;
@@ -45,7 +49,7 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
-        String urlDestino = "http://172.20.10.11/bd/loginApp.php";
+        String urlDestino = "http://192.168.163.246:8080/login/getUserByEmail";
         JSONObject postData = new JSONObject();
 
         if (loginEmail.getText().toString().isEmpty()||loginContrasenia.getText().toString().isEmpty()){
@@ -54,38 +58,36 @@ public class Login extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "El formato de correo es incorrecto", Toast.LENGTH_SHORT).show();
         }else {
             try {
+                /*
                 postData.put("emailTelefono", loginEmail.getText().toString());
                 postData.put("contrasenia", loginContrasenia.getText().toString());
-
-                AndroidNetworking.post(urlDestino)
+                */
+                AndroidNetworking.get(urlDestino)
                         .addHeaders("Content-Type", "application/json; charset=utf-8")
-                        .addJSONObjectBody(postData)
+                        .addHeaders("email", loginEmail.getText().toString())
                         .setTag("post_data")
                         .setPriority(Priority.MEDIUM)
                         .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            //El servidor me ha respondido con un Json Object
+                        .getAsJSONArray(new JSONArrayRequestListener() {
+                            //El servidor me ha respondido con un Json Array
                             @Override
-                            public void onResponse(JSONObject response) {
+                            public void onResponse(JSONArray response) {
 
                                 if (response != null && response.length() > 0) {
                                     try {
-                                        //Leo el mensaje que hay en dentro del response
-                                        String success = response.getString("success");
-                                        String message = response.getString("message");
-
-                                        //Si success me responde con un 1, un toast con el message
-                                        if ("1".equals(success)) {
-                                            Log.d(ETIQUETA_LOG, "Login Correcto " + message);
-                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                        JSONObject responseJSON = new JSONObject(String.valueOf(response.get(0)));
+                                        CifrarDescifrarAES cifrado = new CifrarDescifrarAES();
+                                        String contraseñaDesencriptada = cifrado.desencriptar(responseJSON.getString("contraseña"));
+                                        if (contraseñaDesencriptada.equals(loginContrasenia.getText().toString())) {
+                                            Log.d(ETIQUETA_LOG, "Login Correcto ");
+                                            Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
                                             finish();
                                             startActivity(intentToMain);
                                         }
                                         //Si success me responde con un 0, un toast con el message
                                         else {
-                                            Log.d(ETIQUETA_LOG, "Login Fallado: " + message);
-                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
+                                            Log.d(ETIQUETA_LOG, "Login Fallado: ");
+                                            Toast.makeText(getApplicationContext(), "Login fallido", Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -97,13 +99,11 @@ public class Login extends AppCompatActivity {
                             }
                             @Override
                             public void onError(ANError error) {
-
                                 if (error != null) {
-                                    Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage().toString());
+                                    Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage());
                                 }
                             }
                         });
-
             }catch (Exception e) {
                 throw new RuntimeException(e);
             }
