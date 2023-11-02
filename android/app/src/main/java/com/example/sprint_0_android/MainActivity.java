@@ -60,14 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothLeScanner elEscanner;
     private ScanCallback callbackDelEscaneo = null;
     private Intent elIntentDelServicio = null;
-    private TextView elTextoMinor;
-    private TextView elTextoMajor;
     private TextView salidaTexto;
-    private EditText temperaturaInput;
-    private EditText co2Input;
-    private Button elBotonEnviar;
-    private Button elBotonRegistrar;
-    private Button elBotonPrueba;
     private Button btnQR;
 
 
@@ -144,10 +137,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " uuid  = " + Utilidades.bytesToString(tib.getUUID()));
         Log.d(ETIQUETA_LOG, " major  = " + Utilidades.bytesToHexString(tib.getMajor()) + "( "
                 + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
-        elTextoMajor.setText ("Major: "  + Utilidades.bytesToInt(tib.getMajor()) );
         Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
                 + Utilidades.bytesToInt(tib.getMinor()) + " ) ");
-        elTextoMinor.setText ("Minor: "  + Utilidades.bytesToInt(tib.getMinor()) );
         Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
         Log.d(ETIQUETA_LOG, " ****************************************************");
 
@@ -378,15 +369,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.elBotonEnviar =(Button) findViewById(R.id.elBotonEnviar);
-        this.elBotonPrueba =(Button) findViewById(R.id.elBotonPrueba);
-        this.elBotonRegistrar= (Button) findViewById(R.id.elBotonSignUp);
-        this.elTextoMinor = (TextView) findViewById(R.id.elTextoMinor);
-        this.elTextoMajor =(TextView) findViewById(R.id.elTextoMajor);
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
 
-        this.temperaturaInput = (EditText) findViewById(R.id.temperaturaInput);
-        this.co2Input = (EditText) findViewById(R.id.co2Input);
+        Intent intent = getIntent();
+        if (intent != null) {
+            String nombreUsuario = intent.getStringExtra("nombreUsuario");
+            salidaTexto.setText("Bienvenido "+nombreUsuario);
+        }
 
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
@@ -453,8 +442,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Añado parametros y los envio al enlace correspondiente
         AndroidNetworking.get(urlComprobarComproDestino)
-                .addQueryParameter("temperatura",  temperaturaInput.getText().toString())
-                .addQueryParameter("co2", co2Input.getText().toString())
+                .addQueryParameter("temperatura",  "")
+                .addQueryParameter("co2", "")
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -502,8 +491,8 @@ public class MainActivity extends AppCompatActivity {
             JSONObject postData = new JSONObject();
             try {
                 postData.put("id", "");
-                postData.put("temperatura", temperaturaInput.getText().toString());
-                postData.put("co2", co2Input.getText().toString());
+                postData.put("temperatura", "");
+                postData.put("co2", "");
                 postData.put("latitud",String.valueOf(loc.getLongitude()));
                 postData.put("longitud", String.valueOf(loc.getLongitude()));
 
@@ -558,17 +547,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-<<<<<<< HEAD
-
-
-
-
-
-
-
     }
     //ESCANEO DE QR
-
     private void iniciarEscaneo() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
@@ -608,9 +588,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-
-
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
             if(result.getContents() == null) {
@@ -628,14 +605,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-=======
->>>>>>> registrarUsuarioApp
+
     }
-    //----------------------------------------------------------------
-    //----------------------------------------------------------------
-    public void boton_sign_up(View v) {
-        Intent intent = new Intent(MainActivity.this, SignUp.class);
-        startActivity(intent);
+    @Override
+    public void onBackPressed() {
+        //bloquear el botón de retroceso
     }
 
 }

@@ -16,7 +16,7 @@ public class CifrarDescifrarAES {
     private Cipher decryptCipher;
 
     // Constructor
-    public CifrarDescifrarAES(String text) {
+    public CifrarDescifrarAES() {
         this.iv = new byte[16]; // IV de 16 bytes con ceros
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "AES");
         IvParameterSpec ivSpec = new IvParameterSpec(iv);

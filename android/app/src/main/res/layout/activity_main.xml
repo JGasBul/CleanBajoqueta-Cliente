@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/salidaTexto"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="Bienvenido   "
+        android:textSize="24sp" />
+
     <Button
         android:id="@+id/botonBuscarDispositivosBTLE"
         android:layout_width="wrap_content"
@@ -28,65 +35,11 @@
         android:onClick="botonBuscarNuestroDispositivoBTLEPulsado"
         android:text="Buscar nuestro dispositivo  BTLE" />
 
-    <TextView
-        android:id="@+id/elTextoMajor"
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:text="Major:" />
-
-    <TextView
-        android:id="@+id/elTextoMinor"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:text="Minor:" />
-
-    <EditText
-        android:id="@+id/temperaturaInput"
-        android:layout_width="match_parent"
-        android:layout_height="74dp"
-        android:ems="10"
-        android:hint="Temperatura"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/co2Input"
-        android:layout_width="match_parent"
-        android:layout_height="74dp"
-        android:ems="10"
-        android:hint="co2"
-        android:inputType="text" />
-
-    <TextView
-        android:id="@+id/salidaTexto"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:text="Salida:" />
-
-    <Button
-        android:id="@+id/elBotonEnviar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="boton_enviar_pulsado_client"
-        android:text="Guardar Mediciones" />
-
-    <Button
-        android:id="@+id/elBotonPrueba"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="boton_prueba_pulsado"
-        android:text="Prueba" />
     <Button
         android:id="@+id/btnQR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:text="Escanear QR de la sonda" />
-
-    <Button
-        android:id="@+id/elBotonSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="boton_sign_up"
-        android:text="sign up" />
 
 </android.widget.LinearLayout>
