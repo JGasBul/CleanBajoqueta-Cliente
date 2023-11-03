@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
-        String urlDestino = "http://192.168.163.246:8080/login/getUserByEmail";
+        String urlDestino = "http://192.168.173.185:8080/login/getUserByEmail";
         JSONObject postData = new JSONObject();
 
         //Check si hay algún campo nulo

@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView salidaTexto;
     private Button btnQR;
 
+    private TextView TextoMajor;
+    private TextView TextoMinor;
 
     private String uuidEscaneado ="";
 
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
+        this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
+        this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
 
         Log.d(ETIQUETA_LOG, " ****************************************************");
         Log.d(ETIQUETA_LOG, " ****** DISPOSITIVO DETECTADO BTLE ****************** ");
@@ -137,10 +141,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " uuid  = " + Utilidades.bytesToString(tib.getUUID()));
         Log.d(ETIQUETA_LOG, " major  = " + Utilidades.bytesToHexString(tib.getMajor()) + "( "
                 + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
+
+        TextoMajor.setText(String.valueOf(    Utilidades.bytesToInt(tib.getMajor())));
+        TextoMinor.setText(String.valueOf( Utilidades.bytesToInt(tib.getMajor())));
+
         Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
                 + Utilidades.bytesToInt(tib.getMinor()) + " ) ");
         Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
         Log.d(ETIQUETA_LOG, " ****************************************************");
+
 
     }
 
@@ -370,6 +379,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
+        this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
+        this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
 
         Intent intent = getIntent();
         if (intent != null) {

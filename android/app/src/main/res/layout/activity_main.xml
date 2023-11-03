@@ -42,4 +42,17 @@
 
         android:text="Escanear QR de la sonda" />
 
+    <TextView
+        android:id="@+id/TextoMajor"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:text="Major:" />
+
+    <TextView
+        android:id="@+id/TextoMinor"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:text="Minor:" />
+
+
 </android.widget.LinearLayout>
