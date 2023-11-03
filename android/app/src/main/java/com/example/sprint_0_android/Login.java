@@ -86,7 +86,7 @@ public class Login extends AppCompatActivity {
                                             Log.d(ETIQUETA_LOG, "Login Correcto ");
                                             Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
                                             finish();
-                                            intentToMain.putExtra("nombreUsuario",nombreApellido);
+                                            intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
                                             startActivity(intentToMain);
                                         }
                                         //Si success me responde con un 0, un toast con el message
@@ -99,7 +99,7 @@ public class Login extends AppCompatActivity {
                                     }
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Sin respuesta", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "El usuario no existe", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             @Override
