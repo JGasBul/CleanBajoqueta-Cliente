@@ -25,8 +25,10 @@ import android.view.View;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -150,6 +152,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
         Log.d(ETIQUETA_LOG, " ****************************************************");
 
+        //Enviar Medicion (Major=id_Contaminante, Minor=valor)
+        int id_contaminante=Utilidades.bytesToInt(tib.getMajor());
+        switch (id_contaminante){
+            case 11:
+                String nombre = "co2";
+                enviarMedicion(id_contaminante,nombre,Utilidades.bytesToInt(tib.getMajor()));
+        }
 
     }
 
@@ -283,7 +292,6 @@ public class MainActivity extends AppCompatActivity {
         startService( this.elIntentDelServicio );
 
         if (uuidEscaneado != "") {
-            Log.d(ETIQUETA_LOG, " iniciamos la buscaqueda epsg-gti");
 
             // aqui va el codigo para identificar la uudi_____________________________________________________________________
             this.buscarEsteDispositivoBTLE(uuidEscaneado);
@@ -385,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             String nombreUsuario = intent.getStringExtra("nombreUsuario");
+            String email = intent.getStringExtra("email");
             salidaTexto.setText("Bienvenido "+nombreUsuario);
         }
 
@@ -489,23 +498,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // _______________________________________________________________
-    public void boton_enviar_pulsado_client (View quien) {
+    public void enviarMedicion (int idContaminante,String nombre,float valor) {
         Log.d("clienterestandroid", "boton_enviar_pulsado_client");
 
-            LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            @SuppressLint("MissingPermission") Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //Email de usuario
+            Intent intent = getIntent();
+            if (intent != null) {
+                String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.1.106/Sprint_0_Web/logica/insertarmedicion.php";
+            String urlDestino = "http://192.168.1.106/bd/enviarMedicion.php";
+
+            //Instante de tomar medicion
+            Date currentTime = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            String formattedTime = sdf.format(currentTime);
 
             //Creo un objeto JSON e introducir valores
             JSONObject postData = new JSONObject();
             try {
-                postData.put("id", "");
-                postData.put("temperatura", "");
-                postData.put("co2", "");
-                postData.put("latitud",String.valueOf(loc.getLongitude()));
-                postData.put("longitud", String.valueOf(loc.getLongitude()));
+                postData.put("idContaminante", idContaminante);
+                postData.put("nombre", nombre);
+                postData.put("valor", valor);
+                postData.put("instante", formattedTime);
+                postData.put("email",email );
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -558,6 +574,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+            }
     }
     //ESCANEO DE QR
     private void iniciarEscaneo() {
@@ -608,6 +625,7 @@ public class MainActivity extends AppCompatActivity {
                 // AQUI ES DONDE ESTA LA INFORMACÓN ESCANEADA: result.getContents()
                 Toast.makeText(this, "Se va a intentar contactar con la sonda: " + result.getContents(), Toast.LENGTH_LONG).show();
                 uuidEscaneado = result.getContents(); //Asignar lo escaneado a la variable para poderse usar en otras partes del codigo
+                asignarSonda();
                 this.buscarEsteDispositivoBTLE( uuidEscaneado); //Iniciar el escaneo
                 Button btnQR = findViewById(R.id.btnQR); //Asignar el nombre de la sonda al boton
                 btnQR.setText(uuidEscaneado);
@@ -618,6 +636,72 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    private void asignarSonda(){
+        Intent intent = getIntent();
+        if (intent != null) {
+            String email = intent.getStringExtra("email");
+
+            String urlDestino = "http://192.168.1.106/bd/asignarSondaUsuario.php";
+
+            //Creo un objeto JSON e introducir valores
+            JSONObject postData = new JSONObject();
+            try {
+            postData.put("email", email);
+            }
+            catch (JSONException e) {
+            e.printStackTrace();
+            }
+
+            //Envío el objeto JSON a tal url de destino
+            AndroidNetworking.post(urlDestino)
+                .addHeaders("Content-Type", "application/json; charset=utf-8")
+                .addJSONObjectBody(postData)
+                .setTag("post_data")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    //El servidor me ha respondido con un Json Object
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (response != null && response.length() > 0) {
+                            try {
+                                //Leo el mensaje que hay en dentro del response
+                                String success = response.getString("success");
+                                String message = response.getString("message");
+
+                                //Si success me responde con un 1, un toast con el message
+                                if ("1".equals(success)) {
+                                    Log.d(ETIQUETA_LOG, "Datos guardados correctamente: " + message);
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                                }
+                                //Si success me responde con un 0, un toast con el message
+                                else {
+                                    Log.d(ETIQUETA_LOG, "Datos guardados incorrectamente: " + message);
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+                            Log.d(ETIQUETA_LOG, "Datos guardados incorrectamente ");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                        if (error != null) {
+                            Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage().toString());
+                        }
+                    }
+                });
+        }
+    }
+
     @Override
     public void onBackPressed() {
         //bloquear el botón de retroceso

@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
-        String urlDestino = "http://192.168.173.185:8080/login/getUserByEmail";
+        String urlDestino = "http://192.168.1.106:8080/login/getUserByEmail";
         JSONObject postData = new JSONObject();
 
         //Check si hay algún campo nulo
@@ -87,6 +87,7 @@ public class Login extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
                                             finish();
                                             intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
+                                            intentToMain.putExtra("email",responseJSON.getString("email"));
                                             startActivity(intentToMain);
                                         }
                                         //Si success me responde con un 0, un toast con el message

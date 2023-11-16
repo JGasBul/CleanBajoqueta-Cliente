@@ -50,7 +50,7 @@ public class SignUp extends AppCompatActivity {
     public void boton_registrar(View v) {
         Intent intentToLogin = new Intent(this, Login.class);
         //URL de destino para mandar
-        String urlDestino = "http://192.168.173.185:8080/login/insertUser";
+        String urlDestino = "http://192.168.1.106:8080/login/insertUser";
 
         //Objecto JSON para enviar
         JSONObject postData = new JSONObject();
