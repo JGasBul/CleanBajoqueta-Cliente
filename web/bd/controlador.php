@@ -9,7 +9,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "proyecto3a";
+$dbname = "bbdd_cleanbajoqueta";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -19,16 +19,26 @@ if ($conn->connect_error) {
 }
 
 // Realiza la consulta SQL para obtener la última entrada de la tabla medicion
-$sql = "SELECT * FROM medicion ORDER BY id DESC LIMIT 1"; // Ordena por ID de forma descendente y limita a 1 resultado
+$sql = "SELECT * FROM medicion ORDER BY idMedicion DESC LIMIT 1"; // Ordena por ID de forma descendente y limita a 1 resultado
 
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    // Si se encontraron resultados, devuelve la última entrada como un array asociativo
+    //Buscar el idContaminante de la medicion
     $row = $result->fetch_assoc();
+    $idContaminante = $row["idContaminante"];
+
+    //Buscar el nombre de contaminante según la medicion
+    $sqlNombreContaminante = "SELECT nombre FROM contaminante WHERE idContaminante = $idContaminante";
+    $result2 = $conn->query($sqlNombreContaminante);
+    if ($result2->num_rows > 0) {
+        $row2 = $result2->fetch_assoc();
+    }
+   
 } else {
     // Si no se encontraron entradas en la tabla testB, devuelve un array vacío
     $row = array();
+    $row2 = array();
 }
 
 // Cierra la conexión a la base de datos (puedes cerrarla en otro lugar si es necesario)

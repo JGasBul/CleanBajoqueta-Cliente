@@ -42,10 +42,11 @@ session_start();
                     include '../bd/controlador.php';
 
                     //Muestra los datos de la conexión
-                    if (!empty($row)) {
-                        echo "<p>ID: " . $row["id"] . "</p>";
-                        echo "<p>Major: " . $row["Temperatura"] . "</p>"; 
-                        echo "<p>Minor: " . $row["Contaminacion"] . "</p>"; 
+                    if (!empty($row)&&!empty($row2)) {
+                        echo "<p>ID: " . $row["idMedicion"] . "</p>";
+                        echo "<p>Contaminante: " . $row2["nombre"] . "</p>"; 
+                        echo "<p>Valor: " . $row["valor"] . "</p>"; 
+                        echo "<p>Instante: " . $row["instante"] . "</p>"; 
     
                     } else {
                         echo "<p>No se encontraron entradas en la tabla testB.</p>";
