@@ -3,6 +3,8 @@ package com.example.sprint_0_android;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 // -----------------------------------------------------------------------------------
@@ -136,6 +138,24 @@ public class Utilidades {
         }
         return sb.toString();
     } // ()
+
+    //----------------------------------------------------------------------------------------------
+    // Calendar, SimpleDateFormat --> getActualTime() --> Date:String
+    // Descripción: Función que permite conocer dia,més,año y hora exacta en ese momento (el de
+    // cuando se ejecute la función)
+    // Llevarla a Utils.
+    //----------------------------------------------------------------------------------------------
+    public static String getActualTime(){
+        Calendar calendar;
+        SimpleDateFormat simpleDateFormat;
+        String Date;
+
+        calendar=Calendar.getInstance();
+        simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Date = simpleDateFormat.format(calendar.getTime());
+
+        return Date;
+    }
 } // class
 // -----------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------

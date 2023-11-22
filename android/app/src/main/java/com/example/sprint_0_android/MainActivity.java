@@ -1,56 +1,61 @@
 package com.example.sprint_0_android;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.ScanSettings;
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
-
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.ParcelUuid;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.media.AudioAttributes;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-
-import android.content.Intent;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView TextoMinor;
 
     private String uuidEscaneado ="";
+
+    //Variables para notificaciones
+    public FusedLocationProviderClient fusedLocationProviderClient;
+    public String Lat,Long,address,city,country;
+    public List<String> listaLocalizacion = new ArrayList<>();
 
     // _______________________________________________________________
     // Diseño: buscarTodosLosDispositivosBTLE()
@@ -150,7 +160,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " txPower  = " + Integer.toHexString(tib.getTxPower()) + " ( " + tib.getTxPower() + " )");
         Log.d(ETIQUETA_LOG, " ****************************************************");
 
-
+        //Si supera el valor del contaminante, identificar la localización. Después de ello, se encarga automáticament
+        if (Utilidades.bytesToInt(tib.getMinor())>=60){
+            getLastLocation();
+        }
     }
 
     // _______________________________________________________________
@@ -417,7 +430,114 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this);
 
+        getLastLocation();
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // getLastLocation()
+    // Descripción: Devuelve una lista, de manera asíncrona, con los siguientes parámetros:
+    // Latitud, Longitud, Dirección, Ciudad y País
+    //----------------------------------------------------------------------------------------------
+    private void getLastLocation(){
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null){
+                                try {
+                                    DecimalFormat precision = new DecimalFormat("0.00");
+
+                                    Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                    Lat=("Latitud: "+precision.format(addresses.get(0).getLatitude())+"º");
+                                    Long=("Longitud: "+precision.format(addresses.get(0).getLongitude())+"º");
+                                    address=("Dirección: "+addresses.get(0).getAddressLine(0));
+                                    city=("Ciudad: "+addresses.get(0).getLocality());
+                                    country=("País: "+addresses.get(0).getCountryName());
+
+                                    listaLocalizacion.add(Lat);
+                                    listaLocalizacion.add(Long);
+                                    listaLocalizacion.add(address);
+                                    listaLocalizacion.add(city);
+                                    listaLocalizacion.add(country);
+
+                                    for (int i=0; i<listaLocalizacion.size();i++){
+                                        Log.d("listaLocalizacion", "listaLocalizacion: "+listaLocalizacion.get(i));
+                                    }
+                                    sendNotification();
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+        }else {
+            askPermission();
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // sendNotification() --> NotificationCompat
+    // Descripción: Función que permite enviar una notificación con un audio en específico y una descripción.
+    // En este caso, la descripción contendrá: Fecha y hora exacta del momento + localización GPS
+    //----------------------------------------------------------------------------------------------
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void sendNotification()
+    {
+        Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/raw/audio");
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity. this, "default_notification_channel_id" )
+                .setSmallIcon(R.drawable. ic_launcher_foreground )
+                .setContentTitle( "BlueSky" )
+                .setSound(sound)
+                .setContentText(
+                        "Expande para ver más detalles"
+                )
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Date: "+Utilidades.getActualTime()+" Localización: "+listaLocalizacion))
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine("Fecha: "+Utilidades.getActualTime())
+                        .addLine("Localización")
+                        .addLine(listaLocalizacion.get(0))
+                        .addLine(listaLocalizacion.get(1))
+                        .addLine(listaLocalizacion.get(2))
+                        .addLine(listaLocalizacion.get(3))
+                        .addLine(listaLocalizacion.get(4))
+                        .addLine(""));
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context. NOTIFICATION_SERVICE );
+        if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes. CONTENT_TYPE_SONIFICATION )
+                    .setUsage(AudioAttributes. USAGE_ALARM )
+                    .build() ;
+            int importance = NotificationManager. IMPORTANCE_HIGH ;
+            NotificationChannel notificationChannel = new NotificationChannel( "NOTIFICATION_CHANNEL_ID" , "NOTIFICATION_CHANNEL_NAME" , importance) ;
+            notificationChannel.enableLights( true ) ;
+            notificationChannel.setLightColor(Color. RED ) ;
+            notificationChannel.enableVibration( true ) ;
+            notificationChannel.setVibrationPattern( new long []{ 100 , 200 , 300 , 400 , 500 , 400 , 300 , 200 , 400 }) ;
+            notificationChannel.setSound(sound , audioAttributes) ;
+            mBuilder.setChannelId( "NOTIFICATION_CHANNEL_ID" ) ;
+            assert mNotificationManager != null;
+            mNotificationManager.createNotificationChannel(notificationChannel) ;
+        }
+        assert mNotificationManager != null;
+        mNotificationManager.notify(( int ) System. currentTimeMillis () ,
+                mBuilder.build()) ;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // askPermission()
+    // Descripción: Función que pregunta por el permiso de Localización
+    //----------------------------------------------------------------------------------------------
+    private void askPermission() {
+        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},CODIGO_PETICION_PERMISOS);
     }
 
     // _______________________________________________________________
@@ -435,6 +555,8 @@ public class MainActivity extends AppCompatActivity {
                     // Permission is granted. Continue the action or workflow
                     // in your app.
 
+                    getLastLocation();
+
                 }  else {
 
                     Log.d(ETIQUETA_LOG, " onRequestPermissionResult(): Socorro: permisos NO concedidos  !!!!");
@@ -443,7 +565,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
     // _______________________________________________________________
     public void boton_prueba_pulsado (View quien) {
         Log.d("clienterestandroid", "boton_prueba_pulsado");
