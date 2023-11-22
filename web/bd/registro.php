@@ -22,7 +22,9 @@ if (!empty($_POST["registrar"])) {
         empty($_POST["contraseniaregistro"]) and
         empty($_POST["confirmarcontraseniaregistro"]) and
         empty($_POST["emailregistro"]) and
-        empty($_POST["telefonoregistro"])
+        empty($_POST["telefonoregistro"]) and
+        empty($_POST["customer_privacy"]) and
+        $_POST["customer_privacy"] = "on"
     ) {
         echo '<div class="alert alert-danger">Los campos están vacíos</div>';
     } else {
@@ -46,10 +48,11 @@ if (!empty($_POST["registrar"])) {
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "GET"
-            ));
+            )
+            );
             $headers = [
                 'accept: applicaction/json',
-                'email: '. $email .''
+                'email: ' . $email . ''
             ];
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
             $res = curl_exec($curl);
@@ -57,47 +60,66 @@ if (!empty($_POST["registrar"])) {
             $err = curl_error($curl);
             curl_close($curl);
             //$sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
-            if (in_array( $email, $res)) {
+            if (in_array($email, $res)) {
                 echo '<div class="alert alert-danger">Actualmente registrado. Intentelo con otro email</div>';
             } else {
-                //Encriptamos datos
-
-                $cifrado = new CifrarDescifrarAES($contrasenia);
-                $encryptedPassword = $cifrado->encriptar();
-
-                //Registramos Usuario
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => "http://localhost:8080/login/insertUser",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST"
-                ));
-                $headers = [
-                    'accept: applicaction/json',
-                    'Content-Type: application/json'
-                ];
-                $fields = [
-                    'email'      => $email,
-                    'contraseña' => $encryptedPassword,
-                    'nombreApellido'         => $nombreApellidos,
-                    'telefono' => $telefono
-                ];
-                curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
-                $res = curl_exec($curl);
-                $res = json_decode($res, true); //because of true, it's in an array
-                $err = curl_error($curl);
-                curl_close($curl);
-
-                //Si se pudo registrar, lo llevamos a la página de Login
-                if (!$err) {
-                    echo '<div class="alert alert-success">Registro Completado</div>';
-                    //header("location:../user/login.php");
-                    header('refresh:' . $segundos_espera . '; url=../user/login.php');
+                
+                //Aqui capto el permiso de haber verificado el correo
+                /*
+                $permiso
+                 if(verifico correcto){
+                    $permiso = true;
+                 }else{
+                      $permiso = false;
+                 }            
+                */
+                
+                $permiso=true;
+                //Se espera 30 segundos para continuar
+                sleep(30);
+                if (!$permiso) {
+                    echo '<div class="alert alert-danger">No esta verificado </div>';
                 } else {
-                    echo '<div class="alert alert-danger">Hubo problemas al registrar el usuario</div>';
+
+                    //Encriptamos datos
+                    $cifrado = new CifrarDescifrarAES($contrasenia);
+                    $encryptedPassword = $cifrado->encriptar();
+
+                    //Registramos Usuario
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => "http://localhost:8080/login/insertUser",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "POST"
+                    )
+                    );
+                    $headers = [
+                        'accept: applicaction/json',
+                        'Content-Type: application/json'
+                    ];
+                    $fields = [
+                        'email' => $email,
+                        'contraseña' => $encryptedPassword,
+                        'nombreApellido' => $nombreApellidos,
+                        'telefono' => $telefono
+                    ];
+                    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
+                    $res = curl_exec($curl);
+                    $res = json_decode($res, true); //because of true, it's in an array
+                    $err = curl_error($curl);
+                    curl_close($curl);
+
+                    //Si se pudo registrar, lo llevamos a la página de Login
+                    if (!$err) {
+                        echo '<div class="alert alert-success">Registro Completado</div>';
+                        //header("location:../user/login.php");
+                        header('refresh:' . $segundos_espera . '; url=../user/login.php');
+                    } else {
+                        echo '<div class="alert alert-danger">Hubo problemas al registrar el usuario</div>';
+                    }
                 }
             }
         } else {
