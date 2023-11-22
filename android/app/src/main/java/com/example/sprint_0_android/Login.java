@@ -40,6 +40,16 @@ public class Login extends AppCompatActivity {
         this.loginEmail = (EditText) findViewById(R.id.inputEmailTelefonoLogin);
         this.loginContrasenia = (EditText) findViewById(R.id.inputContraseniaLogin);
 
+
+        Button directAccessButton = findViewById(R.id.buttonDirectAccess);
+        directAccessButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, InfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     public void boton_sign_up(View v) {
         Intent intent = new Intent(this, SignUp.class);
