@@ -31,9 +31,9 @@
             <div class="tab-content" id="myTabContent">
 
                 <!-- Ozono -->
-                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                    <div class="card text-start">
-                        <div class="card-header bg-info  text-md-center text-dark border-0 fs-3">
+                <div class="tab-pane fade shadow border-light show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                    <div class="card shadow border-light text-start">
+                        <div class="card-header shadow-sm border-light bg-info  text-md-center text-dark border-0 fs-3">
                             <h4>Ozono (O3)<h4>
                         </div>
                         <div class="card-body">
@@ -49,9 +49,9 @@
                 </div>
 
                 <!-- Monóxido de Carbono (CO) -->
-                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                    <div class="card text-start">
-                            <div class="card-header bg-info  text-md-center text-dark border-0 fs-3">
+                <div class="tab-pane fade shadow border-light" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                    <div class="card shadow border-light text-start">
+                            <div class="card-header shadow-sm bg-info  text-md-center text-dark border-0 fs-3">
                                 <h4>Monóxido de Carbono (CO)<h4>
                             </div>
                             <div class="card-body">
@@ -67,9 +67,9 @@
                 </div>
 
                 <!-- Dióxido de Azufre (SO2) -->
-                <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-                    <div class="card text-start">
-                            <div class="card-header bg-info  text-md-center text-dark border-0 fs-3">
+                <div class="tab-pane shadow border-light fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                    <div class="card shadow border-lights text-start">
+                            <div class="card-header bg-info  shadow-sm text-md-center text-dark border-0 fs-3">
                                 <h4>Dióxido de Azufre (SO2)<h4>
                             </div>
                             <div class="card-body">
