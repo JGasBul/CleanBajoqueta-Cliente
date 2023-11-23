@@ -41,7 +41,8 @@
                         <form method="POST">
                             <!--Inicio Campo Nombre -->
                             <div class="text-center">
-                                <span class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
+                                <span
+                                    class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-lg-3">
@@ -67,7 +68,8 @@
 
                             <!--Inicio Campo Apellidos -->
                             <div class="text-center">
-                                <span class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
+                                <span
+                                    class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-lg-3 align-middle">
@@ -91,7 +93,8 @@
                             <!------------------------------------------------------------------------------------------------------------------->
                             <!--Inicio Campo Contraseña -->
                             <div class="text-center">
-                                <span class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
+                                <span
+                                    class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-lg-3 align-middle">
@@ -113,7 +116,8 @@
                             <!------------------------------------------------------------------------------------------------------------------->
                             <!--Inicio Campo Confirmar Contraseña -->
                             <div class="text-center">
-                                <span class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
+                                <span
+                                    class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-lg-3 align-middle">
@@ -134,7 +138,8 @@
                             <!------------------------------------------------------------------------------------------------------------------->
                             <!--Inicio Campo Email -->
                             <div class="text-center">
-                                <span class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
+                                <span
+                                    class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-lg-3 align-middle">
@@ -157,7 +162,8 @@
                             <!------------------------------------------------------------------------------------------------------------------->
                             <!--Inicio Campo Telefono de Contacto -->
                             <div class="text-center">
-                                <span class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
+                                <span
+                                    class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-75 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-lg-3 align-middle">
@@ -175,9 +181,23 @@
                                 <p><small>Formato del Teléfono: 962876543</small></p>
                             </div>
                             <!--Fin Campo Telefono de Contacto -->
+
+                            <!--Inicio Campo Politica de Privacidad -->
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-5 align-items-start">
+                                    <div class="form-check" id="uniform-customer_privacy">
+                                        <input class= "form-check-input" type="checkbox" value="0" required name="customer_privacy"
+                                            autocomplete="off">
+                                        <label class="form-check-label" for="exampleCheck2"><a href="../user/politicaPrivacidad.php">Acepto
+                                                politica de
+                                                Privacidad</a></label>
+                                    </div>
+                                </div>
+                            </div>
                             <?php include("../bd/registro.php"); ?>
-                            <div class="text-center">
-                                <input name="registrar" type="submit" class="btn btn-success fs-5 rounded-pill" value="  Registrarse  ">
+                            <div class="text-center mt-3">
+                                <input name="registrar" type="submit" class="btn btn-success fs-5 rounded-pill"
+                                    value="  Registrarse  ">
                             </div>
                         </form>
                         <!--Fin Formulario de Registro -->

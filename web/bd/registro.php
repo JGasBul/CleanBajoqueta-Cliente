@@ -25,10 +25,15 @@ if (!empty($_POST["registrar"])) {
     $contrasenia = $_POST["contraseniaregistro"];
     $confirmarcontrasenia = $_POST["confirmarcontraseniaregistro"];
     //Comprobamos si sus campos estan vacios
-
-    if
-    (
-        empty($nombre) || empty($apellidos) || empty($email) || empty($telefono) || empty($contrasenia) || empty($confirmarcontrasenia)
+    if (
+        empty($_POST["nombreregistro"]) and
+        empty($_POST["apellidosregistro"]) and
+        empty($_POST["contraseniaregistro"]) and
+        empty($_POST["confirmarcontraseniaregistro"]) and
+        empty($_POST["emailregistro"]) and
+        empty($_POST["telefonoregistro"]) and
+        empty($_POST["customer_privacy"]) and
+        $_POST["customer_privacy"] = "on"
     ) {
         $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono);
 
@@ -47,15 +52,13 @@ if (!empty($_POST["registrar"])) {
             $nombreApellidos = $nombre . " " . $apellidos;
 
             $curl = curl_init();
-            curl_setopt_array(
-                $curl,
-                array(
-                    CURLOPT_URL => "http://localhost:8080/login/getUserByEmail",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "GET"
-                )
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://localhost:8080/login/getUserByEmail",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET"
+            )
             );
             $headers = [
                 'accept: applicaction/json',
@@ -70,39 +73,54 @@ if (!empty($_POST["registrar"])) {
             if (in_array($email, $res)) {
                 echo '<div class="alert alert-danger">Actualmente registrado. Intentelo con otro email</div>';
             } else {
-                //Encriptamos datos
+                
+                //Aqui capto el permiso de haber verificado el correo
+                /*
+                $permiso
+                 if(verifico correcto){
+                    $permiso = true;
+                 }else{
+                      $permiso = false;
+                 }            
+                */
+                
+                $permiso=true;
+                //Se espera 30 segundos para continuar
+                sleep(30);
+                if (!$permiso) {
+                    echo '<div class="alert alert-danger">No esta verificado </div>';
+                } else {
 
-                $cifrado = new CifrarDescifrarAES($contrasenia);
-                $encryptedPassword = $cifrado->encriptar();
+                    //Encriptamos datos
+                    $cifrado = new CifrarDescifrarAES($contrasenia);
+                    $encryptedPassword = $cifrado->encriptar();
 
-                //Registramos Usuario
-                $curl = curl_init();
-                curl_setopt_array(
-                    $curl,
-                    array(
+                    //Registramos Usuario
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
                         CURLOPT_URL => "http://localhost:8080/login/insertUser",
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_TIMEOUT => 30,
                         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                         CURLOPT_CUSTOMREQUEST => "POST"
                     )
-                );
-                $headers = [
-                    'accept: applicaction/json',
-                    'Content-Type: application/json'
-                ];
-                $fields = [
-                    'email' => $email,
-                    'contraseña' => $encryptedPassword,
-                    'nombreApellido' => $nombreApellidos,
-                    'telefono' => $telefono
-                ];
-                curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
-                $res = curl_exec($curl);
-                $res = json_decode($res, true); //because of true, it's in an array
-                $err = curl_error($curl);
-                curl_close($curl);
+                    );
+                    $headers = [
+                        'accept: applicaction/json',
+                        'Content-Type: application/json'
+                    ];
+                    $fields = [
+                        'email' => $email,
+                        'contraseña' => $encryptedPassword,
+                        'nombreApellido' => $nombreApellidos,
+                        'telefono' => $telefono
+                    ];
+                    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
+                    $res = curl_exec($curl);
+                    $res = json_decode($res, true); //because of true, it's in an array
+                    $err = curl_error($curl);
+                    curl_close($curl);
 
                 //Si se pudo registrar, lo llevamos a la página de Login
                 if (!$err) {
