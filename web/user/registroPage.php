@@ -50,7 +50,7 @@
                                                 </span>
                                             </div>
                                             <div class="col  align-middle">
-                                                <input type="text" class="form-control  border-0 " name="nombreregistro" placeholder="Escriba su nombre" required>
+                                                <input type="text" class="form-control  border-0 recoverField" name="nombreregistro" placeholder="Escriba su nombre">
                                                 <small id="emailHelp" class="form-text text-muted"> </small>
                                             </div>
                                             <div class="col-lg-1  align-middle">
@@ -77,7 +77,7 @@
                                             </div>
 
                                             <div class="col  align-middle">
-                                                <input type="text" class="form-control  border-0" name="apellidosregistro" placeholder="Escriba sus apellidos" required>
+                                                <input type="text" class="form-control  border-0 recoverField" name="apellidosregistro" placeholder="Escriba sus apellidos">
                                             </div>
 
                                         </div>
@@ -101,7 +101,7 @@
                                             </div>
 
                                             <div class="col  align-middle">
-                                                <input type="password" class="form-control  border-0" name="contraseniaregistro" placeholder="Escriba su contraseña" required>
+                                                <input type="password" class="form-control  border-0" name="contraseniaregistro" placeholder="Escriba su contraseña">
                                             </div>
 
                                         </div>
@@ -123,7 +123,7 @@
                                             </div>
 
                                             <div class="col  align-middle">
-                                                <input type="password" class="form-control  border-0" name="confirmarcontraseniaregistro" placeholder="Vuelva a escribir tu contraseña" required>
+                                                <input type="password" class="form-control  border-0" name="confirmarcontraseniaregistro" placeholder="Vuelva a escribir tu contraseña">
                                             </div>
 
                                         </div>
@@ -144,7 +144,7 @@
                                             </div>
 
                                             <div class="col  align-middle">
-                                                <input type="email" class="form-control  border-0" name="emailregistro" placeholder="Escriba su email" required>
+                                                <input type="email" class="form-control  border-0 recoverField" name="emailregistro" placeholder="Escriba su email">
                                             </div>
 
                                         </div>
@@ -167,12 +167,12 @@
                                             </div>
 
                                             <div class="col  align-middle">
-                                                <input type="tel" class="form-control" name="telefonoregistro" placeholder="###-##-##-##" pattern="[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}" required>
+                                                <input type="text" class="form-control recoverField" name="telefonoregistro" placeholder="#########" pattern="[0-9]{9}">
                                             </div>
                                         </div>
                                     </div>
                                 </span>
-                                <p><small>Formato: 900-45-67-81</small></p>
+                                <p><small>Formato del Teléfono: 962876543</small></p>
                             </div>
                             <!--Fin Campo Telefono de Contacto -->
                             <?php include("../bd/registro.php"); ?>
