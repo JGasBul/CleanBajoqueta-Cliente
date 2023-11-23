@@ -54,5 +54,11 @@
         android:layout_height="33dp"
         android:text="Minor:" />
 
+    <Button
+        android:id="@+id/buttonEnviaMed"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:text="Envia Medicion" />
+
 
 </android.widget.LinearLayout>

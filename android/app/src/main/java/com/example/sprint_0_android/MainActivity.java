@@ -22,6 +22,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioAttributes;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView salidaTexto;
     private Button btnQR;
 
+    private Button btnEnviaMed;
     private TextView TextoMajor;
     private TextView TextoMinor;
 
@@ -139,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
-        this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
-        this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
 
         Log.d(ETIQUETA_LOG, " ****************************************************");
         Log.d(ETIQUETA_LOG, " ****** DISPOSITIVO DETECTADO BTLE ****************** ");
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
 
         TextoMajor.setText(String.valueOf(    Utilidades.bytesToInt(tib.getMajor())));
-        TextoMinor.setText(String.valueOf( Utilidades.bytesToInt(tib.getMajor())));
+        TextoMinor.setText(String.valueOf( Utilidades.bytesToInt(tib.getMinor())));
 
         Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
                 + Utilidades.bytesToInt(tib.getMinor()) + " ) ");
@@ -179,10 +179,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Enviar Medicion (Major=id_Contaminante, Minor=valor)
         int id_contaminante=Utilidades.bytesToInt(tib.getMajor());
+        int valor = Utilidades.bytesToInt((tib.getMinor()));
+        Log.d(ETIQUETA_LOG, "idcontaminante:" +id_contaminante +", Valor: " +valor );
         switch (id_contaminante){
             case 11:
-                String nombre = "co2";
-                enviarMedicion(id_contaminante,nombre,Utilidades.bytesToInt(tib.getMajor()));
+                enviarMedicion(id_contaminante,valor);
         }
 
     }
@@ -410,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+/*
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
@@ -429,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         ).attach();
-
+*/
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
         this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
         this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
@@ -474,6 +475,13 @@ public class MainActivity extends AppCompatActivity {
 
         getLastLocation();
 
+        btnEnviaMed=findViewById(R.id.buttonEnviaMed);
+        btnEnviaMed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enviarMedicion(11,69);
+            }
+        });
     }
 
     //----------------------------------------------------------------------------------------------
@@ -650,7 +658,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // _______________________________________________________________
-    public void enviarMedicion (int idContaminante,String nombre,float valor) {
+    public void enviarMedicion (int idContaminante,float valor) {
         Log.d("clienterestandroid", "boton_enviar_pulsado_client");
 
             //Email de usuario
@@ -659,21 +667,24 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.1.106/bd/enviarMedicion.php";
+            String urlDestino = "http://192.168.1.106:8080/mediciones/guardar_mediciones";
+
 
             //Instante de tomar medicion
-            Date currentTime = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            String formattedTime = sdf.format(currentTime);
+            String currentTime = Utilidades.getActualTime();
+                Log.d(ETIQUETA_LOG, "enviarMedicion: " +currentTime);
 
             //Creo un objeto JSON e introducir valores
             JSONObject postData = new JSONObject();
             try {
                 postData.put("idContaminante", idContaminante);
-                postData.put("nombre", nombre);
+                postData.put("idSonda", 10);
                 postData.put("valor", valor);
-                postData.put("instante", formattedTime);
-                postData.put("email",email );
+                postData.put("instante", currentTime);
+                postData.put("emailUser",email );
+                postData.put("latitud",4 );
+                postData.put("longitud",3 );
+                postData.put("temperatura",20 );
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -748,19 +759,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            return;
+        if (
+                ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
+        )
+        {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_ADMIN,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH_SCAN,Manifest.permission.INTERNET},
+                    CODIGO_PETICION_PERMISOS);
         }
         this.detenerBusquedaDispositivosBTLE();
-
     }
 
     //Aqui es donde se obtiene la respuesta del analisis del codigo qr, se muestra en un toast
