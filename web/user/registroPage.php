@@ -188,7 +188,7 @@
                                     <div class="form-check" id="uniform-customer_privacy">
                                         <input class= "form-check-input" type="checkbox" value="0" required name="customer_privacy"
                                             autocomplete="off">
-                                        <label class="form-check-label" for="exampleCheck2"><a href="../user/politicaPrivacidad.php">Acepto
+                                        <label class="form-check-label" for="exampleCheck2"><a href="../user/politicaPrivacidadPage.php">Acepto
                                                 politica de
                                                 Privacidad</a></label>
                                     </div>

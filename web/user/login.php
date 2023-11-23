@@ -6,6 +6,7 @@ if($_POST){
         $_SESSION['usuario']=ok;
     }
 }*/
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="es">
