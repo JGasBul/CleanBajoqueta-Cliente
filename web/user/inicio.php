@@ -1,5 +1,10 @@
 <?php
+
 session_start();
+
+if(!isset($_SESSION['usuario'])){
+    header('refresh:0; url=../user/login.php');
+}
 ?>
 
 <!doctype html>
