@@ -2,4 +2,29 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores primarios para la UI -->
+    <color name="colorPrimary">#6200EE</color> <!-- Un tono de azul -->
+    <color name="colorPrimaryDark">#3700B3</color> <!-- Un tono de azul más oscuro -->
+    <color name="colorAccent">#03DAC5</color> <!-- Un tono de cian -->
+
+    <!-- Colores para la barra de estado y navegación -->
+    <color name="statusBarColor">#84E4F1</color> <!-- Debería combinar con colorPrimaryDark para coherencia -->
+    <color name="navigationBarColor">#A2DDF8</color> <!-- Puede ser el mismo que colorPrimary -->
+
+
+        <!-- Definiciones de colores para las pestañas -->
+        <color name="tab_text_color">#DAFFDB</color> <!-- blanco -->
+        <color name="tab_selected_text_color">#FFFFFF</color> <!-- amarillo -->
+        <color name="tab_indicator_color">#9AD6A7</color> <!-- amarillo -->
+        <color name="tab_background_color">#79B4FF</color> <!-- azul -->
+
+        <!-- Puedes agregar más colores según sea necesario -->
+
+
+
+    <!-- Colores de texto para la barra de estado -->
+    <!-- Si statusBarColor es claro, usa color de texto oscuro, si es oscuro, usa color de texto claro -->
+    <color name="statusBarTextColor">#FFFFFF</color> <!-- Blanco para texto claro -->
+
 </resources>

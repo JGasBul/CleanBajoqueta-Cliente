@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,6 +71,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -407,6 +410,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+
+        // Configura el adaptador para ViewPager
+        TabsAdapter tabsAdapter = new TabsAdapter(this);
+        viewPager.setAdapter(tabsAdapter);
+
+        // Conecta TabLayout con ViewPager2
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> {
+                    // Aquí puedes configurar el texto de cada pestaña
+                    if (position == 0) {
+                        tab.setText("Tab 1");
+                    } else {
+                        tab.setText("Tab 2");
+                    }
+                }
+        ).attach();
 
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
         this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
