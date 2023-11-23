@@ -52,13 +52,15 @@ if (!empty($_POST["registrar"])) {
             $nombreApellidos = $nombre . " " . $apellidos;
 
             $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "http://localhost:8080/login/getUserByEmail",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET"
-            )
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL => "http://localhost:8080/user/getUserByEmail",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET"
+                )
             );
             $headers = [
                 'accept: applicaction/json',
@@ -73,7 +75,7 @@ if (!empty($_POST["registrar"])) {
             if (in_array($email, $res)) {
                 echo '<div class="alert alert-danger">Actualmente registrado. Intentelo con otro email</div>';
             } else {
-                
+
                 //Aqui capto el permiso de haber verificado el correo
                 /*
                 $permiso
@@ -83,10 +85,10 @@ if (!empty($_POST["registrar"])) {
                       $permiso = false;
                  }            
                 */
-                
-                $permiso=true;
+
+                $permiso = true;
                 //Se espera 30 segundos para continuar
-                sleep(30);
+                //sleep(30);
                 if (!$permiso) {
                     echo '<div class="alert alert-danger">No esta verificado </div>';
                 } else {
@@ -97,13 +99,15 @@ if (!empty($_POST["registrar"])) {
 
                     //Registramos Usuario
                     $curl = curl_init();
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => "http://localhost:8080/login/insertUser",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_TIMEOUT => 30,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "POST"
-                    )
+                    curl_setopt_array(
+                        $curl,
+                        array(
+                            CURLOPT_URL => "http://localhost:8080/user/insertUser",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_TIMEOUT => 30,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "POST"
+                        )
                     );
                     $headers = [
                         'accept: applicaction/json',
@@ -122,22 +126,22 @@ if (!empty($_POST["registrar"])) {
                     $err = curl_error($curl);
                     curl_close($curl);
 
-                //Si se pudo registrar, lo llevamos a la página de Login
-                if (!$err) {
-                    echo '<div class="alert alert-success">Registro Completado</div>';
+                    //Si se pudo registrar, lo llevamos a la página de Login
+                    if (!$err) {
+                        echo '<div class="alert alert-success">Registro Completado</div>';
 
-                    $temp = new TempData($tempDataFile, null);
-                    $temp->eraseTempData();
+                        $temp = new TempData($tempDataFile, null);
+                        $temp->eraseTempData();
 
-                    header('refresh:' . $segundos_espera . '; url=../user/login.php');
-                } else {
-                    echo '<div class="alert alert-danger">Hubo problemas al registrar el usuario</div>';
+                        header('refresh:' . $segundos_espera . '; url=../user/login.php');
+                    } else {
+                        echo '<div class="alert alert-danger">Hubo problemas al registrar el usuario</div>';
+                    }
                 }
             }
         } else {
             //$Formdata = ("Nombre: ".$nombre.", Apellidos: ".$apellidos.", Email: ".$email.", Telefono: ".$telefono);
             $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono);
-            ;
 
             $temp = new TempData($tempDataFile, json_encode($Formdata));
             $temp->putTempData();
@@ -157,8 +161,7 @@ if ($pageWasRefreshed) {
     if ($Formdata == null) {
         echo '<div class="alert alert-danger">Hubo problemas al redireccionar. Vaya manualmente al Login y pruebe
         si está registrado</div>';
-    } 
-    else {
+    } else {
         // Como el PHP se ejecuta antes que el browser, y el JS después, para completar los campos necesitamos
         // un trozo de código de JS cuyos campos son validados previamente en PHP
         echo
