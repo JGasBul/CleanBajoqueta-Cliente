@@ -180,9 +180,16 @@ public class MainActivity extends AppCompatActivity {
         //Enviar Medicion (Major=id_Contaminante, Minor=valor)
         int id_contaminante=Utilidades.bytesToInt(tib.getMajor());
         int valor = Utilidades.bytesToInt((tib.getMinor()));
+        float limite = 50;
+
+        if (valor>=limite){
+            getLastLocation();
+
+        }
         Log.d(ETIQUETA_LOG, "idcontaminante:" +id_contaminante +", Valor: " +valor );
         switch (id_contaminante){
             case 11:
+
                 enviarMedicion(id_contaminante,valor);
         }
 
@@ -542,7 +549,7 @@ public class MainActivity extends AppCompatActivity {
         Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/raw/audio");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity. this, "default_notification_channel_id" )
                 .setSmallIcon(R.drawable. ic_launcher_foreground )
-                .setContentTitle( "BlueSky" )
+                .setContentTitle( "BlueSky-Danger Alert" )
                 .setSound(sound)
                 .setContentText(
                         "Expande para ver más detalles"
