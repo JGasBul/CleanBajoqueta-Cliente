@@ -1,12 +1,10 @@
 <?php
 include("../bd/bd.php");
-/*Si no has iniciado sesión, no puedes entrar a la página de inicio del login
-if($_POST){
-    if($_POST['usuariologin']== $_SESSION['nombre'] && $_POST['contrasenialogin']== $_SESSION['contraseña']){
-        $_SESSION['usuario']=ok;
-    }
-}*/
-session_start();
+
+if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
+    header('refresh:0; url=../user/inicio.php');
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
