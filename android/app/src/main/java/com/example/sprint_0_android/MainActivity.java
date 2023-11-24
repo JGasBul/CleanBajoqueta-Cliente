@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnEnviaMed;
     private TextView TextoMajor;
     private TextView TextoMinor;
+    private TextView Textdist;
 
     private String uuidEscaneado ="";
 
@@ -171,6 +172,13 @@ public class MainActivity extends AppCompatActivity {
 
         TextoMajor.setText(String.valueOf(    Utilidades.bytesToInt(tib.getMajor())));
         TextoMinor.setText(String.valueOf( Utilidades.bytesToInt(tib.getMinor())));
+
+        //Distancia sonda movil
+        Log.d(ETIQUETA_LOG, " distancia = " + rssi);
+        //Textdist.setText(String.valueOf(rssi));
+        distanciasonda(rssi);
+
+
 
         Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
                 + Utilidades.bytesToInt(tib.getMinor()) + " ) ");
@@ -441,6 +449,7 @@ public class MainActivity extends AppCompatActivity {
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
         this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
         this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
+        this.Textdist = (TextView) findViewById(R.id.textdist);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -625,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("clienterestandroid", "boton_prueba_pulsado");
 
         //Url de destino
-        String urlComprobarComproDestino = "http://192.168.1.106/Sprint_0_Web/logica/comprobarenviomedicion.php";
+        String urlComprobarComproDestino = "http://192.168.0.35/Sprint_0_Web/logica/comprobarenviomedicion.php";
 
         //Añado parametros y los envio al enlace correspondiente
         AndroidNetworking.get(urlComprobarComproDestino)
@@ -674,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.1.106:8080/mediciones/guardar_mediciones";
+            String urlDestino = "http://192.168.0.35:8080/mediciones/guardar_mediciones";
 
 
             //Instante de tomar medicion
@@ -815,7 +824,7 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             String email = intent.getStringExtra("email");
 
-            String urlDestino = "http://192.168.1.106/bd/asignarSondaUsuario.php";
+            String urlDestino = "http://192.168.0.35/bd/asignarSondaUsuario.php";
 
             //Creo un objeto JSON e introducir valores
             JSONObject postData = new JSONObject();
@@ -880,5 +889,13 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         //bloquear el botón de retroceso
     }
-
+    public void distanciasonda(int distancia){
+        if(distancia>=-45){
+            Textdist.setText("La sonda está cerca");
+        }else if(distancia>=-65){
+            Textdist.setText("La sonda está lejos");
+        }else if(distancia<-65){
+            Textdist.setText("La sonda está muy lejos");
+        }
+    }
 }

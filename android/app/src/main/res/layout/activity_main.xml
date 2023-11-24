@@ -60,5 +60,11 @@
         android:layout_height="wrap_content"
         android:text="Envia Medicion" />
 
+    <TextView
+        android:id="@+id/textdist"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:text="La sonda está: " />
+
 
 </android.widget.LinearLayout>
