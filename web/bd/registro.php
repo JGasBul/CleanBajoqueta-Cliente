@@ -72,7 +72,11 @@ if (!empty($_POST["registrar"])) {
             $err = curl_error($curl);
             curl_close($curl);
             //$sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
-            if (in_array($email, $res)) {
+            if ($res) {
+                $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => null, 3 => $telefono);
+
+                $temp = new TempData($tempDataFile, json_encode($Formdata));
+                $temp->putTempData();
                 echo '<div class="alert alert-danger">Actualmente registrado. Intentelo con otro email</div>';
             } else {
 
