@@ -634,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("clienterestandroid", "boton_prueba_pulsado");
 
         //Url de destino
-        String urlComprobarComproDestino = "http://192.168.0.35/Sprint_0_Web/logica/comprobarenviomedicion.php";
+        String urlComprobarComproDestino = "http://192.168.217.185/Sprint_0_Web/logica/comprobarenviomedicion.php";
 
         //Añado parametros y los envio al enlace correspondiente
         AndroidNetworking.get(urlComprobarComproDestino)
@@ -683,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.0.35:8080/mediciones/guardar_mediciones";
+            String urlDestino = "http://192.168.217.185:8080/mediciones/guardar_mediciones";
 
 
             //Instante de tomar medicion
@@ -824,7 +824,7 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             String email = intent.getStringExtra("email");
 
-            String urlDestino = "http://192.168.0.35/bd/asignarSondaUsuario.php";
+            String urlDestino = "http://192.168.217.185/bd/asignarSondaUsuario.php";
 
             //Creo un objeto JSON e introducir valores
             JSONObject postData = new JSONObject();
