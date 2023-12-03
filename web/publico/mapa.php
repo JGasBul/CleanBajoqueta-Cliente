@@ -18,7 +18,9 @@
     <!-- Plugin Leaflet: Leaflet.Locate -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
-    
+    <!-- Plugin Leaflet: Leaflet.heat -->
+    <script src="../clases/leaflet-heat.js"></script>
+
     <!-- contaminante.js -->
     <script src="../clases/contaminante.js"></script>
     <!-- mapa.CSS y mapa.JS -->

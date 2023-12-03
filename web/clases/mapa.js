@@ -29,8 +29,10 @@ function mapa(nombre) {
 
     console.log("Inicio añadir Contaminantes");
     res = añadirContaminantes();
+
+    heatlayer = getheatLayer()
     if(res){
-        var layerControl = L.control.layers({},{"Ozono":res[0],"CO":res[1]}).addTo(map);
+        var layerControl = L.control.layers({},{"Ozono":res[0],"CO":res[1],"HeatMap":heatlayer}).addTo(map);
     }
 }
 //----------------------------------------------------------------------------------------------------------
@@ -181,4 +183,64 @@ function tuLocalizacion(punto, zoom) {
         zoom = 16;
     }
     centrarEn(punto, zoom);
+}
+//----------------------------------------------------------------------------------------------------------
+// Punto:punto, N:zoom --> centrarEn()
+// Descripción: centra el mapa en un punto en concreto con un zoom determinado
+//----------------------------------------------------------------------------------------------------------
+function getheatLayer(puntos){
+    //Punto =  [lat, lng, intensity]
+    if(puntos==null){
+        //Puntos de testeo
+        puntos = [
+            [50.4, 30.4, 100],
+            [50.45, 30.45, 100],
+            [50.4, 30.45, 100],
+            [50.45, 30.4, 100],
+
+            [50.475, 30.475, 800],
+            [50.47, 30.475, 100],
+            [50.47, 30.47, 100],
+            [50.475, 30.47, 800],
+
+            [50.4, 30.5, 100],
+            [50.45, 30.55, 400],
+            [50.4, 30.55, 400],
+            [50.45, 30.5, 400],
+
+            [50.475, 30.75, 800],
+            [50.475, 30.575, 800],
+            [50.75, 30.575, 400],
+            [50.75, 30.545, 400],
+
+            [50.5, 30.5, 500],
+            [50.5, 30.6, 500],
+            [50.6, 30.5, 500],
+
+            [50.55, 30.55, 500],
+            [50.55, 30.65, 500],
+            [50.65, 30.55, 500],
+
+            [50.6, 30.6, 600],
+            [50.6, 30.7, 600],
+            [50.7, 30.6, 600],
+
+            [50.65, 30.65, 700],
+            [50.65, 30.75, 700],
+            [50.75, 30.65, 700],
+
+            [50.7, 30.7, 700]
+        ]
+    }
+    
+    // var heatLayer = L.heatLayer([
+    //     puntos
+    // ], {radius: 25}).addTo(map);
+
+    var heatLayer = L.heatLayer(puntos,{radius: 27});
+    heatLayer.addTo(map);
+
+    centrarEn([50.5, 30.5, 1],9); //Esto lo hago para la visualización a modo de testeo. Luego se quita
+
+    return heatLayer;
 }
