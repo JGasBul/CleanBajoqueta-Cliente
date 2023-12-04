@@ -24,6 +24,12 @@ if (!empty($_POST["registrar"])) {
     $telefono = $_POST["telefonoregistro"];
     $contrasenia = $_POST["contraseniaregistro"];
     $confirmarcontrasenia = $_POST["confirmarcontraseniaregistro"];
+    if (!isset($_POST["customer_privacy"])) {
+        $customer_privacy = false;
+    } else {
+        $customer_privacy = true;
+    }
+
     //Comprobamos si sus campos estan vacios
     if (
         empty($_POST["nombreregistro"]) and
@@ -32,16 +38,34 @@ if (!empty($_POST["registrar"])) {
         empty($_POST["confirmarcontraseniaregistro"]) and
         empty($_POST["emailregistro"]) and
         empty($_POST["telefonoregistro"]) and
-        empty($_POST["customer_privacy"]) and
-        $_POST["customer_privacy"] = "on"
+        ($customer_privacy == false)
+        //$_POST["customer_privacy"] == "on"
     ) {
-        $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono);
+        $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
 
+        //var_dump($Formdata);
         $temp = new TempData($tempDataFile, json_encode($Formdata));
         $temp->putTempData();
         echo '<div class="alert alert-danger">Hay campos vacíos</div>';
     } else {
         //print("" . $nombre . "" . $apellidos . "" . $email . "" . $contrasenia . "" . $confirmarcontrasenia . "" . $telefono);
+
+        if ($customer_privacy == false) {
+            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
+
+            $temp = new TempData($tempDataFile, json_encode($Formdata));
+            $temp->putTempData();
+            echo '<div class="alert alert-danger">Política de privacidad no aceptada</div>';
+            return;
+        }
+        if ($_POST["contraseniaregistro"] == '') {
+            echo '<div class="alert alert-danger">contraseña vacia</div>';
+            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
+
+            $temp = new TempData($tempDataFile, json_encode($Formdata));
+            $temp->putTempData();
+            return;
+        }
 
         /*Comprobamos si la contraseña es la misma en los campos 'contraseña' y 'confirmar contraseña'.
         Esto es un método de seguridad anti-Bot
@@ -73,7 +97,8 @@ if (!empty($_POST["registrar"])) {
             curl_close($curl);
             //$sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
             if ($res) {
-                $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => null, 3 => $telefono);
+                $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => null, 3 => $telefono, 4 => $customer_privacy);
+                //var_dump($Formdata);
 
                 $temp = new TempData($tempDataFile, json_encode($Formdata));
                 $temp->putTempData();
@@ -145,7 +170,7 @@ if (!empty($_POST["registrar"])) {
             }
         } else {
             //$Formdata = ("Nombre: ".$nombre.", Apellidos: ".$apellidos.", Email: ".$email.", Telefono: ".$telefono);
-            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono);
+            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
 
             $temp = new TempData($tempDataFile, json_encode($Formdata));
             $temp->putTempData();
@@ -159,6 +184,7 @@ if (!empty($_POST["registrar"])) {
 // Si lo ha sido, entonces rellenamos el formulario con los campos que tuviésemos
 //---------------------------------------------------------------------------------------------------------------------
 if ($pageWasRefreshed) {
+
     $temp = new TempData($tempDataFile, null);
     $Formdata = json_decode($temp->getTempData(), true);
 
@@ -177,5 +203,6 @@ if ($pageWasRefreshed) {
                 formFields[3].value = "' . $Formdata[3] . '";
             </script>';
     }
+
 }
 ?>
