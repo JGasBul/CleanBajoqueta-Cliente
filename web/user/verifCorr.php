@@ -4,10 +4,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correoUsuario = isset($_GET['correo']) ? $_GET['correo'] : "carlesmartif@gmail.com";
     $codigoAleatorio = $_GET['codigo'];
 
-    $titulo = "Cambio de contraseña de tu cuenta BlueSky";
+    $titulo = "Verificación de cuenta BlueSky";
 
     // URL a la que quieres que el botón redirija
-    $urlRedireccion = "http://localhost/user/cambiarCon.php?correo=" . urlencode($correoUsuario) . "&codigo=" . $codigoAleatorio;
+    $urlRedireccion = "http://localhost/user/correoVerificado.php?correo=" . urlencode($correoUsuario) . "&codigo=" . $codigoAleatorio;
 
     // Crear el mensaje en formato HTML
     $mensaje = '
@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </head>
     <body>
       
-      <p>Haz click en el siguiente botón para cambiar la contraseña</p>
-      <p><a href="' . $urlRedireccion . '" style="background-color: blue; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;">Cambiar Contraseña</a></p>
+      <p>Haz click en el siguiente botón para verificar tu cuenta</p>
+      <p><a href="' . $urlRedireccion . '" style="background-color: blue; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;">Verificar Cuenta</a></p>
     </body>
     </html>
     ';

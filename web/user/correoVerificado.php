@@ -8,7 +8,7 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cambio de contraseña</title>
+    <title>Verificacion de correo</title>
 </head>
 <body>
     <h1>Información del Correo</h1>
