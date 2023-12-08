@@ -26,6 +26,23 @@ Mi opción ha sido usar xampp, así que comenzaremos con una instalación limpia
 Con el servidor operativo, acceder desde cualquier navegador a esta url: http://localhost/tests/test_bd.php. O bien pulsar
 en la pantalla de incio el botón tests. También se puede desde consola ejecutando el comando php test_bd.php, por ejemplo:  C:\xampp\htdocs\Web3AZpasgon\tests php test_bd.php Una vez dentro, se obrevarán los datos introducidos y si han pasado con éxito las pruebas o no.También hay un botón salir para volver a la página de inicio.
 
+## Como instalar el servidor de correo necesario para la verificación y restablecimiento de contraseñas
+###*Al modificar los archivos abrirlos con el visualCode u otro programa similar, tener mucho cuidado con los caracteres invisibles*
+
+1. Entrar a la carpeta del XAMPP y comprobar que existe una carpeta llamada sendmail, si no es así, hay que desinstalar el 
+XAMPP y volverlo a instalar teniendo marcada la casilla de Fake Sendmail
+2. Abrir el archivo php.ini dentro de la carpeta php y buscar con ctl+b el apartado de mail funcion
+3.Modificar los siguientes apartados:
+SMTP=smtp.gmail.com
+smtp_port=587
+sendmail_path="C:\xampp\sendmail\sendmail.exe -t" *(quitar el punto y coma iniciales, esta es la ruta donde esta instalado el archivo sendmail.exe en la carpeta sendmail en la ruta del xamp, el -t tiene que estar al final)*
+
+4. Modificar el archivo sendmail.ini de la carpeta sendmail con estos valores:
+smpt_server=smpt.gmail.com
+smpt_port=587
+auth_username=bajoquetabluesky@gmail.com
+auth_password=sfubwqfoijhjfpta
+
 ## Bugs conocidos
 ### Bugs con la base de datos
 Si al tener todo funcionando, solo aparece una medida con id 0 en la página web, comprobar que en la base de datos, la tabla medicion 
