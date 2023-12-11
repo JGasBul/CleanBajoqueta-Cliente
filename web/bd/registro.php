@@ -24,6 +24,14 @@ if (!empty($_POST["registrar"])) {
     $telefono = $_POST["telefonoregistro"];
     $contrasenia = $_POST["contraseniaregistro"];
     $confirmarcontrasenia = $_POST["confirmarcontraseniaregistro"];
+
+    //$imagen = base64_encode(file_get_contents("../assets/defaultUserImage.jpg"));
+    //$imagen = fopen("../assets/defaultUserImage.jpg", "rb");
+    $imagen = base64_encode(file_get_contents(__DIR__ .'/../assets/defaultUserImage.jpg'));
+
+    //echo(__DIR__ .'/../assets/defaultUserImage.jpg');
+
+    //echo '<img src='.$imagen.' alt=imagenTest />';
     //Comprobamos si sus campos estan vacios
     if (
         empty($_POST["nombreregistro"]) and
@@ -121,7 +129,8 @@ if (!empty($_POST["registrar"])) {
                         'email' => $email,
                         'contraseña' => $encryptedPassword,
                         'nombreApellido' => $nombreApellidos,
-                        'telefono' => $telefono
+                        'telefono' => $telefono,
+                        'imagen' => $imagen
                     ];
                     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
                     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
