@@ -41,15 +41,6 @@ public class Login extends AppCompatActivity {
         this.loginContrasenia = (EditText) findViewById(R.id.inputContraseniaLogin);
 
 
-        Button directAccessButton = findViewById(R.id.buttonDirectAccess);
-        directAccessButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Login.this, InfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
     public void boton_sign_up(View v) {
         Intent intent = new Intent(this, SignUp.class);
@@ -59,7 +50,7 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
-        String urlDestino = "http://192.168.217.185:8080/user/getUserByEmail";
+        String urlDestino = "http://192.168.1.106:8080/user/getUserByEmail";
         JSONObject postData = new JSONObject();
 
         //Check si hay algún campo nulo
