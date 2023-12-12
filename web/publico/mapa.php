@@ -23,6 +23,8 @@
 
     <!-- contaminante.js -->
     <script src="../clases/contaminante.js"></script>
+    <!-- contaminante.js -->
+    <script src="../clases/CORSSolve.js"></script>
     <!-- mapa.CSS y mapa.JS -->
     <link rel="stylesheet" href="../css/mapa.css"/>
     <script src="../clases/mapa.js"></script>

@@ -7,6 +7,9 @@
 
 // Variable Global
 var map = null;
+var miLocalizacion = null;
+
+var puntoGlobal = null;
 
 //----------------------------------------------------------------------------------------------------------
 // String nombreMapa --> map()
@@ -24,16 +27,12 @@ function mapa(nombre) {
     }).addTo(map);
 
     console.log("mapa creado");
-    L.control.locate().addTo(map);
+    var locateController = L.control.locate().addTo(map);
+    locateController.start();
+
+    getCurrentLocation();
+
     console.log("mapa Locate creado");
-
-    console.log("Inicio añadir Contaminantes");
-    res = añadirContaminantes();
-
-    heatlayer = getheatLayer()
-    if(res){
-        var layerControl = L.control.layers({},{"Ozono":res[0],"CO":res[1],"HeatMap":heatlayer}).addTo(map);
-    }
 }
 //----------------------------------------------------------------------------------------------------------
 // Punto: punto --> crearMarcador() --> Marker: marker
@@ -43,6 +42,42 @@ function crearMarker(punto) {
     if (punto == null) { punto = [0, 0]; }
     var marker = L.marker(punto).addTo(map);
     return marker;
+}
+//----------------------------------------------------------------------------------------------------------
+// getCurrentLocation() --> Punto: punto
+// Descripción: Recoge tu localización en base al navegador
+//----------------------------------------------------------------------------------------------------------
+function getCurrentLocation() {
+
+    const success = (position) => {
+        console.log(position);
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        const geoApiUrl = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=XXXXXXXXXXXX&longitude=XXXXXXXXXXXX&localityLanguage=es'
+
+        fetch(geoApiUrl)
+            .then(res => res.json())
+            .then(data => {
+                miLocalizacion = [data.longitude, data.latitude];
+                console.log("Mi localización: " + miLocalizacion);
+                console.log("Mi ciudad: " + data.locality);
+
+                console.log("Inicio añadir Contaminantes");
+                res = añadirContaminantes();
+
+                heatlayer = getheatLayer();
+                if (res) {
+                    var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1], "HeatMap": heatlayer }).addTo(map);
+                }
+            })
+    }
+
+    const error = () => {
+        miLocalizacion = 'Unable to retrieve your location'
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error);
 }
 //----------------------------------------------------------------------------------------------------------
 // Punto: punto --> crearCirculo()
@@ -67,6 +102,7 @@ function añadirContaminantes() {
     console.log("añadirContaminante inicia");
     listaContam = [];
     //contaminante = consulta GET
+
     //#region Contaminantes de Prueba
     contaminante = new Contaminante("ozono", 244, [0, 0]);
     listaContam.push(contaminante);
@@ -83,14 +119,16 @@ function añadirContaminantes() {
     listaContam.push(contaminante);
     contaminante = new Contaminante("co", 45, [60, 80]);
     listaContam.push(contaminante);
-
-
-    listaOzono = [];
-    listaCO = [];
-
     //console.log("Lista Ozono: "+listaOzono);
     //console.log("Lista CO: "+listaCO);
     //#endregion
+
+
+    var listaPuntos = getListaPuntos();
+    //var listaContam = getListaContaminantes();
+
+    listaOzono = [];
+    listaCO = [];
 
     var layerOzono;
     var layerCO;
@@ -123,7 +161,7 @@ function añadirContaminantes() {
         layerCO.addTo(map);
     }
 
-    return [layerOzono,layerCO];
+    return [layerOzono, layerCO];
 
 }
 
@@ -175,22 +213,9 @@ function centrarEn(punto, zoom) {
 // Punto:punto, N:zoom --> centrarEn()
 // Descripción: centra el mapa en un punto en concreto con un zoom determinado
 //----------------------------------------------------------------------------------------------------------
-function tuLocalizacion(punto, zoom) {
-    if (punto == null) {
-        punto = [40.737, -73.923];
-    }
-    if (zoom == null) {
-        zoom = 16;
-    }
-    centrarEn(punto, zoom);
-}
-//----------------------------------------------------------------------------------------------------------
-// Punto:punto, N:zoom --> centrarEn()
-// Descripción: centra el mapa en un punto en concreto con un zoom determinado
-//----------------------------------------------------------------------------------------------------------
-function getheatLayer(puntos){
+function getheatLayer(puntos) {
     //Punto =  [lat, lng, intensity]
-    if(puntos==null){
+    if (puntos == null) {
         //Puntos de testeo
         puntos = [
             [50.4, 30.4, 100],
@@ -232,15 +257,69 @@ function getheatLayer(puntos){
             [50.7, 30.7, 700]
         ]
     }
-    
+
     // var heatLayer = L.heatLayer([
     //     puntos
     // ], {radius: 25}).addTo(map);
 
-    var heatLayer = L.heatLayer(puntos,{radius: 27});
+    var heatLayer = L.heatLayer(puntos, { radius: 27 });
     heatLayer.addTo(map);
 
-    centrarEn([50.5, 30.5, 1],9); //Esto lo hago para la visualización a modo de testeo. Luego se quita
+    //centrarEn([50.5, 30.5, 1], 9); //Esto lo hago para la visualización a modo de testeo. Luego se quita
 
     return heatLayer;
+}
+//----------------------------------------------------------------------------------------------------------
+// getListaPuntos() --> listaPuntos:<Punto>
+// Descripción: devuelve una lista de Puntos de las mediciones de la BBDD
+//----------------------------------------------------------------------------------------------------------
+function getListaPuntos() {
+    listaPuntos = [];
+    console.log(miLocalizacion);
+
+    const url = 'http://localhost:8080/mediciones/mediciones_zona/' + miLocalizacion[1] + '&' + miLocalizacion[0];
+    /*
+    const response = fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "no-cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+    })
+    */
+
+    
+    puntoGlobal = CORSSolve(url);
+    console.log("Listado Puntos Pepe");
+    console.log(puntoGlobal);
+    
+
+    return listaPuntos;
+}
+//----------------------------------------------------------------------------------------------------------
+// getListaContaminantes() --> listaContaminantes:<Contaminante>
+// Descripción: devuelve una lista de Contaminantes de la BBDD
+//----------------------------------------------------------------------------------------------------------
+function getListaContaminantes() {
+    listaContaminantes = [];
+    //Petición al servidor
+    var sqlID = "SELECT * FROM medicion";
+    var sql2 = "SELECT * FROM contaminante";
+
+    /*
+    con.query(sqlID, function (err, result) {
+        con.query(sql2, function(err2,result2){
+            for (var i = 0; i < result.length; i++) {
+                //Creo el contaminante
+                var contaminante = new Contaminante(result2[i]["nombre"],result[i]["valor"],[result[i]["latitud"], result[i]["longitud"]]);
+                //Añado el contaminante a la lista
+                listaContaminantes.push(contaminante);
+            }
+        })
+    })
+    */
+    //Devuelvo la lista de contaminantes
+    return listaContaminantes;
 }
