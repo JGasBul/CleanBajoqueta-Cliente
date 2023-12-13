@@ -34,19 +34,19 @@ if (!isset($_SESSION['usuario'])) {
             <div class="col-8 fs-3">
                 Lista de usuarios
             </div>
-            <div class="col-3 fs-3">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Nombre del usuario"
+            <div class="col-3 fs-3 ">
+                <div class="input-group mb-3 shadow rounded-5  align-items-center">
+                    <input type="text" class="form-control rounded-start-5 border-0  " placeholder="Nombre del usuario"
                         aria-label="Nombre del usuario">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="button" id="search">Buscar</button>
+                        <button class="btn btn-outline-success rounded-end-5  border-3" type="button" id="search">Buscar</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- CARD PRINCIPAL -->
-        <div class="row card shadow z-1 m-5 border-0">
+        <div class="row card shadow z-1 m-5 mt-2 border-0">
             <div class="card-body">
                 <table class="table align-middle table-striped">
                     <thead>
