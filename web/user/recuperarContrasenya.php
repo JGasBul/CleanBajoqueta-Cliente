@@ -1,3 +1,10 @@
+<?php
+// Comprobar si los parámetros 'correo' y 'codigo' están presentes en la URL
+$correo = isset($_GET['correo']) ? $_GET['correo'] : 'No se proporcionó correo';
+$codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código';
+
+// HTML para mostrar el correo y el código
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -17,6 +24,7 @@
 <!-- Inicio Body -->
 
 <body>
+        
     <br><br><br>
     <div class="container-fluid">
         <div class="row align-items-center">
@@ -49,9 +57,8 @@
                                                 </span>
                                             </div>
 
-                                            <div class="col  align-middle">
-                                                <input type="email" class="form-control  border-0" name="emailRec"
-                                                    placeholder="Escriba su email" required>
+                                            <div class="col  align-midle">
+                                            <p name="emailRec"><?php echo htmlspecialchars($correo); ?></p>
                                             </div>
 
                                         </div>
@@ -80,7 +87,8 @@
                                                     name="contraseniaRec" placeholder="Escriba su nueva contraseña"
                                                     required>
                                             </div>
-
+                                            
+                                            <p>Código debug: <?php echo htmlspecialchars($codigo); ?></p>
                                         </div>
                                     </div>
                                 </span>

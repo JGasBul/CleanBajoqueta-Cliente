@@ -156,7 +156,7 @@ if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
             return;
         }
 
-        var codigoAleatorio = generateRandomCode(9);
+        var codigoAleatorio = generateRandomCode(20);
         window.location.href = "../user/recCon.php?correo=" + encodeURIComponent(email) + "&codigo=" + codigoAleatorio;
     }
 

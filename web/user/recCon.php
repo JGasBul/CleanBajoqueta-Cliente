@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo = "Cambio de contraseña de tu cuenta BlueSky";
 
     // URL a la que quieres que el botón redirija
-    $urlRedireccion = "http://localhost/user/cambiarCon.php?correo=" . urlencode($correoUsuario) . "&codigo=" . $codigoAleatorio;
+    $urlRedireccion = "http://localhost/user/recuperarContrasenya.php?correo=" . urlencode($correoUsuario) . "&codigo=" . $codigoAleatorio;
 
     // Crear el mensaje en formato HTML
     $mensaje = '

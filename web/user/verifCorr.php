@@ -1,5 +1,5 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     // Recuperar el correo del usuario de la URL (si está disponible)
     $correoUsuario = isset($_GET['correo']) ? $_GET['correo'] : "carlesmartif@gmail.com";
     $codigoAleatorio = $_GET['codigo'];
@@ -32,17 +32,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Enviar el correo
     if(mail($correoUsuario, $titulo, $mensaje, $cabeceras)){
-        echo "Correo enviado a: " . htmlspecialchars($correoUsuario);
+        include("../template/cabecera.php");
+        echo '<div class="alert alert-success d-flex align-items-center" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <div>
+            Correo enviado exitosamente a: <strong>' . htmlspecialchars($correoUsuario) . '</strong>
+        </div>';
     }
     else{
-        echo "Error al enviar el correo, comprueba si has introducido el correo al iniciar sesión";
+        include("../template/cabecera.php");
+        echo '<div class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>
+            Error al enviar el correo. Por favor, comprueba si has introducido correctamente el correo en la pantalla de registro.
+        </div>
+      </div>';
     }
-} else {
-    // Mostrar el formulario si no se ha enviado aún
+
 ?>
-    <form method="post">
-        <button type="submit">Enviar correo</button>
-    </form>
-<?php
-}
-?>
+    
+

@@ -221,7 +221,7 @@
             return;
         }
 
-        var codigoAleatorio = generateRandomCode(9);
+        var codigoAleatorio = generateRandomCode(20);
         window.location.href = "../user/verifCorr.php?correo=" + encodeURIComponent(email) + "&codigo=" + codigoAleatorio;
     }
 
