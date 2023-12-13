@@ -2,13 +2,13 @@
 
 session_start();
 
-if(!isset($_SESSION['usuario'])){
+if (!isset($_SESSION['usuario'])) {
     header('refresh:0; url=../user/login.php');
 }
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <title>PaginaUsuario</title>
@@ -21,25 +21,24 @@ if(!isset($_SESSION['usuario'])){
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    </head>
+    <link rel="stylesheet" href="../css/letra.css">
+</head>
+<header>
+    <?php include("../template/cabecera_user.php"); ?>
+</header>
 
 <body>
+
+
     <?php $url = "http://" . $_SERVER['HTTP_HOST'] ?>
-    <nav class="navbar navbar-expand navbar-light bg-light">
-        <div class="nav navbar-nav">
-            <a class="nav-item nav-link active" href="#"> Bienvenido, <?php echo $_SESSION['usuario'];?> </a>
-            <a class="nav-item nav-link" href="<?php echo $url; ?>/user/inicio.php">Inicio</a>
-            <a class="nav-item nav-link" href="<?php echo $url; ?>/user/cerrar.php">Cerrar sesión</a>
-            <a class="nav-item nav-link" href="<?php echo $url; ?>">Ver sitio web</a>
-        </div>
-    </nav>
+   
 
     <br>
-    <div class="container">
+    <div class="container ">
         <div class="row">
             <div class="col-md-12">
                 <div class="jumbotron">
-                    <h1 class="display-3">Mediciones</h1>
+                    <h1 class="display-3 --bs-font-oxygen">Mediciones</h1>
                     <p class="lead">La medición de su sonda es: </p>
                     <hr class="my-2">
                     <?php
@@ -47,17 +46,17 @@ if(!isset($_SESSION['usuario'])){
                     include '../bd/controlador.php';
 
                     //Muestra los datos de la conexión
-                    if (!empty($row)&&!empty($row2)) {
+                    if (!empty($row) && !empty($row2)) {
                         echo "<p>ID: " . $row["idMedicion"] . "</p>";
-                        echo "<p>Contaminante: " . $row2["nombre"] . "</p>"; 
-                        echo "<p>Valor: " . $row["valor"] . "</p>"; 
-                        echo "<p>Instante: " . $row["instante"] . "</p>"; 
-    
+                        echo "<p>Contaminante: " . $row2["nombre"] . "</p>";
+                        echo "<p>Valor: " . $row["valor"] . "</p>";
+                        echo "<p>Instante: " . $row["instante"] . "</p>";
+
                     } else {
                         echo "<p>No se encontraron entradas en la tabla testB.</p>";
                     }
                     ?>
-                       <p>More info</p>
+                    <p>More info</p>
                     <p class="lead">
                         <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Jumbo action name</a>
                     </p>

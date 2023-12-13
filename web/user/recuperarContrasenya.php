@@ -13,6 +13,7 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
     <title>Proyecto 3A - Cambiar Contraseña</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/letra.css">
 </head>
 <!-- Inicio Header -->
 <header>
