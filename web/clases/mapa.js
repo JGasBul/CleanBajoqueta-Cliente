@@ -9,7 +9,7 @@
 var map = null;
 var miLocalizacion = null;
 
-var puntoGlobal = null;
+var GlobalListaPuntos = null;
 
 //----------------------------------------------------------------------------------------------------------
 // String nombreMapa --> map()
@@ -58,18 +58,24 @@ function getCurrentLocation() {
 
         fetch(geoApiUrl)
             .then(res => res.json())
-            .then(data => {
+            .then(async data => {
                 miLocalizacion = [data.longitude, data.latitude];
-                console.log("Mi localización: " + miLocalizacion);
-                console.log("Mi ciudad: " + data.locality);
+                //console.log("Mi localización: " + miLocalizacion);
+                //console.log("Mi ciudad: " + data.locality);
 
                 console.log("Inicio añadir Contaminantes");
-                res = añadirContaminantes();
+                var res = await añadirContaminantes();
 
-                heatlayer = getheatLayer();
-                if (res) {
-                    var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1], "HeatMap": heatlayer }).addTo(map);
+                /*
+                var heatlayer = getheatLayer(GlobalListaPuntos);
+                if (res&&heatlayer) {
+                    var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1], "HeatMap": heatlayer}).addTo(map);
                 }
+                */
+                if (res) {
+                    var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1]}).addTo(map);
+                }
+
             })
     }
 
@@ -92,16 +98,16 @@ function crearCirculo(punto, color) {
     var circle = L.circleMarker(punto, {
         color: color,
         fillColor: color,
-        fillOpacity: 1,
-        radius: 25
+        fillOpacity: 0.5,
+        radius: 20
     });
 
     return circle
 }
-function añadirContaminantes() {
+async function añadirContaminantes() {
     console.log("añadirContaminante inicia");
+    /*
     listaContam = [];
-    //contaminante = consulta GET
 
     //#region Contaminantes de Prueba
     contaminante = new Contaminante("ozono", 244, [0, 0]);
@@ -122,10 +128,28 @@ function añadirContaminantes() {
     //console.log("Lista Ozono: "+listaOzono);
     //console.log("Lista CO: "+listaCO);
     //#endregion
+    */
 
+    var promesa = getListaPuntos();
 
-    var listaPuntos = getListaPuntos();
-    //var listaContam = getListaContaminantes();
+    console.log("Después del getListaPuntos")
+    console.log(promesa);
+
+    await promesa.then(function (result) {
+        GlobalListaPuntos = result;
+        //console.log(GlobalListaPuntos);
+        console.log("GlobalListaPuntos dentro de promesa: ")
+        console.log(GlobalListaPuntos);
+
+        return GlobalListaPuntos;
+    })
+
+    console.log("GlobalListaPuntos sacado de promesa: ")
+    console.log(GlobalListaPuntos);
+
+    //var listaContam = await getListaContaminantes(GlobalListaPuntos);
+
+    var listaContam = getListaContaminantes(GlobalListaPuntos);
 
     listaOzono = [];
     listaCO = [];
@@ -136,7 +160,7 @@ function añadirContaminantes() {
     for (var i = 0; i < listaContam.length; i++) {
         estadoColor = estadocolor(listaContam[i]);
 
-        contam = crearCirculo([20, 20], estadoColor[1]);
+        contam = crearCirculo([listaContam[i].punto[0], listaContam[i].punto[1]], estadoColor[1]);
 
         mensaje = "Tipo: " + listaContam[i].tipo + "<br>Valor: " + listaContam[i].valor + "<br>Estado: " + estadoColor[0];
 
@@ -168,11 +192,11 @@ function añadirContaminantes() {
 function estadocolor(cont) {
     color = "green"; //Verde Hex
     estado = "Seguro";
-    if (cont.valor >= 250) {
+    if (cont.valor >= 50) {
         color = "yellow";
         estado = "Regular"
     }
-    if (cont.valor >= 500) {
+    if (cont.valor >= 75) {
         color = "red";
         estado = "Peligroso"
     }
@@ -213,56 +237,16 @@ function centrarEn(punto, zoom) {
 // Punto:punto, N:zoom --> centrarEn()
 // Descripción: centra el mapa en un punto en concreto con un zoom determinado
 //----------------------------------------------------------------------------------------------------------
-function getheatLayer(puntos) {
-    //Punto =  [lat, lng, intensity]
-    if (puntos == null) {
-        //Puntos de testeo
-        puntos = [
-            [50.4, 30.4, 100],
-            [50.45, 30.45, 100],
-            [50.4, 30.45, 100],
-            [50.45, 30.4, 100],
+function getheatLayer(mediciones) {
+    console.log("getHeatLayer")
+    console.log(mediciones);
 
-            [50.475, 30.475, 800],
-            [50.47, 30.475, 100],
-            [50.47, 30.47, 100],
-            [50.475, 30.47, 800],
-
-            [50.4, 30.5, 100],
-            [50.45, 30.55, 400],
-            [50.4, 30.55, 400],
-            [50.45, 30.5, 400],
-
-            [50.475, 30.75, 800],
-            [50.475, 30.575, 800],
-            [50.75, 30.575, 400],
-            [50.75, 30.545, 400],
-
-            [50.5, 30.5, 500],
-            [50.5, 30.6, 500],
-            [50.6, 30.5, 500],
-
-            [50.55, 30.55, 500],
-            [50.55, 30.65, 500],
-            [50.65, 30.55, 500],
-
-            [50.6, 30.6, 600],
-            [50.6, 30.7, 600],
-            [50.7, 30.6, 600],
-
-            [50.65, 30.65, 700],
-            [50.65, 30.75, 700],
-            [50.75, 30.65, 700],
-
-            [50.7, 30.7, 700]
-        ]
+    var listaPuntos = [];
+    for(var i = 0; i<mediciones.length; i++){
+        listaPuntos.push([mediciones[i].latitud,mediciones[i].longitud,mediciones[i].valor])
     }
 
-    // var heatLayer = L.heatLayer([
-    //     puntos
-    // ], {radius: 25}).addTo(map);
-
-    var heatLayer = L.heatLayer(puntos, { radius: 27 });
+    var heatLayer = L.heatLayer(listaPuntos, { radius: 25 });
     heatLayer.addTo(map);
 
     //centrarEn([50.5, 30.5, 1], 9); //Esto lo hago para la visualización a modo de testeo. Luego se quita
@@ -270,56 +254,54 @@ function getheatLayer(puntos) {
     return heatLayer;
 }
 //----------------------------------------------------------------------------------------------------------
-// getListaPuntos() --> listaPuntos:<Punto>
-// Descripción: devuelve una lista de Puntos de las mediciones de la BBDD
+// getListaPuntos() --> promesa:Promise
+// Descripción: devuelve un objeto Promise (una promesa) que contiene una
+// lista de Puntos de las mediciones de la BBDD
 //----------------------------------------------------------------------------------------------------------
 function getListaPuntos() {
-    listaPuntos = [];
-    console.log(miLocalizacion);
+    //console.log(miLocalizacion);
 
-    const url = 'http://localhost:8080/mediciones/mediciones_zona/' + miLocalizacion[1] + '&' + miLocalizacion[0];
+    //const url = 'http://localhost:8080/mediciones/mediciones_zona/' + miLocalizacion[1] + '&' + miLocalizacion[0];
+
     /*
-    const response = fetch(url, {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "no-cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
+    var res = CORSSolve(url);
+    res.then(function(result){
+        GlobalListaPuntos = result;
+        console.log(GlobalListaPuntos);
+
+        return GlobalListaPuntos;
     })
     */
 
-    
-    puntoGlobal = CORSSolve(url);
-    console.log("Listado Puntos Pepe");
-    console.log(puntoGlobal);
-    
+    var promesa = new Promise((resolve, reject) => {
+        var peticionGet = CORSSolve(miLocalizacion);
+        //console.log("Dentro de promesa: "+peticionGet);
+        resolve(peticionGet);
+    });
 
-    return listaPuntos;
+    return promesa;
 }
 //----------------------------------------------------------------------------------------------------------
 // getListaContaminantes() --> listaContaminantes:<Contaminante>
 // Descripción: devuelve una lista de Contaminantes de la BBDD
 //----------------------------------------------------------------------------------------------------------
-function getListaContaminantes() {
+function getListaContaminantes(listaPuntos) {
     listaContaminantes = [];
-    //Petición al servidor
-    var sqlID = "SELECT * FROM medicion";
-    var sql2 = "SELECT * FROM contaminante";
 
-    /*
-    con.query(sqlID, function (err, result) {
-        con.query(sql2, function(err2,result2){
-            for (var i = 0; i < result.length; i++) {
-                //Creo el contaminante
-                var contaminante = new Contaminante(result2[i]["nombre"],result[i]["valor"],[result[i]["latitud"], result[i]["longitud"]]);
-                //Añado el contaminante a la lista
-                listaContaminantes.push(contaminante);
-            }
-        })
-    })
-    */
-    //Devuelvo la lista de contaminantes
+    for (var i = 0; i < listaPuntos.length; i++) {
+        var tipo = getTipo(listaPuntos[i]);
+        var contam = new Contaminante(tipo, listaPuntos[i].valor, [listaPuntos[i].latitud, listaPuntos[i].longitud]);
+        listaContaminantes.push(contam);
+    }
+
     return listaContaminantes;
+}
+//----------------------------------------------------------------------------------------------------------
+// medicion: Medicion --> getTipo() --> tipo:String
+// Descripción: devuelve una lista de Contaminantes de la BBDD
+//----------------------------------------------------------------------------------------------------------
+function getTipo(medicion) {
+    if (medicion.idContaminante == 4) { return "ozono" }
+    else if (medicion.idContaminante == 5) { return "co" }
+    else { return "Error" }
 }

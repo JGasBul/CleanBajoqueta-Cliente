@@ -56,11 +56,6 @@
                     <!-- Inicio Card-Body -->
                     <div class="card-body ">
                         <div id="map"></div>
-
-                        <button type="button" onclick="crearMarker()">Añadir Marcador</button>
-                        <button type="button" onclick="crearCirculo()">Añadir Area Circular</button>
-                        <button type="button" onclick="crearPoligono()">Añadir Polígono</button>
-                        <button type="button" onclick="centrarEn()">CentrarEn</button>
                     </div>
                     <!-- Fin Card-Body -->
                     <br><br>
