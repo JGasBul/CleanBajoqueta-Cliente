@@ -177,14 +177,14 @@ public class MainActivity extends AppCompatActivity {
         float limite = 50;
 
         if (valor>=limite){
-            //getLastLocation();
+            getLastLocation();
 
         }
         Log.d(ETIQUETA_LOG, "idcontaminante:" +id_contaminante +", Valor: " +valor );
         switch (id_contaminante){
             case 11:
 
-                //enviarMedicion(id_contaminante,valor);
+                enviarMedicion(id_contaminante,valor);
         }
 
     }
@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // _______________________________________________________________
-    public void botonBuscarNuestroDispositivoBTLEPulsado(View v) {
+    public void botonBuscarNuestroDispositivoBTLEPulsado(String uuid) {
         Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado");
         //this.buscarEsteDispositivoBTLE( Utilidades.stringToUUID( "EPSG-GTI-PROY-3A" ) );
 
@@ -318,10 +318,10 @@ public class MainActivity extends AppCompatActivity {
         this.elIntentDelServicio.putExtra("tiempoDeEspera", (long) 5000);
         startService( this.elIntentDelServicio );
 
-        if (uuidEscaneado != "") {
+        if (uuid != "") {
 
             // aqui va el codigo para identificar la uudi_____________________________________________________________________
-            this.buscarEsteDispositivoBTLE(uuidEscaneado);
+            this.buscarEsteDispositivoBTLE(uuid);
             //this.buscarEsteDispositivoBTLE("fistro");
         }else {
             Toast.makeText(this, "NO HAY NINGUNA SONDA VINCULADA", Toast.LENGTH_LONG).show();
@@ -515,20 +515,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+         */
+
         fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
 
-        getLastLocation();
-
-        //btnEnviaMed=findViewById(R.id.buttonEnviaMed);
-        btnEnviaMed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enviarMedicion(11,69);
-            }
-        });
+        //getLastLocation();
 
 
-         */
+
+
+
 
     }
 
@@ -715,7 +711,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.217.185:8080/mediciones/guardar_mediciones";
+            String urlDestino = "http://192.168.1.106:8080/mediciones/guardar_mediciones";
 
 
             //Instante de tomar medicion
@@ -841,9 +837,8 @@ public class MainActivity extends AppCompatActivity {
                 // AQUI ES DONDE ESTA LA INFORMACÓN ESCANEADA: result.getContents()
                 Toast.makeText(this, "Se va a intentar contactar con la sonda: " + result.getContents(), Toast.LENGTH_LONG).show();
                 uuidEscaneado = result.getContents(); //Asignar lo escaneado a la variable para poderse usar en otras partes del codigo
-                //asignarSonda();
-                this.buscarTodosLosDispositivosBTLE();
-                //this.buscarEsteDispositivoBTLE( uuidEscaneado); //Iniciar el escaneo
+                asignarSonda();
+                this.botonBuscarNuestroDispositivoBTLEPulsado(uuidEscaneado); //Iniciar el escaneo
                 //Button btnQR = findViewById(R.id.btnQR); //Asignar el nombre de la sonda al boton
                 //btnQR.setText(uuidEscaneado);
 

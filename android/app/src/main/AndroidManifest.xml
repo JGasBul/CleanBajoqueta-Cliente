@@ -31,7 +31,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityInicio"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +46,7 @@
         <activity android:name=".SignUp" />
         <activity android:name=".Ajuste" />
         <activity android:name=".InfoActivity" />
-        <activity android:name=".ActivityInicio" />
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".Login"
             android:exported="false" />
