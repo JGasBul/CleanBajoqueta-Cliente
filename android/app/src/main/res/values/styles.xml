@@ -9,6 +9,11 @@
         <!-- Color de la barra de estado -->
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <!-- Color del texto y los íconos en la barra de estado -->
+
         <item name="android:windowLightStatusBar">true</item> <!-- true para texto oscuro, false para texto claro -->
+    </style>
+    <style name="AppTheme.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
     </style>
 </resources>
