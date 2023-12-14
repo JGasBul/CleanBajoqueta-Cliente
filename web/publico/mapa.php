@@ -1,4 +1,4 @@
-<php 
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +27,10 @@
     <script src="../clases/CORSSolve.js"></script>
     <!-- mapa.CSS y mapa.JS -->
     <link rel="stylesheet" href="../css/mapa.css"/>
+    
     <script src="../clases/mapa.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/letra.css"/>
 </head>
 
 <!-- Inicio Header -->
@@ -44,18 +47,23 @@
 
             <div class="col-sm ">
                 <!-- Inicio Card -->
-                <div class="card shadow border-light">
+                <div class="card shadow border-light m-5 ">
                     <!-- Inicio Card-Header -->
-                    <div class="card-header text-md-center text-dark border-0 fs-3">
-                        Mapa de Contaminación
-                    </div>
-                    <!-- Fin Card-Header -->
-
+                    <div class="card-header d-flex align-items-center justify-content-center bg-info">
+                    <h5 class="card-title fs-2 align-self-center mt-3 text-white">Mapa de Contaminación</h5>
+                    
+                    
+                        </div>
+                    <!---------------------------------------------------------------------------------------------------------->
                     <!------------------------------------------------------------------------------------------------------------------->
-                    <!------------------------------------------------------------------------------------------------------------------->
+                    
+                    
                     <!-- Inicio Card-Body -->
+
                     <div class="card-body ">
-                        <div id="map"></div>
+                        <div class="row">
+                        <div class="col mx-2  rounded-2" id="map"></div>
+                        </div>
                     </div>
                     <!-- Fin Card-Body -->
                     <br><br>
