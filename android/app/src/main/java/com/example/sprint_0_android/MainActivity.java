@@ -19,10 +19,8 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.media.AudioAttributes;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,18 +36,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
-import android.content.Intent;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.TextView;
 
 
 import com.androidnetworking.AndroidNetworking;
@@ -68,9 +57,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -170,13 +156,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " major  = " + Utilidades.bytesToHexString(tib.getMajor()) + "( "
                 + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
 
-        TextoMajor.setText(String.valueOf(    Utilidades.bytesToInt(tib.getMajor())));
-        TextoMinor.setText(String.valueOf( Utilidades.bytesToInt(tib.getMinor())));
+        //TextoMajor.setText(String.valueOf(    Utilidades.bytesToInt(tib.getMajor())));
+        //TextoMinor.setText(String.valueOf( Utilidades.bytesToInt(tib.getMinor())));
 
         //Distancia sonda movil
         Log.d(ETIQUETA_LOG, " distancia = " + rssi);
         //Textdist.setText(String.valueOf(rssi));
-        distanciasonda(rssi);
+        //distanciasonda(rssi);
 
 
 
@@ -304,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // _______________________________________________________________
-    public void botonBuscarNuestroDispositivoBTLEPulsado(View v) {
+    public void botonBuscarNuestroDispositivoBTLEPulsado(String uuid) {
         Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado");
         //this.buscarEsteDispositivoBTLE( Utilidades.stringToUUID( "EPSG-GTI-PROY-3A" ) );
 
@@ -332,10 +318,10 @@ public class MainActivity extends AppCompatActivity {
         this.elIntentDelServicio.putExtra("tiempoDeEspera", (long) 5000);
         startService( this.elIntentDelServicio );
 
-        if (uuidEscaneado != "") {
+        if (uuid != "") {
 
             // aqui va el codigo para identificar la uudi_____________________________________________________________________
-            this.buscarEsteDispositivoBTLE(uuidEscaneado);
+            this.buscarEsteDispositivoBTLE(uuid);
             //this.buscarEsteDispositivoBTLE("fistro");
         }else {
             Toast.makeText(this, "NO HAY NINGUNA SONDA VINCULADA", Toast.LENGTH_LONG).show();
@@ -426,9 +412,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
+        ViewPager2 viewPager = findViewById(R.id.viewPagerMain);
+        TabLayout tabLayout4 = findViewById(R.id.tabLayout4);
+
+        TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
+        viewPager.setAdapter(tabsAdapter);
+        viewPager.setCurrentItem(1);
+
+        new TabLayoutMediator(tabLayout4, viewPager,
+                (tab, position) -> {
+                    switch (position) {
+                        case 0:
+                            tab.setIcon(R.drawable.ajustes);
+                            break;
+                        case 1:
+                            tab.setIcon(R.drawable.home);
+                            break;
+                        case 2:
+                            tab.setIcon(R.drawable.map);
+                            break;
+                    }
+                }
+        ).attach();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Para texto oscuro
+        } else {
+            getWindow().setStatusBarColor(Color.BLACK); // Para fondos claros, usa un color de fondo oscuro para la barra de estado
+        }
+
+        /*
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         TabLayout tabLayout = findViewById(R.id.tabLayout);
+
 
         // Configura el adaptador para ViewPager
         TabsAdapter tabsAdapter = new TabsAdapter(this);
@@ -445,11 +461,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         ).attach();
-*/
+
+
+
+
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
         this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
         this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
         this.Textdist = (TextView) findViewById(R.id.textdist);
+
+
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -457,6 +478,10 @@ public class MainActivity extends AppCompatActivity {
             String email = intent.getStringExtra("email");
             salidaTexto.setText("Bienvenido "+nombreUsuario);
         }
+
+
+         */
+
 
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
@@ -478,7 +503,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("clienterestandroid", "fin onCreate()");
 
+
         // QR SCAN
+
+        /*
         Button btnQR = findViewById(R.id.btnQR);
         btnQR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -487,17 +515,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this);
+         */
 
-        getLastLocation();
+        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
 
-        btnEnviaMed=findViewById(R.id.buttonEnviaMed);
-        btnEnviaMed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enviarMedicion(11,69);
-            }
-        });
+        //getLastLocation();
+
+
+
+
+
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -683,7 +711,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.217.185:8080/mediciones/guardar_mediciones";
+            String urlDestino = "http://192.168.1.106:8080/mediciones/guardar_mediciones";
 
 
             //Instante de tomar medicion
@@ -796,6 +824,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Aqui es donde se obtiene la respuesta del analisis del codigo qr, se muestra en un toast
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -809,9 +838,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Se va a intentar contactar con la sonda: " + result.getContents(), Toast.LENGTH_LONG).show();
                 uuidEscaneado = result.getContents(); //Asignar lo escaneado a la variable para poderse usar en otras partes del codigo
                 asignarSonda();
-                this.buscarEsteDispositivoBTLE( uuidEscaneado); //Iniciar el escaneo
-                Button btnQR = findViewById(R.id.btnQR); //Asignar el nombre de la sonda al boton
-                btnQR.setText(uuidEscaneado);
+                this.botonBuscarNuestroDispositivoBTLEPulsado(uuidEscaneado); //Iniciar el escaneo
+                //Button btnQR = findViewById(R.id.btnQR); //Asignar el nombre de la sonda al boton
+                //btnQR.setText(uuidEscaneado);
 
             }
         } else {
@@ -819,12 +848,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     private void asignarSonda(){
         Intent intent = getIntent();
         if (intent != null) {
             String email = intent.getStringExtra("email");
 
-            String urlDestino = "http://192.168.217.185/bd/asignarSondaUsuario.php";
+            String urlDestino = "http://192.168.1.106/bd/asignarSondaUsuario.php";
 
             //Creo un objeto JSON e introducir valores
             JSONObject postData = new JSONObject();
