@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $err = curl_error($curl);
     curl_close($curl);
     
-    if ($verificado!=null){
+    
     $verificado = $res[0]["verificado"];
-    }
+    
     
     if ($verificado == 1) {
        
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         curl_close($curl);
         $correcto = true;
     }
-    if ($verificado == 0 & $verificado==null) {
+    if ($verificado == 0 || $verificado==null) {
         echo '<!DOCTYPE html> 
         <html lang="es">
     
