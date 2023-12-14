@@ -14,6 +14,7 @@ if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
     <title>Registro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/letra.css">
 </head>
 <!------------------------------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------------------------------>
@@ -103,8 +104,7 @@ if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
                                 </div>
 
                                 <div class="col-5 align-baseline">
-                                    <label class="form-check-label"><a
-                                            href="../user/recuperarContrasenya.php">¿Has olvidado tu contraseña?</a></label>
+                                    <label class="form-check-label"> <a href="#" onclick="redirectToForgotPassword()"> ¿Has olvidado tu contraseña?</a></label>
                                 </div>
                             </div>
 
@@ -146,6 +146,33 @@ if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
         </div>
     </div>
     </div>
+
+    <!-- redireccion contraseña olvidada -->
+    <script>
+    function redirectToForgotPassword() {
+        var email = document.getElementsByName("usuariologin")[0].value;
+        
+        if (!email) {
+            alert("Por favor, ingresa tu correo electrónico en el campo de Usuario para recuperar la contraseña.");
+            return;
+        }
+
+        var codigoAleatorio = generateRandomCode(20);
+        window.location.href = "../user/recCon.php?correo=" + encodeURIComponent(email) + "&codigo=" + codigoAleatorio;
+    }
+
+    function generateRandomCode(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        
+        return result;
+    }
+</script>
+
 
 
 

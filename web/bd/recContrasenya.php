@@ -22,7 +22,7 @@ if (!empty($_POST["cambiarContrasenya"])) {
         
     } else {
 
-        $email = $_POST["emailRec"];
+        $email = isset($_GET['correo']) ? $_GET['correo'] : 'No se proporcionó correo';
         $contraseniaNueva = $_POST["contraseniaRec"];
 
 
@@ -57,7 +57,7 @@ if (!empty($_POST["cambiarContrasenya"])) {
 
                 if ($cambiarContrasenya) {
                     echo '<div class="alert alert-success">Contraseña Cambiada</div>';
-                    header('refresh:' . $segundos_espera . '; url=../user/login.php');
+                    //header('refresh:' . $segundos_espera . '; url=../user/login.php');
                     
                 } else {
                     echo '<div class="alert alert-danger">Hubo problemas al cambiar la contraseña</div>';

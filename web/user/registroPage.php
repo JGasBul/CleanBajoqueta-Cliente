@@ -6,6 +6,7 @@
     <title>Proyecto 3A - Registro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/letra.css">
 </head>
 <!-- Inicio Header -->
 <header>
@@ -38,7 +39,8 @@
                     <!-- Inicio Card-Body -->
                     <div class="card-body ">
                         <!--Inicio Formulario de Registro -->
-                        <form method="POST">
+                        <form method="POST" id="registrationForm" onsubmit="return redirectToVerify()">
+
                             <!--Inicio Campo Nombre -->
                             <div class="text-center">
                                 <span
@@ -196,8 +198,7 @@
                             </div>
                             <?php include("../bd/registro.php"); ?>
                             <div class="text-center mt-3">
-                                <input name="registrar" type="submit" class="btn btn-success fs-5 rounded-pill"
-                                    value="  Registrarse  ">
+                                <input name="registrar" type="submit" class="btn btn-success fs-5 rounded-pill" value="Registrarse">
                             </div>
                         </form>
                         <!--Fin Formulario de Registro -->
@@ -211,6 +212,32 @@
 
 
 </body>
+
+<script>
+    function redirectToVerify() {
+        var email = document.getElementsByName("usuariologin")[0].value;
+        
+        if (!email) {
+            alert("Por favor, ingresa tu correo electrónico en el campo de Usuario para recuperar la contraseña.");
+            return;
+        }
+
+        var codigoAleatorio = generateRandomCode(20);
+        window.location.href = "../user/verifCorr.php?correo=" + encodeURIComponent(email) + "&codigo=" + codigoAleatorio;
+    }
+
+    function generateRandomCode(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        
+        return result;
+    }
+</script>
+
 <!-- Fin Body -->
 <!------------------------------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------------------------------>
