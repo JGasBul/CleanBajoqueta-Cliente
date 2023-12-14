@@ -63,23 +63,27 @@ function editar($datos){
     $headers = [
         'accept: applicaction/json',
         'Content-Type: application/json',
-        'email: '.$email
+        'email: '.$_SESSION["email"]
     ];
     $fields = [
         'email' => $email,
         'contraseña' => $contrasenia,
         'nombreApellido' => $nombreApellidos,
-        'imagen' => $imagen
+        //'imagen' => $imagen
     ];
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
     $res = curl_exec($curl);
+    var_dump("Curl ejecutado");
+    var_dump("Curl ejecutado");
     $res = json_decode($res, true); //because of true, it's in an array
     $err = curl_error($curl);
     curl_close($curl);
 
     //Si se pudo registrar, lo llevamos a la página de Login
     if (!$err) {
+        $_SESSION['usuario'] = $nombreApellidos;
+        $_SESSION["email"] = $email;
         echo '<div class="alert alert-success">Información Actualizada</div>';
 
         header('refresh:' . $GLOBALS['segundos_espera'] . '; url=../user/inicio.php');
