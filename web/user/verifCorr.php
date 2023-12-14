@@ -1,8 +1,10 @@
 <?php
 
-    // Recuperar el correo del usuario de la URL (si está disponible)
-    $correoUsuario = isset($_GET['correo']) ? $_GET['correo'] : "carlesmartif@gmail.com";
-    $codigoAleatorio = $_GET['codigo'];
+// Recuperar el correo del usuario de la URL (si está disponible)
+$correoUsuario = isset($_GET['correo']) ? $_GET['correo'] : "carlesmartif@gmail.com";
+$codigoAleatorio = $_GET['codigo'];
+
+
 
     $titulo = "Verificación de cuenta BlueSky";
 

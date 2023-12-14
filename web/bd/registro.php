@@ -97,6 +97,8 @@ if (!empty($_POST["registrar"])) {
                     echo '<div class="alert alert-danger">No esta verificado </div>';
                 } else {
 
+
+
                     //Encriptamos datos
                     $cifrado = new CifrarDescifrarAES($contrasenia);
                     $encryptedPassword = $cifrado->encriptar();
@@ -114,14 +116,15 @@ if (!empty($_POST["registrar"])) {
                         )
                     );
                     $headers = [
-                        'accept: applicaction/json',
+                        'accept: application/json',
                         'Content-Type: application/json'
                     ];
                     $fields = [
                         'email' => $email,
                         'contraseña' => $encryptedPassword,
                         'nombreApellido' => $nombreApellidos,
-                        'telefono' => $telefono
+                        'telefono' => $telefono,
+
                     ];
                     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
                     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
@@ -134,22 +137,61 @@ if (!empty($_POST["registrar"])) {
                     //Si se pudo registrar, lo llevamos a la página de Login
                     if (!$err) {
 
-                            
+
                         //Enviar correo verificación--------------------------------------------------------------------
 
 
                         // Recuperar el correo del usuario de la URL (si está disponible)
                         $correoUsuario = $email;
-                        
+
                         //Generar codigo aleatorio
-                        
+
                         $length = 20; //Longitud del codigo
                         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-                            $charactersLength = strlen($characters);
-                            $codigoAleatorio = '';
-                            for ($i = 0; $i < $length; $i++) {
-                                $codigoAleatorio .= $characters[rand(0, $charactersLength - 1)];
-                            }
+                        $charactersLength = strlen($characters);
+                        $codigoAleatorio = '';
+                        for ($i = 0; $i < $length; $i++) {
+                            $codigoAleatorio .= $characters[rand(0, $charactersLength - 1)];
+                        }
+
+
+
+                        //HACER UPDATE DEL TOKEN --------------------------------
+
+                        $curl = curl_init();
+                        curl_setopt_array(
+                            $curl,
+                            array(
+                                CURLOPT_URL => "http://localhost:8080/user/updateUserByEmail",
+                                CURLOPT_RETURNTRANSFER => true,
+                                CURLOPT_TIMEOUT => 30,
+                                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                                CURLOPT_CUSTOMREQUEST => "PUT"
+                            )
+                        );
+
+                        // Agregar el email del usuario en el header
+                        $headers = [
+                            'accept: application/json',
+                            'Content-Type: application/json',
+                            'email: ' . $correoUsuario // Asegúrate de que $correoUsuario contenga el email correcto
+                        ];
+
+                        // Body con los cambios a realizar, en este caso, actualizar el token
+                        $fields = [
+                            'token' => $codigoAleatorio, // Asegúrate de que $codigoAleatorio contenga el token correcto
+                            'verificado' => 0
+                        ];
+
+                        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
+                        $res = curl_exec($curl);
+                        $res = json_decode($res, true); // Decodificar la respuesta
+                        $err = curl_error($curl);
+                        curl_close($curl);
+
+                        // Aquí puedes manejar la respuesta y los errores
+
 
 
 
@@ -185,10 +227,10 @@ if (!empty($_POST["registrar"])) {
                             echo "Correo enviado a: " . htmlspecialchars($correoUsuario);
                         } else {
                             echo "Error al enviar el correo, comprueba si has introducido el correo al iniciar sesión";
-                            
+
                         }
 
-                        
+
 
 
 
