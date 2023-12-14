@@ -25,25 +25,45 @@ function editar($datos){
 
     $email = $datos["emailedit"];
     $contrasenia = $datos["contraseniaedit"];
+
+    $cifrado = new CifrarDescifrarAES($contrasenia);
+    $contrasenia = $cifrado->encriptar();
+
+    $tmpFile = $_FILES['archivo']['tmp_name'];
+    $newFile = '../temp/'.$_FILES['archivo']['name'];
+    $result = move_uploaded_file($tmpFile, $newFile);
+    echo $_FILES['archivo']['name'];
+    if ($result) {
+         echo ' was uploaded<br />';
+    } else {
+         echo ' failed to upload<br />';
+    }
     
-    $imagen = '../assets/'.$_FILES["archivo"]["name"];
-    var_dump($datos);
+    //var_dump($_FILES["archivo"]);
+
+    //$imagen = base64_encode(file_get_contents(__DIR__));
+    
+    //$imagen = base64_encode(file_get_contents(__DIR__ .'/'.$newFile));
+    $imagen = base64_encode(file_get_contents(__DIR__ .'/../temp/gorrionmonocromo.jpg'));
+    var_dump($imagen);
+    //var_dump($datos);
 
     //Editamos Usuario
     $curl = curl_init();
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => "http://localhost:8080/user/insertUser",
+            CURLOPT_URL => "http://localhost:8080/user/updateUserByEmail",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST"
+            CURLOPT_CUSTOMREQUEST => "PUT"
         )
     );
     $headers = [
         'accept: applicaction/json',
-        'Content-Type: application/json'
+        'Content-Type: application/json',
+        'email: '.$email
     ];
     $fields = [
         'email' => $email,
@@ -70,6 +90,11 @@ function editar($datos){
     
 
 getData();
+//----------------------------------------------------------------------------------------------------------
+// getData() --> datos:JSON
+// Descripción: Hago una petición GET con el email del usuario para recibir sus datos de la BBDD.
+// Luego dichos datos son transferidos a la función setFormData()
+//----------------------------------------------------------------------------------------------------------
 function getData()
 {
     $email = $_SESSION['email'];
@@ -99,7 +124,10 @@ function getData()
         setFormData($res[0]);
     }
 }
-
+//----------------------------------------------------------------------------------------------------------
+// datos:JSON --> setFormData()
+// Descripción: Con los datos recibidos por la función getData() relleno los campos del formulario HTML
+//----------------------------------------------------------------------------------------------------------
 function setFormData($datos){
     if (empty($datos)) {
         echo '<div class="alert alert-danger">Hubo problemas al conseguir los datos</div>';
@@ -123,7 +151,9 @@ function setFormData($datos){
         //$imagen = base64_encode($datos['imagen']);
         //$imagen = base64_encode(implode($datos['imagen']));
         //$imagen = base64_encode(implode($datos['imagen']['data']));
-        $imagen = ($datos['imagen']);
+        $imagen = $datos['imagen'];
+
+
         //var_dump($imagen);
 
         //var_dump($imagen);

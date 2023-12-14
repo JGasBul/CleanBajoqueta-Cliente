@@ -25,12 +25,12 @@ if (!isset($_SESSION['usuario'])) {
 
 <body onload="getArchivo()">
     <?php $url = "http://" . $_SERVER['HTTP_HOST'] ?>
+    <?php $url = "http://" . $_SERVER['HTTP_HOST'] ?>
     <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="nav navbar-nav">
-            <a class="nav-item nav-link active" href="#"> Bienvenido,
-                <?php echo $_SESSION['usuario']; ?>
-            </a>
+            <a class="nav-item nav-link active" href="#"> Bienvenido, <?php echo $_SESSION['usuario'];?> </a>
             <a class="nav-item nav-link" href="<?php echo $url; ?>/user/inicio.php">Inicio</a>
+            <a class="nav-item nav-link" href="<?php echo $url; ?>/user/editarUserPage.php">Editar Usuario</a>
             <a class="nav-item nav-link" href="<?php echo $url; ?>/user/cerrar.php">Cerrar sesión</a>
             <a class="nav-item nav-link" href="<?php echo $url; ?>">Ver sitio web</a>
         </div>
