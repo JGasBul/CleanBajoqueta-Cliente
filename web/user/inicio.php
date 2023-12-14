@@ -16,13 +16,59 @@ if (!isset($_SESSION['usuario'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
+    <!-- LeafLet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Plugin Leaflet: Leaflet.Locate -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js"
+        charset="utf-8"></script>
+    <!-- Plugin Leaflet: Leaflet.heat -->
+    <script src="../clases/leaflet-heat.js"></script>
+
+    <!-- contaminante.js -->
+    <script src="../clases/contaminante.js"></script>
+    <!-- contaminante.js -->
+    <script src="../clases/CORSSolve.js"></script>
+    <!-- mapa.CSS y mapa.JS -->
+    <link rel="stylesheet" href="../css/mapa.css" />
+
+    <script src="../clases/mapa.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/letra.css" />
+    <script src="../clases/contaminante.js"></script>
+    <!-- contaminante.js -->
+    <script src="../clases/CORSSolve.js"></script>
+    <!-- mapa.CSS y mapa.JS -->
+    <link rel="stylesheet" href="../css/mapa.css" />
+
+    <script src="../clases/mapa.js"></script>
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+
     <link rel="stylesheet" href="../css/letra.css">
     <link rel="stylesheet" href="../css/proground.css">
+
+
+
 </head>
 <header>
     <?php include("../template/cabecera_user.php"); ?>
@@ -107,17 +153,18 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
 
 
-            </div>
 
-            <!-- MAPA -->
-            <div class="col-6 card shadow z-1 my-5 border-0" style="height: 100%;">
-                <div class="card-body">Mapa</div>
+
+
 
             </div>
 
-            <!-- Punto selecionado -->
-            <div class="row">
-                <div class="col-5 card shadow z-1 ms-5 border-0">
+
+           
+
+
+            
+            <div class="col-5 card shadow z-1 m-5 border-0">
                     <div class="card-body">
 
                         <h5 class="card-title bg-warning-subtle primary rounded-2 p-2">
@@ -132,7 +179,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <span class="progress2-right">
                                     <span class="progress2-bar"></span>
                                 </span>
-                                <div class="progress2-value" id="progPunto" >
+                                <div class="progress2-value" id="progPunto">
                                     <img src="../assets/contaminacion.png" style="width: 30%">
 
                                     45%
@@ -155,11 +202,30 @@ if (!isset($_SESSION['usuario'])) {
 
                     </div>
                 </div>
+
+
+
+
+        </div>
+        <!-- Punto selecionado -->
+        <div class="row">
+            <!-- MAPA -->
+            <div class="col card shadow z-1 my-2 border-0 ">
+                <h5 class="card-title bg-info rounded-2 p-2 text-dark mt-2">
+                    Mapa de contaminación
+                </h5>
+                <div class="row">
+                    <div class="col mx-2 mb-2  rounded-2" id="map"></div>
+                </div>
+
             </div>
 
-            <!-- DEBUG -->
 
-            <div class="row mt-5">
+        </div>
+
+        <!-- DEBUG -->
+
+        <div class="row mt-5">
             <div class="col-md-12">
                 <div class="card shadow z-1 m-5 border-0">
                     <h1 class="display-3 --bs-font-oxygen">Menu de DEBUG</h1>
@@ -180,15 +246,20 @@ if (!isset($_SESSION['usuario'])) {
                         echo "<p>No se encontraron entradas en la tabla testB.</p>";
                     }
                     ?>
-                    
+
                 </div>
             </div>
         </div>
 
 
-        </div>
+    </div>
 
 </body>
+
+<script>
+    //Inicializar mapa
+    mapa('map');
+</script>
 
 
 </html>
