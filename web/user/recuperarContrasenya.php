@@ -3,6 +3,39 @@
 $correo = isset($_GET['correo']) ? $_GET['correo'] : 'No se proporcionó correo';
 $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código';
 
+
+//MIRAR SI ESTA EL MISMO TOKEN
+    
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => "http://localhost:8080/user/getUserByEmail",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET"
+));
+$headers = [
+    'accept: applicaction/json',
+    'email: ' . $correo . ''
+];
+curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+$res = curl_exec($curl);
+$res = json_decode($res, true); //because of true, it's in an array
+$err = curl_error($curl);
+curl_close($curl);
+
+$tokenValue = $res[0]["token"];
+
+
+$correcto=false;
+
+if ($tokenValue == $codigo){
+    $correcto = true;   
+}
+
+
+
+
 // HTML para mostrar el correo y el código
 ?>
 <!DOCTYPE html>
@@ -52,14 +85,14 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
                                     class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-50 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
-                                            <div class="col-lg-3 align-middle">
+                                            <div class="col-lg-3 d-flex align-items-center justify-content-center">
                                                 <span class="align-middle">
                                                     <label for="exampleInputEmail"> Email: </label>
                                                 </span>
                                             </div>
 
-                                            <div class="col  align-midle">
-                                            <p name="emailRec"><?php echo htmlspecialchars($correo); ?></p>
+                                            <div class="col d-flex align-items-center justify-content-center">
+                                            <p name="emailRec" class="align-middle"><?php echo htmlspecialchars($correo); ?></p>
                                             </div>
 
                                         </div>
@@ -77,8 +110,8 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
                                     class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-50 align-items-center fs-6">
                                     <div class="container-fluid">
                                         <div class="row">
-                                            <div class="col-lg-3 align-middle">
-                                                <span class="align-middle">
+                                            <div class="col-lg-3 d-flex align-items-center justify-content-center">
+                                                <span class="align-items-center ">
                                                     <label for="exampleInputEmail1"> Nueva Contraseña: </label>
                                                 </span>
                                             </div>
@@ -89,7 +122,7 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
                                                     required>
                                             </div>
                                             
-                                            <p>Código debug: <?php echo htmlspecialchars($codigo); ?></p>
+                                            <!-- <p>Código debug: <?php //echo htmlspecialchars($codigo); ?></p> -->
                                         </div>
                                     </div>
                                 </span>
@@ -100,7 +133,19 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
                             <!------------------------------------------------------------------------------------------------------------------->
                             <!------------------------------------------------------------------------------------------------------------------->
                            
-                            <?php include("../bd/recContrasenya.php"); ?>
+                            <?php ; 
+                            
+                            if ($correcto){
+                                include("../bd/recContrasenya.php");
+                            }else{
+                                echo '<div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>
+                                    Parece que el token es incorrecto
+                                </div>
+                              </div>';
+                            }
+                            ?>
                             <div class="text-center mt-3">
                                 <input name="cambiarContrasenya" type="submit" class="btn btn-success fs-5 rounded-pill"
                                     value="  Cambiar Contraseña ">

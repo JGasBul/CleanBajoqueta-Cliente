@@ -3,6 +3,74 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Recuperar el correo del usuario de la URL (si está disponible)
     $correoUsuario = isset($_GET['correo']) ? $_GET['correo'] : "carlesmartif@gmail.com";
     $codigoAleatorio = $_GET['codigo'];
+$correcto = false;
+
+    //MIRAR SI ESTA SIN VERIFICAR
+    
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "http://localhost:8080/user/getUserByEmail",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET"
+    ));
+    $headers = [
+        'accept: applicaction/json',
+        'email: ' . $correoUsuario . ''
+    ];
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    $res = curl_exec($curl);
+    $res = json_decode($res, true); //because of true, it's in an array
+    $err = curl_error($curl);
+    curl_close($curl);
+
+    $verificado = $res[0]["verificado"];
+    if ($verificado == 1) {
+
+        //HACER UPDATE DEL TOKEN --------------------------------
+
+    $curl = curl_init();
+    curl_setopt_array(
+        $curl,
+        array(
+            CURLOPT_URL => "http://localhost:8080/user/updateUserByEmail",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "PUT"
+        )
+    );
+
+    // Agregar el email del usuario en el header
+    $headers = [
+        'accept: application/json',
+        'Content-Type: application/json',
+        'email: ' . $correoUsuario // Asegúrate de que $correoUsuario contenga el email correcto
+    ];
+
+    // Body con los cambios a realizar, en este caso, actualizar el token
+    $fields = [
+        'token' => $codigoAleatorio, // Asegúrate de que $codigoAleatorio contenga el token correcto
+        
+    ];
+
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
+    $res = curl_exec($curl);
+    $res = json_decode($res, true); // Decodificar la respuesta
+    $err = curl_error($curl);
+    curl_close($curl);
+    $correcto = true;
+    }else{
+       
+      $correcto = false;
+    }
+
+
+  
+
+
 
     $titulo = "Cambio de contraseña de tu cuenta BlueSky";
 
@@ -31,10 +99,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Cabecera adicional
     $cabeceras .= 'From: bajoquetabluesky@gmail.com' . "\r\n";
 
-    
+
 
     // Enviar el correo
-    if(mail($correoUsuario, $titulo, $mensaje, $cabeceras)) {
+    if($correcto = true){
+    if (mail($correoUsuario, $titulo, $mensaje, $cabeceras)) {
         include("../template/cabecera.php");
         echo '
         <!DOCTYPE html>
@@ -123,8 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="alert alert-danger d-flex align-items-center" role="alert">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
                             <div>
-                                Error al enviar el correo. Por favor, comprueba si has introducido correctamente el correo en la pantalla de iniciar sesión y que el correo
-                                introducido exista.
+                                Tu correo no esta verificado, porfavor comprueba tu bandeja de entrada.
                             </div>
                           </div>
 
@@ -187,5 +255,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </html>
 
     <?php
+}}
+else{
+    echo '
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Recuperación de Contraseña</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/bootstrap.min.css" />
+        <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="../css/letra.css">
+
+        <!-- Inicio Header -->
+        <header>
+            <?php include("../template/cabecera.php"); ?>
+        </header>
+        <!-- Fin Header -->
+    </head>
+    <body>
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>
+        Tu correo no esta verificado, porfavor comprueba tu bandeja de entrada.
+    </div>
+  </div>
+  </body>
+  ';
 }
 ?>

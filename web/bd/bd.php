@@ -56,7 +56,7 @@ if (!empty($_POST["ingresar"])) {
                     header("location:../user/inicio.php");
                 } else {
                     if ($verificado == 0) {
-                        echo '<div class="alert alert-danger">El usuario no ha sido verificado</div>';
+                        echo '<div class="alert alert-danger">El usuario no ha sido verificado, porfavor comprueba tu correo</div>';
                     } else {
                         echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
                     }

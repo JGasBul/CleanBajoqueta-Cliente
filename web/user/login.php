@@ -104,7 +104,7 @@ if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
                                 </div>
 
                                 <div class="col-5 align-baseline">
-                                    <label class="form-check-label">< <a href="#" onclick="redirectToForgotPassword()"> ¿Has olvidado tu contraseña?</a></label>
+                                    <label class="form-check-label"> <a href="#" onclick="redirectToForgotPassword()"> ¿Has olvidado tu contraseña?</a></label>
                                 </div>
                             </div>
 
