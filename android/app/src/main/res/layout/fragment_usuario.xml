@@ -95,7 +95,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
                 android:layout_width="0dp"
-                android:layout_height="231dp"
+                android:layout_height="160dp"
                 android:layout_marginTop="20dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/cardview_edituser"
@@ -110,7 +110,7 @@
                         android:id="@+id/textView10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="5dp"
                         android:text="Cambiar Contraseña"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:text="Nueva Contraseña"
                         app:layout_constraintEnd_toStartOf="@+id/input_cambia_contrasenya1"
@@ -149,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:text="Repetir Contraseña"
                         app:layout_constraintEnd_toStartOf="@+id/input_cambiar_contrasenya2"
@@ -160,12 +160,13 @@
                         android:id="@+id/input_cambiar_contrasenya2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="-5dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/custom_input"
                         android:ems="10"
+                        android:inputType="text"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:inputType="text"
                         app:layout_constraintBottom_toBottomOf="@+id/textView13"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView13"
@@ -175,10 +176,12 @@
                         android:id="@+id/button_cambiar_contrasenya"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                         android:backgroundTint="#E2F2E6"
                         android:text="Cambiar Contraseña"
                         android:textColor="#000000"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -189,20 +192,114 @@
 
             <Button
                 android:id="@+id/button_cerrar_sesion"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="32dp"
-                android:backgroundTint="#D9F1FB"
+                android:backgroundTint="#f07393"
                 android:text="Cerrar sesión"
                 android:textColor="#000000"
                 android:textColorLink="#000000"
                 android:textSize="20sp"
                 android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/cardView2"
                 app:layout_constraintStart_toStartOf="@+id/cardView2"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+
+            <androidx.cardview.widget.CardView
+
+                android:id="@+id/cardView3"
+                android:layout_width="0dp"
+                android:layout_height="175dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/cardView2"
+                app:layout_constraintStart_toStartOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/button_cambiar_perfil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="#E2F2E6"
+                        android:text="Actualizar Perfil"
+                        android:textColor="#000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/input_cambiar_email" />
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="Email"
+                        app:layout_constraintEnd_toStartOf="@+id/input_cambiar_email"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Nombre"
+                        app:layout_constraintEnd_toStartOf="@+id/input_cambia_nombre"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+                    <EditText
+                        android:id="@+id/input_cambiar_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/custom_input"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView20"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView20"
+                        app:layout_constraintTop_toTopOf="@+id/textView20" />
+
+                    <EditText
+                        android:id="@+id/input_cambia_nombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/custom_input"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView11"
+                        app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Cambiar Perfil de Usuario"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

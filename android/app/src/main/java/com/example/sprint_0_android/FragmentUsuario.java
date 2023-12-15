@@ -31,6 +31,13 @@ public class FragmentUsuario extends Fragment {
     private  EditText input1;
     private EditText  input2;
 
+    private EditText inputnombre;
+    private EditText inputcorreo;
+
+    private String nombreUsuario ;
+    private String userEmail;
+    private String userTelefono;
+
     public static FragmentUsuario newInstance(String nombreUsuario, String email, String telefono) {
         FragmentUsuario fragment = new FragmentUsuario();
         Bundle args = new Bundle();
@@ -49,9 +56,12 @@ public class FragmentUsuario extends Fragment {
         View view = inflater.inflate(R.layout.fragment_usuario, container, false);
         Button cerrar_sesion = view.findViewById(R.id.button_cerrar_sesion);
         Button cambia_contrasenya=view.findViewById(R.id.button_cambiar_contrasenya);
+        Button cambiar_perfil = view.findViewById(R.id.button_cambiar_perfil);
 
         input1 = view.findViewById(R.id.input_cambia_contrasenya1);
         input2 = view.findViewById(R.id.input_cambiar_contrasenya2);
+        inputnombre=view.findViewById(R.id.input_cambia_nombre);
+        inputcorreo=view.findViewById(R.id.input_cambiar_email);
 
         TextView nombre=view.findViewById(R.id.text_nombre);
         TextView email=view.findViewById(R.id.text_email);
@@ -61,14 +71,14 @@ public class FragmentUsuario extends Fragment {
 
         if (args != null) {
             // Extrae los valores de los argumentos
-            String nombreUsuario = args.getString("nombreUsuario", "");
-            String userEmail = args.getString("email", "");
-            String userTelefono = args.getString("telefono", "");
+            this.nombreUsuario = args.getString("nombreUsuario", "");
+            this.userEmail = args.getString("email", "");
+            this.userTelefono = args.getString("telefono", "");
 
             // Asigna los valores a las vistas
-            nombre.setText("Nombre: " + nombreUsuario);
-            email.setText("Email: " + userEmail);
-            telefono.setText("Telefono: " + userTelefono);
+            nombre.setText("Nombre: " + this.nombreUsuario);
+            email.setText("Email: " + this.userEmail);
+            telefono.setText("Telefono: " +this.userTelefono);
 
 
             cerrar_sesion.setOnClickListener(new View.OnClickListener() {
@@ -77,15 +87,24 @@ public class FragmentUsuario extends Fragment {
                     Intent intentToMainPage = new Intent(getContext(), ActivityInicio.class);
                     startActivity(intentToMainPage);
                     Toast.makeText(getContext(), "Sesión Cerrado", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
                 }
             });
 
             cambia_contrasenya.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cambiar_contrasenya(userEmail);
+                    cambiar_contrasenya();
                         Log.d(ETIQUETA_LOG, "onClick: cambia contraseña");
 
+                }
+            });
+
+            cambiar_perfil.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cambiar_Perfil();
+                    Log.d(ETIQUETA_LOG, "onClick: cambia perfil");
                 }
             });
         }
@@ -93,27 +112,25 @@ public class FragmentUsuario extends Fragment {
         return view;
     }
 
-    public void cambiar_contrasenya(String email){
-
-
+    public void cambiar_contrasenya(){
         JSONObject postData = new JSONObject();
         String urlDestino = "http://192.168.1.106:8080/user/updateUserByEmail";
-
         if (!this.input1.getText().toString().equals(this.input2.getText().toString())){
-
             Toast.makeText(getContext(), "Contraseña no son iguales", Toast.LENGTH_SHORT).show();
-        }else {
+        }else if(this.input1.getText().toString().isEmpty()&&this.input2.getText().toString().isEmpty()){
+            Toast.makeText(getContext(), "Campo sin rellenar", Toast.LENGTH_SHORT).show();
+        }
+        else {
             try {
-
                 CifrarDescifrarAES cifrador = new CifrarDescifrarAES();
                 String textoEncriptado = cifrador.encriptar(this.input1.getText().toString());
 
-                postData.put("email", email);
+                postData.put("email", this.userEmail);
                 postData.put("contraseña", textoEncriptado);
 
                 AndroidNetworking.put(urlDestino)
                         .addHeaders("Content-Type", "application/json; charset=utf-8")
-                        .addHeaders("email", email)
+                        .addHeaders("email", this.userEmail)
                         .addJSONObjectBody(postData)
                         .setTag("post_data")
                         .setPriority(Priority.MEDIUM)
@@ -145,6 +162,61 @@ public class FragmentUsuario extends Fragment {
             }
 
         }
+    }
+
+    public void cambiar_Perfil(){
+        JSONObject postData = new JSONObject();
+        String urlDestino = "http://192.168.1.106:8080/user/updateUserByEmail";
+
+            try {
+                if (!this.inputnombre.getText().toString().isEmpty()&&!this.inputcorreo.getText().toString().isEmpty()){
+                    postData.put("nombreApellido", this.inputnombre.getText().toString());
+                    postData.put("email", this.inputcorreo.getText().toString());
+                }
+                else if(!this.inputcorreo.getText().toString().isEmpty()){
+                    postData.put("email", this.inputcorreo.getText().toString());
+
+                }else{
+                    postData.put("nombreApellido", this.inputnombre.getText().toString());
+
+                }
+
+                AndroidNetworking.put(urlDestino)
+                        .addHeaders("Content-Type", "application/json; charset=utf-8")
+                        .addHeaders("email", this.userEmail)
+                        .addJSONObjectBody(postData)
+                        .setTag("post_data")
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener(){
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                if (response != null && response.length() > 0) {
+
+                                    if (!inputcorreo.getText().toString().isEmpty()){
+                                        userEmail=inputcorreo.getText().toString();
+                                    }
+                                    inputnombre.setText("");
+                                    inputcorreo.setText("");
+                                    Toast.makeText(getContext(), "Perfil cambiada correctamente", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Toast.makeText(getContext(), "No ha podido cambiar", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onError(ANError error) {
+                                if (error != null) {
+                                    Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage());
+                                }
+                            }
+                        });
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
 
     }
