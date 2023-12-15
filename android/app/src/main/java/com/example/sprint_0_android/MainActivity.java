@@ -164,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
         //Textdist.setText(String.valueOf(rssi));
         //distanciasonda(rssi);
 
+        //Resetear contador desconexion
+        DesconexionSonda.getInstance().setData(0);
+
 
 
         Log.d(ETIQUETA_LOG, " minor  = " + Utilidades.bytesToHexString(tib.getMinor()) + "( "
@@ -418,6 +421,8 @@ public class MainActivity extends AppCompatActivity {
         TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
         viewPager.setAdapter(tabsAdapter);
         viewPager.setCurrentItem(1);
+
+
 
         new TabLayoutMediator(tabLayout4, viewPager,
                 (tab, position) -> {
@@ -711,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.1.106:8080/mediciones/guardar_mediciones";
+            String urlDestino = "http://192.168.0.35:8080/mediciones/guardar_mediciones";
 
 
             //Instante de tomar medicion
@@ -855,7 +860,7 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             String email = intent.getStringExtra("email");
 
-            String urlDestino = "http://192.168.1.106/bd/asignarSondaUsuario.php";
+            String urlDestino = "http://192.168.0.35/bd/asignarSondaUsuario.php";
 
             //Creo un objeto JSON e introducir valores
             JSONObject postData = new JSONObject();
