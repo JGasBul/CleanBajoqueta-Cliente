@@ -15,6 +15,7 @@
     <?php include("../template/cabecera.php"); ?>
 </header>
 <!-- Fin Header -->
+<script src="../bd/polPriv.js"></script>
 <!------------------------------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------------------------------>
 <!-- Inicio Body -->
@@ -475,7 +476,7 @@
                         </article>
                         <!-- Fin article informacion -->
                         <div class="text-center">
-                        <a class="btn btn-success fs-5 rounded-pill" href="../user/registroPage.php">Aceptar</a>
+                        <a class="btn btn-success fs-5 rounded-pill" onclick="aceptar()">Aceptar</a>
                         </div>
                     </div>
                     <!-- Fin Card-Body -->
@@ -493,5 +494,4 @@
     <?php include("../template/pie.php"); ?>
 </footer>
 <!-- Fin Footer -->
-
 </html>
