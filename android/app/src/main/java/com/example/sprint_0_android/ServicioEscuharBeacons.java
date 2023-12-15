@@ -3,6 +3,7 @@ package com.example.sprint_0_android;
 import android.app.IntentService;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -120,9 +121,16 @@ public class ServicioEscuharBeacons extends IntentService {
                 //Notificación desconexión
                 //Cambiar el 10 segundos a cualquier tiempo
                 if (DesconexionSonda.getInstance().getData() == 10) {
+
                     Log.d(ETIQUETA_LOG, " alerta desconexion");
                     // Crear y registrar un canal de notificaciones para Android 8.0 y versiones posteriores
+                    PendingIntent pendingIntent = null;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                        Intent intent2 = new Intent(this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        pendingIntent = PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
+
                         CharSequence name = "Desconexion sonda"; // Nombre del canal
                         String description = "Alerta desconexión"; // Descripción del canal
                         int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -136,8 +144,10 @@ public class ServicioEscuharBeacons extends IntentService {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "YOUR_CHANNEL_ID")
                             .setSmallIcon(R.drawable.logo) // Ícono de la notificación
                             .setContentTitle("Alerta desconexión sonda") // Título de la notificación
-                            .setContentText("La sonda lleva tiempo sin emitir mediciones, revise su batería o si está dañada.") // Texto de la notificación
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                            .setContentText("La sonda lleva tiempo sin emitir, revise su batería o si está dañada.") // Texto de la notificación
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setContentIntent(pendingIntent) // Asigna el PendingIntent aquí
+                            .setAutoCancel(true); // La notificación desaparece al pulsarla
 
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
                     int notificationId = 1; // Identificador único para la notificación
@@ -153,7 +163,7 @@ public class ServicioEscuharBeacons extends IntentService {
                     }
                     notificationManager.notify(notificationId, builder.build());
 
-                    contador=0;
+                    contador = 0;
                 }
             }
 

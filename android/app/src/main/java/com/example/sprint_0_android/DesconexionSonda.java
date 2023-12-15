@@ -4,6 +4,8 @@ public class DesconexionSonda {
 
         private static DesconexionSonda instance = new DesconexionSonda();
 
+
+
         private int data;
 
         private DesconexionSonda() {}

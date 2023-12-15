@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -63,6 +64,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 
 public class MainActivity extends AppCompatActivity {
+
 
     private static final String ETIQUETA_LOG = ">>>>";
     private static final int CODIGO_PETICION_PERMISOS = 11223344;
@@ -421,7 +423,6 @@ public class MainActivity extends AppCompatActivity {
         TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
         viewPager.setAdapter(tabsAdapter);
         viewPager.setCurrentItem(1);
-
 
 
         new TabLayoutMediator(tabLayout4, viewPager,
@@ -934,4 +935,5 @@ public class MainActivity extends AppCompatActivity {
             Textdist.setText("La sonda está muy lejos");
         }
     }
+
 }
