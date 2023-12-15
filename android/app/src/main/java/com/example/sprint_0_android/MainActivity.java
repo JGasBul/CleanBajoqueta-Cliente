@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.d(ETIQUETA_LOG, "idcontaminante:" +id_contaminante +", Valor: " +valor );
         switch (id_contaminante){
-            case 11:
+            case 4:
 
                 enviarMedicion(id_contaminante,valor);
         }
@@ -420,9 +420,12 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPagerMain);
         TabLayout tabLayout4 = findViewById(R.id.tabLayout4);
 
-        TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
-        viewPager.setAdapter(tabsAdapter);
-        viewPager.setCurrentItem(1);
+        Intent intent = getIntent();
+        if (intent != null) {
+            String nombreUsuario = intent.getStringExtra("nombreUsuario");
+            String email = intent.getStringExtra("email");
+            String telefono = intent.getStringExtra("telefono");
+            Log.d(ETIQUETA_LOG, "onCreate: " + nombreUsuario + "" + email + "" + telefono);
 
 
         new TabLayoutMediator(tabLayout4, viewPager,
@@ -438,14 +441,13 @@ public class MainActivity extends AppCompatActivity {
                             tab.setIcon(R.drawable.map);
                             break;
                     }
-                }
-        ).attach();
+            ).attach();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Para texto oscuro
-        } else {
-            getWindow().setStatusBarColor(Color.BLACK); // Para fondos claros, usa un color de fondo oscuro para la barra de estado
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Para texto oscuro
+            } else {
+                getWindow().setStatusBarColor(Color.BLACK); // Para fondos claros, usa un color de fondo oscuro para la barra de estado
+            }
 
         /*
         ViewPager2 viewPager = findViewById(R.id.viewPager);
@@ -468,49 +470,35 @@ public class MainActivity extends AppCompatActivity {
                 }
         ).attach();
 
-
-
-
         this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
         this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
         this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
         this.Textdist = (TextView) findViewById(R.id.textdist);
 
-
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            String nombreUsuario = intent.getStringExtra("nombreUsuario");
-            String email = intent.getStringExtra("email");
-            salidaTexto.setText("Bienvenido "+nombreUsuario);
-        }
-
-
          */
 
 
-        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-            return;
-        }else {
+                return;
+            } else {
 
-            Toast.makeText(getApplicationContext(),"GPS Activado",Toast.LENGTH_SHORT).show();
-        }
+                Toast.makeText(getApplicationContext(), "GPS Activado", Toast.LENGTH_SHORT).show();
+            }
 
-        Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
+            Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
 
-        inicializarBlueTooth();
+            inicializarBlueTooth();
 
-        Log.d(ETIQUETA_LOG, " onCreate(): termina ");
+            Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
-        Log.d("clienterestandroid", "fin onCreate()");
+            Log.d("clienterestandroid", "fin onCreate()");
 
 
-        // QR SCAN
+            // QR SCAN
 
         /*
         Button btnQR = findViewById(R.id.btnQR);
@@ -523,15 +511,10 @@ public class MainActivity extends AppCompatActivity {
 
          */
 
-        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        //getLastLocation();
-
-
-
-
-
-
+            //getLastLocation();
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -728,13 +711,13 @@ public class MainActivity extends AppCompatActivity {
             JSONObject postData = new JSONObject();
             try {
                 postData.put("idContaminante", idContaminante);
-                postData.put("idSonda", 10);
+                postData.put("idSonda", 1);
                 postData.put("valor", valor);
                 postData.put("instante", currentTime);
                 postData.put("emailUser",email );
-                postData.put("latitud",4 );
-                postData.put("longitud",3 );
-                postData.put("temperatura",20 );
+                postData.put("latitud",0 );
+                postData.put("longitud",0 );
+                postData.put("temperatura",0 );
 
             } catch (JSONException e) {
                 e.printStackTrace();
