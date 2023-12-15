@@ -21,11 +21,17 @@
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_background"
-            android:text="El dióxido de azufre, generado mayormente por la quema de combustibles fósiles en actividades industriales, es un contaminante que puede causar problemas respiratorios severos y afectar a los ecosistemas, incluso a largas distancias de su origen. También contribuye a la formación de lluvia ácida y partículas finas en la atmósfera, perjudicando la salud y el ambiente"
-            android:textSize="20sp" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_background"
+                android:text="El dióxido de azufre, generado mayormente por la quema de combustibles fósiles en actividades industriales, es un contaminante que puede causar problemas respiratorios severos y afectar a los ecosistemas, incluso a largas distancias de su origen. También contribuye a la formación de lluvia ácida y partículas finas en la atmósfera, perjudicando la salud y el ambiente."
+                android:textSize="20sp" />
+        </ScrollView>
+
     </androidx.cardview.widget.CardView>
 </LinearLayout>

@@ -21,11 +21,17 @@
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="343dp"
-            android:background="@drawable/rounded_background"
-            android:text="El ozono es un gas incoloro con una doble cara: el bueno en la estratosfera nos protege de la radiación ultravioleta, y el malo en la troposfera es un contaminante dañino que surge de la reacción de emisiones industriales y vehiculares con la luz solar, causando problemas respiratorios en humanos, daño a la vegetación y contribuyendo al efecto invernadero y al calentamiento global"
-            android:textSize="20sp" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="429dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_background"
+                android:text="El ozono es un gas incoloro con una doble cara: el bueno en la estratosfera nos protege de la radiación ultravioleta, y el malo en la troposfera es un contaminante dañino que surge de la reacción de emisiones industriales y vehiculares con la luz solar, causando problemas respiratorios en humanos, daño a la vegetación y contribuyendo al efecto invernadero y al calentamiento global."
+                android:textSize="20sp" />
+        </ScrollView>
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>
