@@ -163,9 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Distancia sonda movil
         Log.d(ETIQUETA_LOG, " distancia = " + rssi);
-        //Textdist.setText(String.valueOf(rssi));
-        //distanciasonda(rssi);
 
+        DistanciaSonda.getInstance().setData(rssi);
         //Resetear contador desconexion
         DesconexionSonda.getInstance().setData(0);
 
@@ -419,6 +418,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ViewPager2 viewPager = findViewById(R.id.viewPagerMain);
         TabLayout tabLayout4 = findViewById(R.id.tabLayout4);
+        Textdist = findViewById(R.id.dist);
+        Log.d(ETIQUETA_LOG, " distancia en oncreate"+Textdist);
+
 
         TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
         viewPager.setAdapter(tabsAdapter);
@@ -926,14 +928,4 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         //bloquear el botón de retroceso
     }
-    public void distanciasonda(int distancia){
-        if(distancia>=-45){
-            Textdist.setText("La sonda está cerca");
-        }else if(distancia>=-65){
-            Textdist.setText("La sonda está lejos");
-        }else if(distancia<-65){
-            Textdist.setText("La sonda está muy lejos");
-        }
-    }
-
 }

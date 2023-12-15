@@ -13,6 +13,7 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.app.Activity;
@@ -55,8 +57,14 @@ public class FragmentSonda extends Fragment {
     private static final String ETIQUETA_LOG = ">>>>";
     private BluetoothLeScanner elEscanner;
     private String uuidEscaneado ="";
+    private TextView Textdist;
     private ScanCallback callbackDelEscaneo = null;
 
+    private Handler handler = new Handler();
+    private Runnable runnable;
+
+
+    private int dist;
     @SuppressLint("MissingPermission")
     private void buscarTodosLosDispositivosBTLE() {
         this.callbackDelEscaneo = new ScanCallback() {
@@ -96,6 +104,7 @@ public class FragmentSonda extends Fragment {
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
+        dist=rssi;
 
         Log.d(ETIQUETA_LOG, " ****************************************************");
         Log.d(ETIQUETA_LOG, " ****** DISPOSITIVO DETECTADO BTLE ****************** ");
@@ -125,9 +134,10 @@ public class FragmentSonda extends Fragment {
                 + Utilidades.bytesToInt(tib.getMajor()) + " ) ");
 
         //Distancia sonda movil
-        Log.d(ETIQUETA_LOG, " distancia = " + rssi);
+        Log.d(ETIQUETA_LOG, " distancia en fragment sonda = " + rssi);
+        Log.d(ETIQUETA_LOG, " distancia global = " + dist);
         //Textdist.setText(String.valueOf(rssi));
-        //distanciasonda(rssi);
+        distanciasonda(rssi);
 
 
 
@@ -225,7 +235,14 @@ public class FragmentSonda extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        Log.d(ETIQUETA_LOG, " distancia = " + dist);
         View view = inflater.inflate(R.layout.fragment_sonda, container, false);
+        Textdist = view.findViewById(R.id.dist);
+
+
+        // Si necesitas actualizar un TextView con este valor
+
+
 
         Spinner spinner = view.findViewById(R.id.spinner2);
         String[] array = {"Ahorro de energía", "Uso de energia medio","Alto rendimiento"};
@@ -243,6 +260,19 @@ public class FragmentSonda extends Fragment {
 
             }
         });
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                actualizarVistaConNuevoValor(DistanciaSonda.getInstance().getData());
+                // Volver a ejecutar el Runnable después de un intervalo
+                handler.postDelayed(this, 1000); // Actualiza cada segundo
+            }
+        };
+
+        // Iniciar el proceso
+        handler.post(runnable);
+
         return view;
     }
     private void iniciarEscaneo() {
@@ -272,7 +302,31 @@ public class FragmentSonda extends Fragment {
                     CODIGO_PETICION_PERMISOS);
         }
     }
+    public void distanciasonda(int distancia){
+        if(distancia>=-45){
+            Textdist.setText("La sonda está cerca");
+        }else if(distancia>=-65){
+            Textdist.setText("La sonda está lejos");
+        }else if(distancia<-65){
+            Textdist.setText("La sonda está muy lejos");
+        }
+    }
+    private void actualizarVistaConNuevoValor(int distancia) {
+        if(distancia>=-45){
+            Textdist.setText("La sonda está cerca");
+        }else if(distancia>=-65){
+            Textdist.setText("La sonda está lejos");
+        }else if(distancia<-65){
+            Textdist.setText("La sonda está muy lejos");
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Detener el Handler cuando la actividad se destruya
+        handler.removeCallbacks(runnable);
+    }
 
 
 }
