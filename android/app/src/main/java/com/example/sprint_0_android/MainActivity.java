@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView TextoMajor;
     private TextView TextoMinor;
     private TextView Textdist;
+    private TextView Med;
 
     private String uuidEscaneado ="";
 

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,7 @@ public class FragmentSonda extends Fragment {
 
     private Handler handler = new Handler();
     private Runnable runnable;
+    private ImageView foto;
 
 
     private int dist;
@@ -74,6 +76,7 @@ public class FragmentSonda extends Fragment {
         Log.d(ETIQUETA_LOG, " distancia = " + dist);
         View view = inflater.inflate(R.layout.fragment_sonda, container, false);
         Textdist = view.findViewById(R.id.dist);
+        foto = view.findViewById(R.id.imagendist);
 
 
         // Si necesitas actualizar un TextView con este valor
@@ -140,12 +143,22 @@ public class FragmentSonda extends Fragment {
     }
 
     private void actualizarVistaConNuevoValor(int distancia) {
-        if(distancia>=-45){
+        if(distancia==0){
+            Textdist.setText("La sonda no está conectada");
+            foto.setImageResource(R.drawable.bajo);
+        }else if(DesconexionSonda.getInstance().getData()>5){
+            Log.d(ETIQUETA_LOG, " entro");
+            Textdist.setText("La sonda no está conectada");
+            foto.setImageResource(R.drawable.bajo);
+        }else if(distancia>=-45){
             Textdist.setText("La sonda está cerca");
+            foto.setImageResource(R.drawable.alto);
         }else if(distancia>=-65){
             Textdist.setText("La sonda está lejos");
+            foto.setImageResource(R.drawable.medio);
         }else if(distancia<-65){
             Textdist.setText("La sonda está muy lejos");
+            foto.setImageResource(R.drawable.bajo_medio);
         }
     }
 
