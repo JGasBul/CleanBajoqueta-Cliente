@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView TextoMajor;
     private TextView TextoMinor;
     private TextView Textdist;
+    private TextView Med;
 
     private String uuidEscaneado ="";
 
@@ -86,40 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public String Lat,Long,address,city,country;
     public List<String> listaLocalizacion = new ArrayList<>();
 
-    // _______________________________________________________________
-    // Diseño: buscarTodosLosDispositivosBTLE()
-    // Descripción:Empieza el scanner y se establece un callback para
-    // diferentes caso, si obtiene resultado, lo muestra en logcat
-    // _______________________________________________________________
-    @SuppressLint("MissingPermission")
-    private void buscarTodosLosDispositivosBTLE() {
-        this.callbackDelEscaneo = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult resultado) {
-                super.onScanResult(callbackType, resultado);
-                Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onScanResult() ");
-
-                mostrarInformacionDispositivoBTLE(resultado);
-            }
-            @Override
-            public void onBatchScanResults(List<ScanResult> results) {
-                super.onBatchScanResults(results);
-                Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onBatchScanResults() ");
-
-            }
-            @Override
-            public void onScanFailed(int errorCode) {
-                super.onScanFailed(errorCode);
-                Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): onScanFailed() ");
-
-            }
-        };
-        Log.d(ETIQUETA_LOG, " buscarTodosLosDispositivosBTL(): empezamos a escanear ");
-        //Empieza el escanner a escanear, si obtiene resultado, llama el callback del escaneo
-        this.elEscanner.startScan(this.callbackDelEscaneo);
-    }
-
-    // _______________________________________________________________
+      // _______________________________________________________________
     // Diseño: ScanResult ---> mostrarInformacionDispositivosBTLE()
     // Descripción: Recibe un objeto de tipo ScanResult y muestra datos
     // en el logcat
@@ -163,9 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Distancia sonda movil
         Log.d(ETIQUETA_LOG, " distancia = " + rssi);
-        //Textdist.setText(String.valueOf(rssi));
-        //distanciasonda(rssi);
 
+        DistanciaSonda.getInstance().setData(rssi);
         //Resetear contador desconexion
         DesconexionSonda.getInstance().setData(0);
 
@@ -187,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.d(ETIQUETA_LOG, "idcontaminante:" +id_contaminante +", Valor: " +valor );
         switch (id_contaminante){
-            case 11:
+            case 4:
 
                 enviarMedicion(id_contaminante,valor);
         }
@@ -244,57 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // _______________________________________________________________
-    // Diseño: detenerBusquedaDispositivosBTLE()
-    // Descripción: Parar la busqueda
-    // _______________________________________________________________
-    @SuppressLint("MissingPermission")
-    private void detenerBusquedaDispositivosBTLE() {
-
-        //Parar el escanner y anular el callback del escaneo
-        if (this.callbackDelEscaneo == null) {
-            return;
-        }else {
-
-            this.elEscanner.stopScan(this.callbackDelEscaneo);
-            this.callbackDelEscaneo = null;
-        }
-
-    }
-
-    // --------------------------BOTON--------------------------------
-
-    public void botonBuscarDispositivosBTLEPulsado(View v) {
-
-        Log.d(ETIQUETA_LOG, " boton arrancar servicio Pulsado" );
-
-        if ( this.elIntentDelServicio != null ) {
-            // ya estaba arrancado
-            return;
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            return;
-        }
-
-        Log.d(ETIQUETA_LOG, " MainActivity.constructor : voy a arrancar el servicio");
-        this.elIntentDelServicio = new Intent(this, ServicioEscuharBeacons.class);
-        this.elIntentDelServicio.putExtra("tiempoDeEspera", (long) 5000);
-        startService( this.elIntentDelServicio );
-
-        Log.d(ETIQUETA_LOG, " boton buscar dispositivos BTLE Pulsado");
-        this.buscarTodosLosDispositivosBTLE();
-    }
-
-    // _______________________________________________________________
+// ________________________________________________
     public void botonBuscarNuestroDispositivoBTLEPulsado(String uuid) {
         Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado");
         //this.buscarEsteDispositivoBTLE( Utilidades.stringToUUID( "EPSG-GTI-PROY-3A" ) );
@@ -332,34 +249,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "NO HAY NINGUNA SONDA VINCULADA", Toast.LENGTH_LONG).show();
         }
 
-    }
-
-    // _______________________________________________________________
-    public void botonDetenerBusquedaDispositivosBTLEPulsado(View v) {
-
-        if ( this.elIntentDelServicio == null ) {
-            // no estaba arrancado
-            return;
-        }
-
-        stopService( this.elIntentDelServicio );
-        Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado" );
-
-        this.elIntentDelServicio = null;
-        Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            return;
-        }
-        this.detenerBusquedaDispositivosBTLE();
     }
 
     // _______________________________________________________________
@@ -419,6 +308,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ViewPager2 viewPager = findViewById(R.id.viewPagerMain);
         TabLayout tabLayout4 = findViewById(R.id.tabLayout4);
+        Textdist = findViewById(R.id.dist);
+        Med = findViewById(R.id.med);
+        Log.d(ETIQUETA_LOG, " distancia en oncreate"+Textdist);
+
 
         TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
         viewPager.setAdapter(tabsAdapter);
@@ -663,49 +556,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    // _______________________________________________________________
-    public void boton_prueba_pulsado (View quien) {
-        Log.d("clienterestandroid", "boton_prueba_pulsado");
-
-        //Url de destino
-        String urlComprobarComproDestino = "http://192.168.217.185/Sprint_0_Web/logica/comprobarenviomedicion.php";
-
-        //Añado parametros y los envio al enlace correspondiente
-        AndroidNetworking.get(urlComprobarComproDestino)
-                .addQueryParameter("temperatura",  "")
-                .addQueryParameter("co2", "")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    //El servidor me ha respondido con un Json Object
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            //Leo el mensaje que hay en dentro del response
-                            String success = response.getString("success");
-                            String message = response.getString("message");
-
-                            //Pongo los mensajes en la salida de texto
-                            if ("success".equals(success)) {
-                                salidaTexto.setText(message);
-                            } else {
-                                // Aquí puedes manejar la respuesta que no es un éxito
-                                salidaTexto.setText(message);
-                            }
-                        } catch (JSONException e) {
-                            // Manejo cualquier error que ocurra al analizar la respuesta JSON
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onError(ANError error) {
-                        // Tengo error, lo imprimo en logcat
-                        if (error != null) {
-                            Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage());
-                        }
-                    }
-                });
-    }
 
     // _______________________________________________________________
     public void enviarMedicion (int idContaminante,float valor) {
@@ -717,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = intent.getStringExtra("email");
 
             //Url de destino
-            String urlDestino = "http://192.168.0.35:8080/mediciones/guardar_mediciones";
+            String urlDestino = "http://192.168.217.185:8080/mediciones/guardar_mediciones";
 
 
             //Instante de tomar medicion
@@ -789,47 +639,6 @@ public class MainActivity extends AppCompatActivity {
                     });
             }
     }
-    //ESCANEO DE QR
-    private void iniciarEscaneo() {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt("Escanea un código");
-        integrator.setCameraId(0);
-        integrator.setBeepEnabled(false);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.setCaptureActivity(CaptureActivity.class); // Utiliza la actividad de captura personalizada
-        integrator.initiateScan();
-
-        //Detener el escaneo si se esta haciendo
-        if (this.elIntentDelServicio != null) {
-            stopService(this.elIntentDelServicio);
-            Log.d(ETIQUETA_LOG, " boton detener servicio Pulsado");
-            this.elIntentDelServicio = null;
-            Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
-        }
-
-
-        if (
-                ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
-        )
-        {
-            ActivityCompat.requestPermissions(
-                    MainActivity.this,
-                    new String[]{Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_ADMIN,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH_SCAN,Manifest.permission.INTERNET},
-                    CODIGO_PETICION_PERMISOS);
-        }
-        this.detenerBusquedaDispositivosBTLE();
-    }
-
-    //Aqui es donde se obtiene la respuesta del analisis del codigo qr, se muestra en un toast
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -926,14 +735,4 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         //bloquear el botón de retroceso
     }
-    public void distanciasonda(int distancia){
-        if(distancia>=-45){
-            Textdist.setText("La sonda está cerca");
-        }else if(distancia>=-65){
-            Textdist.setText("La sonda está lejos");
-        }else if(distancia<-65){
-            Textdist.setText("La sonda está muy lejos");
-        }
-    }
-
 }
