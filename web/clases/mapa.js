@@ -17,7 +17,7 @@ var GlobalListaPuntos = null;
 // 1 paso: Crear un <div> con la id del mapa en el HTML
 // 2 paso: Llamar a esta función pasandole la id del mapa
 //----------------------------------------------------------------------------------------------------------
-function mapa(nombre) {
+function mapa(nombre, tipo) {
 
     map = L.map(nombre);
     map.setView([0, 0], 1); //Valores: [centro], zoom;
@@ -30,7 +30,7 @@ function mapa(nombre) {
     var locateController = L.control.locate().addTo(map);
     locateController.start();
 
-    getCurrentLocation();
+    getCurrentLocation(tipo);
 
     console.log("mapa Locate creado");
 }
@@ -47,7 +47,7 @@ function crearMarker(punto) {
 // getCurrentLocation() --> Punto: punto
 // Descripción: Recoge tu localización en base al navegador
 //----------------------------------------------------------------------------------------------------------
-function getCurrentLocation() {
+function getCurrentLocation(tipoMapa) {
 
     const success = (position) => {
         console.log(position);
@@ -66,15 +66,25 @@ function getCurrentLocation() {
                 console.log("Inicio añadir Contaminantes");
                 var res = await añadirContaminantes();
 
-                /*
-                var heatlayer = getheatLayer(GlobalListaPuntos);
-                if (res&&heatlayer) {
-                    var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1], "HeatMap": heatlayer}).addTo(map);
+                if (tipoMapa == "heatmap") {
+                    var heatlayers = getheatLayers(GlobalListaPuntos);
+                    console.log("heatLayers:")
+                    console.log(heatlayers);
+                    if (res && heatlayers) {
+                        //var layerControl = L.control.layers({}, { "Seguro": heatlayers[0][0], "Regular": heatlayers[0][1], "Peligro": heatlayers[0][2] }).addTo(map);
+                        //var layerControl = L.control.layers({}, {"Ozono":heatlayers[0], "CO":heatlayers[1]}).addTo(map);
+                        L.layerGroup(heatlayers).addTo(map)
+                    }
                 }
-                */
-                if (res) {
-                    var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1]}).addTo(map);
+                else {
+                    if (res) {
+                        var layerControl = L.control.layers({}, { "Ozono": res[0], "CO": res[1] }).addTo(map);
+                    }
                 }
+
+
+
+
 
             })
     }
@@ -106,29 +116,6 @@ function crearCirculo(punto, color) {
 }
 async function añadirContaminantes() {
     console.log("añadirContaminante inicia");
-    /*
-    listaContam = [];
-
-    //#region Contaminantes de Prueba
-    contaminante = new Contaminante("ozono", 244, [0, 0]);
-    listaContam.push(contaminante);
-    contaminante = new Contaminante("ozono", 332, [20, 20]);
-    listaContam.push(contaminante);
-    contaminante = new Contaminante("ozono", 423, [0, 20]);
-    listaContam.push(contaminante);
-    contaminante = new Contaminante("ozono", 544, [20, 0]);
-    listaContam.push(contaminante);
-
-    contaminante = new Contaminante("co", 123, [60, 60]);
-    listaContam.push(contaminante);
-    contaminante = new Contaminante("co", 32, [80, 60]);
-    listaContam.push(contaminante);
-    contaminante = new Contaminante("co", 45, [60, 80]);
-    listaContam.push(contaminante);
-    //console.log("Lista Ozono: "+listaOzono);
-    //console.log("Lista CO: "+listaCO);
-    //#endregion
-    */
 
     var promesa = getListaPuntos();
 
@@ -181,8 +168,8 @@ async function añadirContaminantes() {
         layerOzono = L.layerGroup(listaOzono);
         layerCO = L.layerGroup(listaCO);
 
-        layerOzono.addTo(map);
-        layerCO.addTo(map);
+        //layerOzono.addTo(map);
+        //layerCO.addTo(map);
     }
 
     return [layerOzono, layerCO];
@@ -237,21 +224,132 @@ function centrarEn(punto, zoom) {
 // Punto:punto, N:zoom --> centrarEn()
 // Descripción: centra el mapa en un punto en concreto con un zoom determinado
 //----------------------------------------------------------------------------------------------------------
-function getheatLayer(mediciones) {
-    console.log("getHeatLayer")
-    console.log(mediciones);
+function getheatLayers(mediciones) {
 
-    var listaPuntos = [];
-    for(var i = 0; i<mediciones.length; i++){
-        listaPuntos.push([mediciones[i].latitud,mediciones[i].longitud,mediciones[i].valor])
+    var rango = [0, 50, 100];
+    var listaClasificada = reclasificar(mediciones)
+
+    var listaozono = getConfig(listaClasificada[0], rango);
+    var listaco = getConfig(listaClasificada[1], rango);
+
+    listaHeatOzonoLayers = [];
+    listaHeatCOLayers = [];
+
+    var listaPuntosOzono = [];
+    var listaPuntosCO = [];
+
+    for (var i = 0; i<listaozono.length; i++) {
+        console.log(listaozono[i][1])
+        var puntos = getPuntos((listaozono[i][1]))
+        listaPuntosOzono.push(puntos);
+    }
+    for (var i = 0; i<listaco.length; i++) {
+        console.log(listaco[i][1])
+        var puntos = getPuntos((listaco[i][1]))
+        listaPuntosCO.push(puntos);
     }
 
-    var heatLayer = L.heatLayer(listaPuntos, { radius: 25 });
-    heatLayer.addTo(map);
+    //console.log("Debugueame esta")
+    //console.log(listaPuntosOzono)
 
-    //centrarEn([50.5, 30.5, 1], 9); //Esto lo hago para la visualización a modo de testeo. Luego se quita
+    for (var i = 0; i < listaPuntosOzono.length; i++) {
+        console.log("Debug Posicion: "+i);
+        console.log("listaPuntosOzono["+i+"]: ");
+        console.log(listaPuntosOzono[i])
+        console.log("listaozono["+i+"][0]: ");
+        console.log(listaozono[i][0])
+        listaHeatOzonoLayers.push(L.heatLayer(listaPuntosOzono[i], listaozono[i][0]));
+    }
+    for (var i = 0; i < listaPuntosCO.length; i++) {
+        console.log("Debug Posicion: "+i);
+        console.log("listaPuntosCO["+i+"]: ");
+        console.log(listaPuntosCO[i])
+        console.log("listaco["+i+"][0]: ");
+        console.log(listaco[i][0])
+        listaHeatCOLayers.push(L.heatLayer(listaPuntosCO[i], listaco[i][0]));
+    }
 
-    return heatLayer;
+    HeatLayerOzono = L.layerGroup(listaHeatOzonoLayers);
+    HeatLayerCO = L.layerGroup(listaHeatCOLayers);
+
+    return [HeatLayerOzono, HeatLayerCO];
+}
+//----------------------------------------------------------------------------------------------------------
+// {mediciones, rango}: Objeto --> getConfig() --> {listaSeguro,listaRegular,listaPeligro}: Objeto
+// Descripción: devuelve un objeto con las mediciones que son Seguras, Regulares y Peligrosas con
+// su configuración para pintarlos en el mapa de calor
+//----------------------------------------------------------------------------------------------------------
+function getConfig(mediciones, rango) {
+    listaSeguro = [];
+    listaRegular = [];
+    listaPeligro = [];
+
+    var configSeguro = {
+        radius: 25,
+        minOpacity: 100,
+        gradient: {
+            '0.5': 'DarkGreen',
+            '1': 'LightGreen'
+        }
+    }
+    var configRegular = {
+        radius: 25,
+        minOpacity: 50,
+        gradient: {
+            '0.5': 'Orange',
+            '1': 'Yellow'
+        }
+    }
+    var configPeligro = {
+        radius: 25,
+        minOpacity: 25,
+        gradient: {
+            '0.5': 'DarkRed',
+            '1': 'Red'
+        }
+    }
+
+    for (var i = 0; i < mediciones.length; i++) {
+        if (mediciones[i].valor <= rango[1]) {
+            listaSeguro.push(mediciones[i]);
+        }
+        else if (mediciones[i].valor <= rango[2]) {
+            listaRegular.push(mediciones[i]);
+        }
+        else {
+            listaPeligro.push(mediciones[i]);
+        }
+    }
+
+    var seguro = [configSeguro, listaSeguro];
+    var regular = [configRegular, listaRegular];
+    var peligro = [configPeligro, listaPeligro];
+
+    return [seguro, regular, peligro];
+}
+
+
+function reclasificar(lista) {
+    listaOzono = [];
+    listaCO = [];
+    for (var i = 0; i < lista.length; i++) {
+        if (lista[i].idContaminante == 4) {
+            listaOzono.push(lista[i]);
+        }
+        else if (lista[i].idContaminante == 5) {
+            listaCO.push(lista[i]);
+        }
+    }
+    return [listaOzono, listaCO];
+}
+
+function getPuntos(lista) {
+    var listares = [];
+
+    for (var i = 0; i < lista.length; i++) {
+        listares.push([lista[i].latitud, lista[i].longitud, lista[i].valor]);
+    }
+    return listares;
 }
 //----------------------------------------------------------------------------------------------------------
 // getListaPuntos() --> promesa:Promise
@@ -259,20 +357,6 @@ function getheatLayer(mediciones) {
 // lista de Puntos de las mediciones de la BBDD
 //----------------------------------------------------------------------------------------------------------
 function getListaPuntos() {
-    //console.log(miLocalizacion);
-
-    //const url = 'http://localhost:8080/mediciones/mediciones_zona/' + miLocalizacion[1] + '&' + miLocalizacion[0];
-
-    /*
-    var res = CORSSolve(url);
-    res.then(function(result){
-        GlobalListaPuntos = result;
-        console.log(GlobalListaPuntos);
-
-        return GlobalListaPuntos;
-    })
-    */
-
     var promesa = new Promise((resolve, reject) => {
         var peticionGet = CORSSolve(miLocalizacion);
         //console.log("Dentro de promesa: "+peticionGet);
