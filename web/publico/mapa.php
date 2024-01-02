@@ -15,11 +15,15 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
+    <!-- Plugin Leaflet: Leaflet.idw -->
+    <script src="../clases/leaflet-idw.js"></script>
+    <script src="../clases/leaflet-idw-directdraw.js"></script>
     <!-- Plugin Leaflet: Leaflet.Locate -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
     <!-- Plugin Leaflet: Leaflet.heat -->
     <script src="../clases/leaflet-heat.js"></script>
+    
 
     <!-- contaminante.js -->
     <script src="../clases/contaminante.js"></script>

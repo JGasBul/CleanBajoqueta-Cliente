@@ -68,6 +68,9 @@ function getCurrentLocation(tipoMapa) {
 
                 if (tipoMapa == "heatmap") {
                     var heatlayers = getheatLayers(GlobalListaPuntos);
+
+                    heatlayers = null;
+
                     console.log("heatLayers:")
                     console.log(heatlayers);
                     if (res && heatlayers) {
@@ -75,6 +78,8 @@ function getCurrentLocation(tipoMapa) {
                         //var layerControl = L.control.layers({}, {"Ozono":heatlayers[0], "CO":heatlayers[1]}).addTo(map);
                         L.layerGroup(heatlayers).addTo(map)
                     }
+                    interpolar();
+                    addlegend();
                 }
                 else {
                     if (res) {
@@ -238,12 +243,12 @@ function getheatLayers(mediciones) {
     var listaPuntosOzono = [];
     var listaPuntosCO = [];
 
-    for (var i = 0; i<listaozono.length; i++) {
+    for (var i = 0; i < listaozono.length; i++) {
         console.log(listaozono[i][1])
         var puntos = getPuntos((listaozono[i][1]))
         listaPuntosOzono.push(puntos);
     }
-    for (var i = 0; i<listaco.length; i++) {
+    for (var i = 0; i < listaco.length; i++) {
         console.log(listaco[i][1])
         var puntos = getPuntos((listaco[i][1]))
         listaPuntosCO.push(puntos);
@@ -253,18 +258,18 @@ function getheatLayers(mediciones) {
     //console.log(listaPuntosOzono)
 
     for (var i = 0; i < listaPuntosOzono.length; i++) {
-        console.log("Debug Posicion: "+i);
-        console.log("listaPuntosOzono["+i+"]: ");
+        console.log("Debug Posicion: " + i);
+        console.log("listaPuntosOzono[" + i + "]: ");
         console.log(listaPuntosOzono[i])
-        console.log("listaozono["+i+"][0]: ");
+        console.log("listaozono[" + i + "][0]: ");
         console.log(listaozono[i][0])
         listaHeatOzonoLayers.push(L.heatLayer(listaPuntosOzono[i], listaozono[i][0]));
     }
     for (var i = 0; i < listaPuntosCO.length; i++) {
-        console.log("Debug Posicion: "+i);
-        console.log("listaPuntosCO["+i+"]: ");
+        console.log("Debug Posicion: " + i);
+        console.log("listaPuntosCO[" + i + "]: ");
         console.log(listaPuntosCO[i])
-        console.log("listaco["+i+"][0]: ");
+        console.log("listaco[" + i + "][0]: ");
         console.log(listaco[i][0])
         listaHeatCOLayers.push(L.heatLayer(listaPuntosCO[i], listaco[i][0]));
     }
@@ -389,3 +394,75 @@ function getTipo(medicion) {
     else if (medicion.idContaminante == 5) { return "co" }
     else { return "Error" }
 }
+//----------------------------------------------------------------------------------------------------------
+// listamedicion: [Medicion] --> interpolar()
+// Descripción: dibuja en el mapa la interpolación resultante de una lista de mediciones
+//----------------------------------------------------------------------------------------------------------
+function interpolar() {
+    console.log("--------------------------------")
+    console.log("--------------------------------")
+    console.log("Empieza la interpolación")
+    console.log("--------------------------------")
+    console.log("--------------------------------")
+
+    listalat = []; listalong = []; listaint = []; listares = [];
+    for (var i = 0; i < GlobalListaPuntos.length; i++) {
+        listalat.push(GlobalListaPuntos[i].latitud);
+        listalong.push(GlobalListaPuntos[i].longitud);
+        listaint.push(GlobalListaPuntos[i].valor);
+
+        listares.push([listalat[i], listalong[i], listaint[i]*2.5]);
+    }
+
+    console.log(listares)
+
+    config = { opacity: 0.3, cellSize: 10, exp: 2, max: 1200, gradient: {0: 'green', 0.5: 'yellow', 1: 'red'} };
+    //config = {opacity: 0.3, cellSize: 10, exp: 2, max: 1200};
+
+    var idw = L.idwLayer(listares, config);
+    /*
+    test =[];
+    num=[];
+    for(var i=0;i<10; i++){
+        num.push((listares[i][2]));
+    }
+    console.log("num[]")
+    console.log(num)
+    for(var i=0; i<10; i++){
+        test.push([listares[i][0],listares[i][1],num[i]])
+    }
+    console.log(test);
+    var idw = L.idwLayer(test, config);
+    */
+    idw.addTo(map);
+
+    centrarEn([39.0042, -0.15977],14);
+}
+//----------------------------------------------------------------------------------------------------------
+// addlegend()
+// Descripción: representa una leyenda en el mapa
+//----------------------------------------------------------------------------------------------------------
+function addlegend(){
+    var legend = L.control({position: 'bottomright'});
+            legend.onAdd=function(map){
+                var div=L.DomUtil.create('div','legend');
+                var labels=["Seguro","Regular",
+                            "Peligroso"];
+                var grades = [0,50,75];
+                div.innerHTML='<div><b>Leyenda</b></div';
+                for(var i=0; i <grades.length; i++){
+                    div.innerHTML+='<i style="background:'+getCountyColor(grades[i])+' ">&nbsp;&nbsp;'+labels[i]+'<br/>';
+                }
+                return div;
+            }
+        legend.addTo(map);
+}
+function getCountyColor(popEst){
+    if(popEst>=75){
+        return 'red';
+    }else if(popEst >= 50){
+        return 'yellow';
+    }else{
+        return 'lime';
+    }
+};
