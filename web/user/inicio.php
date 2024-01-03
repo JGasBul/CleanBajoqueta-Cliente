@@ -1,10 +1,8 @@
 <?php
-
+include("../clases/checkRol.php");
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    header('refresh:0; url=../user/login.php');
-}
+checkRol($_SESSION['rol']);
 ?>
 
 <!doctype html>

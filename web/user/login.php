@@ -1,11 +1,13 @@
 <?php
 include("../bd/bd.php");
+include("../clases/checkRol.php");
 
 if(isset($_SESSION['usuario'])){    //Si existe, redirecciono
-    header('refresh:0; url=../user/inicio.php');
+    checkRol($_SESSION['rol']);
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
