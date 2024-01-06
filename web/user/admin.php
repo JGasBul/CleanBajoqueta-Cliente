@@ -22,6 +22,8 @@ checkRol($_SESSION['rol']);
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/letra.css">
 
+    
+
 </head>
 <header>
     <?php include("../template/cabecera_admin.php"); ?>
@@ -35,10 +37,18 @@ checkRol($_SESSION['rol']);
             </div>
             <div class="col-3 fs-3 ">
                 <div class="input-group mb-3 shadow rounded-5  align-items-center">
-                    <input type="text" class="form-control rounded-start-5 border-0  " placeholder="Nombre del usuario"
-                        aria-label="Nombre del usuario">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-success rounded-end-5  border-3" type="button" id="search">Buscar</button>
+                    <input type="text" class="form-control rounded-start-5 border-0" id="adminInputSearch"
+                        placeholder="Nombre" aria-label="Nombre del usuario">
+                    <!-- Menú desplegable del filtrador -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filtrador
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <a class="dropdown-item" href="#!">Action</a>
+                            <a class="dropdown-item" href="#!">Another action</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,7 +57,8 @@ checkRol($_SESSION['rol']);
         <!-- CARD PRINCIPAL -->
         <div class="row card shadow z-1 m-5 mt-2 border-0">
             <div class="card-body">
-                <table class="table align-middle table-striped">
+                <div id="table-container"></div>
+                <!-- <table class="table align-middle table-striped">
                     <thead>
                         <tr  class="table-info">
                             <th scope="col">Nº</th>
@@ -98,13 +109,14 @@ checkRol($_SESSION['rol']);
                             <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
                         </tr>
                     </tbody>
-                </table>
-
-
+                </table> -->
             </div>
         </div>
     </div>
 </body>
 
+<script src="../bd/adminController.js"></script>
+
+<link rel="stylesheet" href="../css/admin.css">
 
 </html>
