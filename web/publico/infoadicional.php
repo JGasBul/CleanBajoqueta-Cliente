@@ -6,8 +6,6 @@
         <title>Gases Contaminantes</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../css/bootstrap.min.css" />
-
-        <link rel="stylesheet" href="../css/infoadicional.css" />
     </head>
 
     <header>
@@ -44,7 +42,7 @@
                             <h5 class="card-title text-dark">Efectos</h5>
                             <p class="card-text">El gas ozono (O3) tiene un efecto positivo en la estratosfera (a unos 10-50 km de la superficie terrestre), ya que protege de la radiación ultravioleta.Sin embargo, a cotas inferiores, en la troposfera (la capa de la atmósfera en contacto con la tierra), se convierte en un contaminante que actúa como un potente y agresivo agente oxidante.La exposición a elevados niveles de este origina problemas respiratorios sobre la salud humana (irritación, inflamación, insuficiencias respiratorias, asma) y puede contribuir a incrementar la mortalidad prematura; también puede dañar la vegetación, afectar al crecimiento de cultivos y bosques, reducir la absorción de CO por las plantas, alterar la estructura de los ecosistemas y reducir la biodiversidad. Además, es un gas de efecto invernadero, que contribuye al calentamiento de la atmósfera.</p>
                             <h5 class="card-title text-dark">Valores recomendados por la OMS</h5>
-                            <img src="../assets/ozonograf.jpeg" class="imageInfo" alt="Image">
+                            <img src="../assets/ozonograf.png" class="img-responsive" alt="Image">
                         </div>
                         <div class="card-footer text-body-secondary"></div>  
                     </div>
@@ -62,7 +60,7 @@
                                 <h5 class="card-title text-dark">Efectos</h5>
                                 <p class="card-text">El CO penetra en el organismo a través de los pulmones, y puede provocar una disminución de la capacidad de transporte de oxígeno de la sangre, con el consecuente detrimento de oxigenación de órganos y tejidos, así como disfunciones cardiacas, daños en el sistema nervioso, dolor de cabeza, mareos y fatiga; estos efectos pueden producirse tanto sobre el ser humano como sobre la fauna silvestre.También posee consecuencias sobre el clima, ya quecontribuye a la formación de gases de efecto invernadero: su vida media en la atmósfera es de unos tres meses, lo que permite su lenta oxidación para formar CO2, proceso durante el cual también se genera O3.</p>
                                 <h5 class="card-title text-dark">Valores recomendados por la OMS</h5>
-                                <img src="../assets/carbonograf.png" class="imageInfo" alt="Image">
+                                <img src="../assets/carbonograf.png" class="img-responsive" alt="Image">
                             </div>
                         <div class="card-footer text-body-secondary"></div>  
                     </div>
@@ -80,7 +78,7 @@
                                 <h5 class="card-title text-dark">Efectos</h5>
                                 <p class="card-text">Este contaminante puede producir, incluso a grandesdistancias del foco emisor, efectos adversos sobre la salud (tales comoirritación e inflamación del sistema respiratorio, afecciones e insuficiencias pulmonares, alteración del metabolismo de las proteínas, dolor de cabeza oansiedad), sobre la biodiversidad, los suelos y los ecosistemas acuáticos y forestales (puede ocasionar daños a la vegetación, degradación de la clorofila, reducción de la fotosíntesis y la consiguiente pérdida de especies) e incluso sobre las edificaciones, a través de procesos de acidificación, pues una vez emitido, reacciona con el vapor de agua y con otros elementos presentes en la atmósfera, de modo que su oxidación en el aire da lugar a la formación de ácido sulfúrico. Además, también actúa como precursor de la formación de sulfato amónico, lo que incrementa los niveles de PM10 y PM2,5, con graves consecuencias igualmente sobre la salud.</p>
                                 <h5 class="card-title text-dark">Valores recomendados por la OMS</h5>
-                                <img src="../assets/azufregraf.png" class="imageInfo" alt="Image">
+                                <img src="../assets/azufregraf.png" class="img-responsive" alt="Image">
                             </div>
                         <div class="card-footer text-body-secondary"></div>  
                     </div>

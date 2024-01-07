@@ -38,8 +38,8 @@ smtp_port=587
 sendmail_path="C:\xampp\sendmail\sendmail.exe -t" *(quitar el punto y coma iniciales, esta es la ruta donde esta instalado el archivo sendmail.exe en la carpeta sendmail en la ruta del xamp, el -t tiene que estar al final)*
 
 4. Modificar el archivo sendmail.ini de la carpeta sendmail con estos valores:
-smpt_server=smpt.gmail.com
-smpt_port=587
+smtp_server=smtp.gmail.com
+smtp_port=587
 auth_username=bajoquetabluesky@gmail.com
 auth_password=sfubwqfoijhjfpta
 
