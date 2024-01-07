@@ -76,8 +76,8 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
                                 <span
                                     class=" text-left badge rounded-pill text-bg-light shadow-lg  p-2 mb-2 w-50 align-items-center fs-6">
                                     <div class="container-fluid">
-                                        <div class="row">
-                                            <div class="col-lg-3 align-middle">
+                                        <div class="row mt-1">
+                                            <div class="col-lg-5 align-middle">
                                                 <span class="align-middle">
                                                     <label for="exampleInputEmail1"> Nueva Contraseña: </label>
                                                 </span>
@@ -89,8 +89,24 @@ $codigo = isset($_GET['codigo']) ? $_GET['codigo'] : 'No se proporcionó código
                                                     required>
                                             </div>
                                             
-                                            <p>Código debug: <?php echo htmlspecialchars($codigo); ?></p>
+                                            <!-- <p>Código debug: <?php echo htmlspecialchars($codigo); ?></p> -->
                                         </div>
+                                        <div class="row">
+                                            <div class="col-lg-5 align-middle">
+                                                <span class="align-middle">
+                                                    <label for="exampleInputEmail1">Vuelva a repetir la contraseña: </label>
+                                                </span>
+                                            </div>
+
+                                            <div class="col  align-middle">
+                                                <input type="password" class="form-control  border-0"
+                                                    name="contraseniaRec2" placeholder="Repita la contraseña"
+                                                    required>
+                                            </div>
+                                            
+                                            
+                                        </div> 
+
                                     </div>
                                 </span>
                             </div>

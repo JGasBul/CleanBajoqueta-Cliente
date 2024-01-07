@@ -24,6 +24,7 @@ if (!empty($_POST["cambiarContrasenya"])) {
 
         $email = isset($_GET['correo']) ? $_GET['correo'] : 'No se proporcionó correo';
         $contraseniaNueva = $_POST["contraseniaRec"];
+        $contraseniaNuevaR = $_POST["contraseniaRec2"];
 
 
         $sqlEmail = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
@@ -49,6 +50,8 @@ if (!empty($_POST["cambiarContrasenya"])) {
                 echo '<div class="alert alert-danger">No esta verificado </div>';
             } else {
 
+                if($contraseniaNueva == $contraseniaNuevaR){
+
                 $cifrado = new CifrarDescifrarAES($contraseniaNueva);
                 $encryptedPassword = $cifrado->encriptar();
 
@@ -63,6 +66,9 @@ if (!empty($_POST["cambiarContrasenya"])) {
                     echo '<div class="alert alert-danger">Hubo problemas al cambiar la contraseña</div>';
                     
                 }
+            }else{
+                echo '<div class="alert alert-danger">Las contraseñas no coinciden</div>';
+            }
 
             }
         }
