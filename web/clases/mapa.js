@@ -416,7 +416,17 @@ function interpolar() {
 
     console.log(listares)
 
-    config = { opacity: 0.3, cellSize: 10, exp: 2, max: 1200, gradient: {0: 'green', 0.5: 'yellow', 1: 'red'} };
+    var grad = {
+        0.0: 'green',
+        0.2: 'lime',
+        0.4: 'yellow',            
+        0.5: 'orange',
+        0.6: 'red',
+        1.0: 'white'
+    };
+
+    config = { opacity: 0.3, cellSize: 10, exp: 20, max: 90, gradient: grad};
+    //config = { opacity: 0.3, cellSize: 10, exp: 20, max: 75, gradient: {0.1: 'green', 0.5: 'yellow', 1: 'red'} };
     //config = {opacity: 0.3, cellSize: 10, exp: 2, max: 1200};
 
     var idw = L.idwLayer(listares, config);
@@ -436,7 +446,7 @@ function interpolar() {
     */
     idw.addTo(map);
 
-    centrarEn([39.0042, -0.15977],14);
+    //centrarEn([39.0042, -0.15977],16);
 }
 //----------------------------------------------------------------------------------------------------------
 // addlegend()
