@@ -35,47 +35,58 @@
                     <ImageView
                         android:id="@+id/imageView10"
                         android:layout_width="106dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="6dp"
+                        android:layout_height="92dp"
                         android:src="@drawable/logo"
-                        app:layout_constraintBottom_toTopOf="@+id/textView9"
-                        app:layout_constraintEnd_toStartOf="@+id/textView6"
+                        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/text_nombre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="5dp"
                         android:text="Nombre Usuario"
-                        android:textSize="17sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+                        app:layout_constraintBottom_toTopOf="@+id/text_email"
                         app:layout_constraintStart_toEndOf="@+id/imageView10"
-                        app:layout_constraintTop_toTopOf="@+id/imageView10" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/imageButton2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView6"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textView6"
-                        app:layout_constraintTop_toTopOf="@+id/textView6"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView10"
+                        app:layout_constraintStart_toStartOf="@+id/imageView10"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView10"
                         app:srcCompat="@drawable/ic_name" />
 
                     <TextView
-                        android:id="@+id/textView9"
+                        android:id="@+id/text_telefono"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="Cambiar foto"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="Telefono"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView10"
-                        app:layout_constraintStart_toStartOf="@+id/imageView10" />
+                        app:layout_constraintStart_toEndOf="@+id/imageView10"
+                        app:layout_constraintTop_toBottomOf="@+id/text_email" />
+
+                    <TextView
+                        android:id="@+id/text_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/text_telefono"
+                        app:layout_constraintStart_toEndOf="@+id/imageView10"
+                        app:layout_constraintTop_toBottomOf="@+id/text_nombre" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,7 +95,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
                 android:layout_width="0dp"
-                android:layout_height="231dp"
+                android:layout_height="160dp"
                 android:layout_marginTop="20dp"
                 app:cardCornerRadius="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/cardview_edituser"
@@ -99,7 +110,7 @@
                         android:id="@+id/textView10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="5dp"
                         android:text="Cambiar Contraseña"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -107,107 +118,187 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/textView12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="Contraseña Actual"
-                        app:layout_constraintEnd_toStartOf="@+id/editTextText"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="Contraseña Vieja"
+                        app:layout_constraintEnd_toStartOf="@+id/input_cambia_contrasenya1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
                     <EditText
-                        android:id="@+id/editTextText"
+                        android:id="@+id/input_cambia_contrasenya1"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/ic_border"
-                        android:ems="10"
-                        android:inputType="text"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView11"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textView11"
-                        app:layout_constraintTop_toTopOf="@+id/textView11" />
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="Nueva Contraseña"
-                        app:layout_constraintStart_toStartOf="@+id/textView11"
-                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-                    <EditText
-                        android:id="@+id/editTextText2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@drawable/ic_border"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/custom_input"
                         android:ems="10"
                         android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView12"
-                        app:layout_constraintEnd_toEndOf="@+id/editTextText"
-                        app:layout_constraintStart_toStartOf="@+id/editTextText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView12"
                         app:layout_constraintTop_toTopOf="@+id/textView12" />
 
                     <TextView
                         android:id="@+id/textView13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="Repetir Contraseña"
-                        app:layout_constraintStart_toStartOf="@+id/textView12"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="Contraseña Nueva"
+                        app:layout_constraintEnd_toStartOf="@+id/input_cambiar_contrasenya2"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
                     <EditText
-                        android:id="@+id/editTextText3"
+                        android:id="@+id/input_cambiar_contrasenya2"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@drawable/ic_border"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="-5dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/custom_input"
                         android:ems="10"
                         android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView13"
-                        app:layout_constraintEnd_toEndOf="@+id/editTextText2"
-                        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-                        app:layout_constraintTop_toTopOf="@+id/textView13"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView13"
+                        app:layout_constraintTop_toTopOf="@+id/textView13" />
 
                     <Button
-                        android:id="@+id/button3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
+                        android:id="@+id/button_cambiar_contrasenya"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                         android:backgroundTint="#E2F2E6"
                         android:text="Cambiar Contraseña"
                         android:textColor="#000000"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/editTextText3"
-                        app:layout_constraintStart_toStartOf="@+id/textView13"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView13" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/button2"
-                android:layout_width="0dp"
+                android:id="@+id/button_cerrar_sesion"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="32dp"
-                android:backgroundTint="#D9F1FB"
+                android:backgroundTint="#f07393"
                 android:text="Cerrar sesión"
                 android:textColor="#000000"
                 android:textColorLink="#000000"
                 android:textSize="20sp"
                 android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/cardView2"
                 app:layout_constraintStart_toStartOf="@+id/cardView2"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+
+            <androidx.cardview.widget.CardView
+
+                android:id="@+id/cardView3"
+                android:layout_width="0dp"
+                android:layout_height="175dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/cardView2"
+                app:layout_constraintStart_toStartOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/button_cambiar_perfil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="#E2F2E6"
+                        android:text="Actualizar Perfil"
+                        android:textColor="#000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/input_cambiar_telefono" />
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Telefono"
+                        app:layout_constraintEnd_toStartOf="@+id/input_cambiar_telefono"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Nombre"
+                        app:layout_constraintEnd_toStartOf="@+id/input_cambia_nombre"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+                    <EditText
+                        android:id="@+id/input_cambiar_telefono"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="-5dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/custom_input"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView20"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView20"
+                        app:layout_constraintTop_toTopOf="@+id/textView20" />
+
+                    <EditText
+                        android:id="@+id/input_cambia_nombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/custom_input"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView11"
+                        app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Cambiar Perfil de Usuario"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,11 +1,14 @@
 package com.example.sprint_0_android;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ public class SignUp extends AppCompatActivity {
     private EditText telefono;
     private EditText contrasenia;
     private EditText contraseniaVer;
+    private CheckBox privacidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +48,27 @@ public class SignUp extends AppCompatActivity {
         this.telefono = (EditText) findViewById(R.id.inputTelefono);
         this.contrasenia = (EditText) findViewById(R.id.inputContrasenia);
         this.contraseniaVer = (EditText) findViewById(R.id.inputContraseniaVer);
+        this.privacidad=(CheckBox) findViewById(R.id.privacidad);
 
+        privacidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentToPrivacidad = new Intent(SignUp.this,PrivacyPolicy.class);
+                startActivity(intentToPrivacidad);
+
+            }
+        });
     }
 
     public void boton_registrar(View v) {
+
+        if (!privacidad.isChecked()){
+            Toast.makeText(getApplicationContext(), "Por favor, acepta la politica de privacidad", Toast.LENGTH_SHORT).show();
+        }else {
         Intent intentToLogin = new Intent(this, Login.class);
         //URL de destino para mandar
-        String urlDestino = "http://192.168.217.185:8080/user/insertUser";
+        String urlDestino = "http://192.168.1.106:8080/user/insertUser";
 
         //Objecto JSON para enviar
         JSONObject postData = new JSONObject();
@@ -124,6 +142,7 @@ public class SignUp extends AppCompatActivity {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }
         }
     }
 

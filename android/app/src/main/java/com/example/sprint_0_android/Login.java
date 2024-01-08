@@ -50,7 +50,7 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
-        String urlDestino = "http://192.168.217.185:8080/user/getUserByEmail";
+        String urlDestino = "http://192.168.1.106:8080/user/getUserByEmail";
         JSONObject postData = new JSONObject();
 
         //Check si hay algún campo nulo
@@ -89,11 +89,12 @@ public class Login extends AppCompatActivity {
                                             //finish();
                                             intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
                                             intentToMain.putExtra("email",responseJSON.getString("email"));
+                                            intentToMain.putExtra("telefono",responseJSON.getString("telefono"));
                                             startActivity(intentToMain);
                                         }
                                         //Si success me responde con un 0, un toast con el message
                                         else {
-                                            Log.d(ETIQUETA_LOG, "Login Fallado: ");
+                                            Log.d(ETIQUETA_LOG, "onResponse: "+contraseñaDesencriptada);
                                             Toast.makeText(getApplicationContext(), "Login fallido", Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (JSONException e) {
