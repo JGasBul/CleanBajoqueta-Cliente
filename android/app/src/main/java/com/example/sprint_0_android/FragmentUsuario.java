@@ -18,8 +18,11 @@ import androidx.fragment.app.Fragment;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FragmentUsuario extends Fragment {
@@ -37,6 +40,8 @@ public class FragmentUsuario extends Fragment {
     private TextView nombre;
     private TextView email;
     private TextView telefono;
+
+
 
     public static FragmentUsuario newInstance(String nombreUsuario, String email, String telefono) {
         FragmentUsuario fragment = new FragmentUsuario();
@@ -66,6 +71,8 @@ public class FragmentUsuario extends Fragment {
         this.nombre=view.findViewById(R.id.text_nombre);
         this.email=view.findViewById(R.id.text_email);
         this.telefono=view.findViewById(R.id.text_telefono);
+
+
 
         Bundle args = getArguments();
 
@@ -114,36 +121,75 @@ public class FragmentUsuario extends Fragment {
 
     public void cambiar_contrasenya(){
         JSONObject postData = new JSONObject();
-        String urlDestino = "http://192.168.1.106:8080/user/updateUserByEmail";
-        if(this.contraNueva.getText().toString().isEmpty()&&this.contraVieja.getText().toString().isEmpty()){
+        String urlDestino = "http://192.168.1.106:8080/user/getUserByEmail";
+        String urlDestino2 = "http://192.168.1.106:8080/user/updateUserByEmail";
+
+        if(this.contraNueva.getText().toString().isEmpty()||this.contraVieja.getText().toString().isEmpty()){
             Toast.makeText(getContext(), "Campo sin rellenar", Toast.LENGTH_SHORT).show();
         }
         else {
             try {
                 CifrarDescifrarAES cifrador = new CifrarDescifrarAES();
-                String textoEncriptado = cifrador.encriptar(this.contraVieja.getText().toString());
-                String textoEncriptado2 = cifrador.encriptar(this.contraNueva.getText().toString());
+                String contraViejaEncriptado = cifrador.encriptar(this.contraVieja.getText().toString());
+                String contraNuevaEncriptado = cifrador.encriptar(this.contraNueva.getText().toString());
 
-                postData.put("email", this.userEmail);
-                postData.put("contraVieja", textoEncriptado);
-                postData.put("contraNueva", textoEncriptado2);
-
-                AndroidNetworking.put(urlDestino)
+                AndroidNetworking.get(urlDestino)
                         .addHeaders("Content-Type", "application/json; charset=utf-8")
                         .addHeaders("email", this.userEmail)
-                        .addJSONObjectBody(postData)
-                        .setTag("post_data")
+                        .setTag("get_data")
                         .setPriority(Priority.MEDIUM)
                         .build()
-                        .getAsJSONObject(new JSONObjectRequestListener(){
-
+                        .getAsJSONArray(new JSONArrayRequestListener(){
                             @Override
-                            public void onResponse(JSONObject response) {
+                            public void onResponse(JSONArray response) {
 
                                 if (response != null && response.length() > 0) {
-                                    contraVieja.setText("");
-                                    contraNueva.setText("");
-                                    Toast.makeText(getContext(), "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show();
+                                    try {
+                                        JSONObject primerElemento = response.getJSONObject(0);
+                                        String cVieja = primerElemento.optString("contraseña", "");
+
+                                        if (!cVieja.equals(contraViejaEncriptado)){
+                                            Toast.makeText(getContext(), "Contraseña vieja incorrecta", Toast.LENGTH_SHORT).show();
+                                            contraVieja.setText("");
+                                            contraNueva.setText("");
+
+                                        }else {
+                                            postData.put("email", userEmail);
+                                            postData.put("contraseña", contraNuevaEncriptado);
+
+                                            AndroidNetworking.put(urlDestino2)
+                                                    .addHeaders("Content-Type", "application/json; charset=utf-8")
+                                                    .addHeaders("email",userEmail)
+                                                    .addJSONObjectBody(postData)
+                                                    .setTag("post_data")
+                                                    .setPriority(Priority.MEDIUM)
+                                                    .build()
+                                                    .getAsJSONObject(new JSONObjectRequestListener(){
+                                                        @Override
+                                                        public void onResponse(JSONObject response) {
+
+                                                            if (response != null && response.length() > 0) {
+                                                                contraVieja.setText("");
+                                                                contraNueva.setText("");
+                                                                Toast.makeText(getContext(), "Contraseña cambiada correctamente", Toast.LENGTH_SHORT).show();
+
+                                                            } else {
+                                                                Toast.makeText(getContext(), "No ha podido cambiar", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onError(ANError error) {
+                                                            if (error != null) {
+                                                                Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage());
+                                                            }
+                                                        }
+                                                    });
+                                        }
+
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
 
                                 } else {
                                     Toast.makeText(getContext(), "No ha podido cambiar", Toast.LENGTH_SHORT).show();
@@ -153,13 +199,16 @@ public class FragmentUsuario extends Fragment {
                             @Override
                             public void onError(ANError error) {
                                 if (error != null) {
-                                    Log.d(ETIQUETA_LOG, "Mensaje de error: " + error.getMessage());
+                                    Log.d(ETIQUETA_LOG, "Mensaje de error 1: " + error.getMessage());
+
                                 }
                             }
                         });
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
+
 
         }
     }
