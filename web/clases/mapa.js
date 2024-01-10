@@ -33,6 +33,11 @@ function mapa(nombre, tipo) {
     getCurrentLocation(tipo);
 
     console.log("mapa Locate creado");
+
+// Ejemplo de uso: Buscar estaciones en un radio de 80km alrededor de Gandía
+buscarEstaciones(38.994537, -0.168094, 80);
+
+
 }
 //----------------------------------------------------------------------------------------------------------
 // Punto: punto --> crearMarcador() --> Marker: marker
@@ -390,6 +395,7 @@ function getListaContaminantes(listaPuntos) {
 // Descripción: devuelve una lista de Contaminantes de la BBDD
 //----------------------------------------------------------------------------------------------------------
 function getTipo(medicion) {
+    buscarEstaciones(38.994537, -0.168094, 80);
     if (medicion.idContaminante == 4) { return "ozono" }
     else if (medicion.idContaminante == 5) { return "co" }
     else { return "Error" }
@@ -476,3 +482,32 @@ function getCountyColor(popEst){
         return 'lime';
     }
 };
+
+// Función para buscar estaciones y agregarlas al mapa
+function buscarEstaciones(lat, lng, radioKm) {
+    console.log("BUSCANDO ESTACIONES");
+    var latitudGrados = radioKm / 111; 
+    var longitudGrados = radioKm / (111 * Math.cos(lat * Math.PI / 180)); 
+
+    var latMin = lat - latitudGrados;
+    var latMax = lat + latitudGrados;
+    var lngMin = lng - longitudGrados;
+    var lngMax = lng + longitudGrados;
+
+    var token = "a6e94931d9ab07c950fbdce95db0c38d4ccb13b8"; 
+    var latlngBounds = latMin + "," + lngMin + "," + latMax + "," + lngMax;
+    var url = "https://api.waqi.info/map/bounds/?token=" + token + "&latlng=" + latlngBounds;
+
+    $.getJSON(url, function(response) {
+        if (response.status === "ok") {
+            response.data.forEach(function(estacion) {
+                var marcador = L.marker([estacion.lat, estacion.lon]).addTo(map);
+                marcador.bindPopup("Estación: " + estacion.station.name + "<br>Nivel AQI: " + estacion.aqi+"<br>Instante de la lectura: " + estacion.station.time);
+                console.log("Estaciones añadidas");
+            });
+        } else {
+            console.log("No se pudo obtener la información de la API");
+        }
+    });
+}
+
