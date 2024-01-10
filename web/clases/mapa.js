@@ -34,8 +34,8 @@ function mapa(nombre, tipo) {
 
     console.log("mapa Locate creado");
 
-// Ejemplo de uso: Buscar estaciones en un radio de 80km alrededor de Gandía
-buscarEstaciones(38.994537, -0.168094, 80);
+    // Ejemplo de uso: Buscar estaciones en un radio de 80km alrededor de Gandía
+
 
 
 }
@@ -94,9 +94,10 @@ function getCurrentLocation(tipoMapa) {
 
 
 
-
-
+                //Se buscan las estaciones de españa y alrededores
+                buscarEstaciones(miLocalizacion, 99);
             })
+
     }
 
     const error = () => {
@@ -417,7 +418,7 @@ function interpolar() {
         listalong.push(GlobalListaPuntos[i].longitud);
         listaint.push(GlobalListaPuntos[i].valor);
 
-        listares.push([listalat[i], listalong[i], listaint[i]*2.5]);
+        listares.push([listalat[i], listalong[i], listaint[i] * 2.5]);
     }
 
     console.log(listares)
@@ -425,13 +426,13 @@ function interpolar() {
     var grad = {
         0.0: 'green',
         0.2: 'lime',
-        0.4: 'yellow',            
+        0.4: 'yellow',
         0.5: 'orange',
         0.6: 'red',
         1.0: 'white'
     };
 
-    config = { opacity: 0.3, cellSize: 10, exp: 20, max: 90, gradient: grad};
+    config = { opacity: 0.3, cellSize: 10, exp: 20, max: 90, gradient: grad };
     //config = { opacity: 0.3, cellSize: 10, exp: 20, max: 75, gradient: {0.1: 'green', 0.5: 'yellow', 1: 'red'} };
     //config = {opacity: 0.3, cellSize: 10, exp: 2, max: 1200};
 
@@ -458,56 +459,74 @@ function interpolar() {
 // addlegend()
 // Descripción: representa una leyenda en el mapa
 //----------------------------------------------------------------------------------------------------------
-function addlegend(){
-    var legend = L.control({position: 'bottomright'});
-            legend.onAdd=function(map){
-                var div=L.DomUtil.create('div','legend');
-                var labels=["Seguro","Regular",
-                            "Peligroso"];
-                var grades = [0,50,75];
-                div.innerHTML='<div><b>Leyenda</b></div';
-                for(var i=0; i <grades.length; i++){
-                    div.innerHTML+='<i style="background:'+getCountyColor(grades[i])+' ">&nbsp;&nbsp;'+labels[i]+'<br/>';
-                }
-                return div;
-            }
-        legend.addTo(map);
+function addlegend() {
+    var legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'legend');
+        var labels = ["Seguro", "Regular",
+            "Peligroso"];
+        var grades = [0, 50, 75];
+        div.innerHTML = '<div><b>Leyenda</b></div';
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML += '<i style="background:' + getCountyColor(grades[i]) + ' ">&nbsp;&nbsp;' + labels[i] + '<br/>';
+        }
+        return div;
+    }
+    legend.addTo(map);
 }
-function getCountyColor(popEst){
-    if(popEst>=75){
+function getCountyColor(popEst) {
+    if (popEst >= 75) {
         return 'red';
-    }else if(popEst >= 50){
+    } else if (popEst >= 50) {
         return 'yellow';
-    }else{
+    } else {
         return 'lime';
     }
 };
 
 // Función para buscar estaciones y agregarlas al mapa
-function buscarEstaciones(lat, lng, radioKm) {
+function buscarEstaciones(local, radioKm) {
     console.log("BUSCANDO ESTACIONES");
-    var latitudGrados = radioKm / 111; 
-    var longitudGrados = radioKm / (111 * Math.cos(lat * Math.PI / 180)); 
-
+    var lat = local[1]; // Latitud
+    var lng = local[0]; // Longitud
+   
+    lat= 38.988576;
+    lng = -0.174931;
+    console.log("lat:" + lat + " lng:" + lng);
+    // Calcular grados de latitud y longitud para el radio
+    var latitudGrados = radioKm / 111; // Aproximación
+    var longitudGrados = radioKm / (111 * Math.cos(lat * Math.PI / 180)); // Ajuste por coseno de la latitud
+    console.log("longitudGrados:" + longitudGrados + " latitudGrados:" + latitudGrados)
+    // Calcular los límites
     var latMin = lat - latitudGrados;
     var latMax = lat + latitudGrados;
     var lngMin = lng - longitudGrados;
     var lngMax = lng + longitudGrados;
 
-    var token = "a6e94931d9ab07c950fbdce95db0c38d4ccb13b8"; 
+    // Construir la URL de la API
+    var token = "a6e94931d9ab07c950fbdce95db0c38d4ccb13b8"; // Tu token API
     var latlngBounds = latMin + "," + lngMin + "," + latMax + "," + lngMax;
+    console.log(latlngBounds);
     var url = "https://api.waqi.info/map/bounds/?token=" + token + "&latlng=" + latlngBounds;
 
-    $.getJSON(url, function(response) {
+    
+    $.getJSON(url, function (response) {
         if (response.status === "ok") {
-            response.data.forEach(function(estacion) {
+            console.log(response)
+            response.data.forEach(function (estacion) {
+                var fechaHoraISO = estacion.station.time; // Fecha y hora en formato ISO 8601
+                var opciones = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                var fechaHoraLocal = new Date(fechaHoraISO).toLocaleString(undefined, opciones); // Convertir a fecha y hora local sin segundos
+    
                 var marcador = L.marker([estacion.lat, estacion.lon]).addTo(map);
-                marcador.bindPopup("Estación: " + estacion.station.name + "<br>Nivel AQI: " + estacion.aqi+"<br>Instante de la lectura: " + estacion.station.time);
+                marcador.bindPopup("Estación: " + estacion.station.name + "<br>Nivel AQI: " + estacion.aqi + "<br>Instante de la lectura: " + fechaHoraLocal);
                 console.log("Estaciones añadidas");
             });
         } else {
             console.log("No se pudo obtener la información de la API");
         }
     });
+    
 }
+
 

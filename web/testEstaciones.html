@@ -18,7 +18,7 @@ function buscarEstaciones(lat, lng, radioKm) {
     // Calcular grados de latitud y longitud para el radio
     var latitudGrados = radioKm / 111; // Aproximación
     var longitudGrados = radioKm / (111 * Math.cos(lat * Math.PI / 180)); // Ajuste por coseno de la latitud
-
+    console.log("longitudGrados:"+longitudGrados+" latitudGrados:"+latitudGrados)
     // Calcular los límites
     var latMin = lat - latitudGrados;
     var latMax = lat + latitudGrados;
@@ -28,6 +28,7 @@ function buscarEstaciones(lat, lng, radioKm) {
     // Construir la URL de la API
     var token = "a6e94931d9ab07c950fbdce95db0c38d4ccb13b8"; // Tu token API
     var latlngBounds = latMin + "," + lngMin + "," + latMax + "," + lngMax;
+    console.log(latlngBounds);
     var url = "https://api.waqi.info/map/bounds/?token=" + token + "&latlng=" + latlngBounds;
     
     // Hacer la solicitud a la API
@@ -42,7 +43,7 @@ function buscarEstaciones(lat, lng, radioKm) {
 
 $(document).ready(function() {
     // Ejemplo de uso: Buscar estaciones en un radio de 80km alrededor de Gandía
-    buscarEstaciones(38.994537, -0.168094, 50);
+    buscarEstaciones(38.994537, -0.168094, 99);
 });
 </script>
 </body>
