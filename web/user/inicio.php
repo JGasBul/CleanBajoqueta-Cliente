@@ -258,7 +258,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <script>
     //Inicializar mapa
-    mapa('map');
+    mapa('map','normal');
 </script>
 
 

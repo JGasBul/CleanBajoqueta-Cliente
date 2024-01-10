@@ -15,11 +15,15 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
+    <!-- Plugin Leaflet: Leaflet.idw -->
+    <script src="../clases/leaflet-idw.js"></script>
+    <script src="../clases/leaflet-idw-directdraw.js"></script>
     <!-- Plugin Leaflet: Leaflet.Locate -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
     <!-- Plugin Leaflet: Leaflet.heat -->
     <script src="../clases/leaflet-heat.js"></script>
+    
 
     <!-- contaminante.js -->
     <script src="../clases/contaminante.js"></script>
@@ -83,56 +87,7 @@
 
 <script>
     //Inicializar mapa
-    mapa('map');
-
-//#region Ejemplos de funciones
-    /* Crear mapa
-    const map = L.map('map');
-    map.setView([0, 0], 1); //Valores: [centro], zoom;
-    L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=kIRP9eC6t8HxGCalVgc5', {
-        attribution:
-            '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-    }).addTo(map);
-    */
-
-
-    /* Añadir un Marcador
-    var marker = L.marker([51.5, -0.09]).addTo(map);
-    */    
-    
-    /*Añadir un area circular
-    var circle = L.circle([51.508, -0.11], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 500
-    }).addTo(map);
-    */
-
-    /*Añadir un area poligonal
-    var polygon = L.polygon([
-        [51.509, -0.08],
-        [51.503, -0.06],
-        [51.51, -0.047]
-    ]).addTo(map);
-    */
-
-    /*Añadir PopUps al marcador, circulo y polígono
-    marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-    circle.bindPopup("I am a circle.");
-    polygon.bindPopup("I am a polygon.");
-    */
-
-    /*function mapa(nombre){
-    
-    map = L.map(nombre);
-    map.setView([0, 0], 1); //Valores: [centro], zoom;
-    L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=kIRP9eC6t8HxGCalVgc5', {
-        attribution:
-            '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-    }).addTo(map);
-}*/
-    //#endregion
+    mapa('map','heatmap');
 </script>
 
 </html>
