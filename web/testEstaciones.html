@@ -1,40 +1,49 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Registro</title>
+    <title>Estaciones de Calidad del Aire</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/letra.css" />
-    <!-- Inclusión de jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<!-- Inicio Header -->
 <header>
     <?php include("../template/cabecera.php"); ?>
 </header>
-<!-- Fin Header -->
-
-<!-- PHP Proxy Code -->
-
 
 <script>
-$.ajax({
-    url: '../user/proxy.php', // Asegúrate de que esta es la ruta correcta
-    type: 'GET',
-    success: function(response) {
-        console.log(response);
-    },
-    error: function(error) {
-        console.error(error);
-    }
-});
+function buscarEstaciones(lat, lng, radioKm) {
+    // Calcular grados de latitud y longitud para el radio
+    var latitudGrados = radioKm / 111; // Aproximación
+    var longitudGrados = radioKm / (111 * Math.cos(lat * Math.PI / 180)); // Ajuste por coseno de la latitud
 
+    // Calcular los límites
+    var latMin = lat - latitudGrados;
+    var latMax = lat + latitudGrados;
+    var lngMin = lng - longitudGrados;
+    var lngMax = lng + longitudGrados;
+    
+    // Construir la URL de la API
+    var token = "a6e94931d9ab07c950fbdce95db0c38d4ccb13b8"; // Tu token API
+    var latlngBounds = latMin + "," + lngMin + "," + latMax + "," + lngMax;
+    var url = "https://api.waqi.info/map/bounds/?token=" + token + "&latlng=" + latlngBounds;
+    
+    // Hacer la solicitud a la API
+    $.getJSON(url, function(response) {
+        if (response.status === "ok") {
+            console.log("Estaciones encontradas: ", response.data);
+        } else {
+            console.log("No se pudo obtener la información de la API");
+        }
+    });
+}
+
+$(document).ready(function() {
+    // Ejemplo de uso: Buscar estaciones en un radio de 80km alrededor de Gandía
+    buscarEstaciones(38.994537, -0.168094, 50);
+});
 </script>
 </body>
 </html>
