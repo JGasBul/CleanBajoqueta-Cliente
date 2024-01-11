@@ -1,8 +1,44 @@
 <?php
 include("../clases/checkRol.php");
-session_start();
 
+session_start();
 checkRol($_SESSION['rol']);
+
+//Obtain
+$curl = curl_init();
+curl_setopt_array(
+    $curl,
+    array(
+        CURLOPT_URL => "http://localhost:8080/mediciones/ultima_medicion",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET"
+    )
+);
+$headers = [
+    'accept: applicaction/json',
+    'email: ' . "testMediciones@email.com" . ''
+];
+curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+$res = curl_exec($curl);
+$res = json_decode($res, true); // because of true, it's in an array
+$err = curl_error($curl);
+curl_close($curl);
+
+if ($err) {
+    echo '<div class="alert alert-danger">Error: ' . $err . '</div>';
+} else {
+    //echo '<div class="alert alert-success"><pre>';
+    //print_r($res);
+    //echo '</pre></div>';
+}
+$_SESSION['email'] = $res[0]['email'];
+$_SESSION['instante'] = $res[0]['instante'];
+
+
+
+
 //echo(var_dump($_SESSION))
 ?>
 
@@ -22,6 +58,7 @@ checkRol($_SESSION['rol']);
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/letra.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
@@ -69,7 +106,18 @@ checkRol($_SESSION['rol']);
 </body>
 
 <?php include("../bd/eliminarUsuario.php"); ?>
-<script src="../bd/adminController.js"></script>
+<script type="text/javascript">
+    var email = <?php echo json_encode($_SESSION['email']); ?>;
+    var instante = <?php echo json_encode($_SESSION['instante']); ?>;
+</script>
+
+
+<script src="../bd/adminController.js">
+
+    
+</script>
+
+
 
 <link rel="stylesheet" href="../css/admin.css">
 

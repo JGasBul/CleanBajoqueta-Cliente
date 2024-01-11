@@ -43,7 +43,7 @@ async function generateTable(data) {
     */
 
     let table = '<table>';
-    table += '<tr><th>Nº</th><th>Perfil</th><th>Email</th><th>Telefono</th><th>Activo</th><th></th></tr>';
+    table += '<tr><th>Nº</th><th>Perfil</th><th>Email</th><th>Telefono</th><th>Activo</th><th>Ult.Medición</th><th></th></tr>';
 
     let btnEliminar = '<button type="button" onClick="eliminar(this.parentNode.parentNode)">Eliminar</button>';
 
@@ -52,7 +52,7 @@ async function generateTable(data) {
     data.forEach(item => {
 
       if (item.rol != 1 && item.verificado != 0) {
-        table += `<tr><td>${index}</td><td>${item.nombreApellido}</td><td>${item.email}</td><td>${item.telefono}</td><td>${estado(item.activo)}</td><td>${btnEliminar}</td></tr>`;
+        table += `<tr><td>${index}</td><td>${item.nombreApellido}</td><td>${item.email}</td><td>${item.telefono}</td><td>${estado(item.activo)}</td><td>${item.ultimoNodo}</td><td>${btnEliminar}</td></tr>`;
         index++;
       }
     });
@@ -167,12 +167,46 @@ function popUp(title, description, callback, yesBtnLabel = 'Aceptar', noBtnLabel
   var modal = new bootstrap.Modal(modalWrap.querySelector('.modal'));
   modal.show();
 }
+
+async function obtenerUltima(email) {
+  console.log("Obteniendo el email:", email);
+  try {
+      const response = await fetch('../bd/ultimoNodo.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email })
+      });
+      const data = await response.json();
+      if (data.error) {
+          console.error('Error:', data.error);
+          return null;
+      } else {
+          console.log("Datos obtenidos para el email:", email, data);
+          return data;
+      }
+  } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+      return null;
+  }
+}
+
+
+
+
 //---------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------
 // Al empezar
 //---------------------------------------------------------------------------------------------------------
 async function main() {
+ 
   await getUsers();
+  
+  
+
+  obtenerUltima("testMediciones@email.com")
+
   generateTable(data);
 }
 main()
