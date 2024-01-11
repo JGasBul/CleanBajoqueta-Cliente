@@ -57,6 +57,7 @@ if (isset($_COOKIE["eliminar"])) {
       createCookie("eliminar", email, 0.000104167) //("nametag","valor","9 segundos en escala de dias")
 
       console.log("eliminado");
+      actualizarTabla();
     })
   }
 //---------------------------------------------------------------------------------------------------------

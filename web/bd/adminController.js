@@ -130,44 +130,10 @@ function actualizarTabla() {
   }, 1000);
 }
 //---------------------------------------------------------------------------------------------------------
-// datos:tr --> eliminar()
-// Descripción: Esta función recibe el tr del que fué seleccionado. Mediante eso, recogemos
-// el indice de la fila con el proposito de recoger el email correcto.
-// Una vez lo recogemos, enseñamos un mensaje de alerta. Si se acepta, se elimina el usuario de la BBDD.
-// Luego llamamos a actualizarTabla() para actualizar la tabla
+// title, description:Txt; callback:function --> popUp() --> popUp
+// Descripción: Función que crea un popUp con un titulo y descripción en concreto.
+// Si no se especifican los labels de Si y No, se crearán por defecto con los valores "Aceptar" y "Cancelar"
 //---------------------------------------------------------------------------------------------------------
-function eliminar(datos) {
-  let index = datos.rowIndex;
-  console.log("Row Index: " + index)
-
-  let tr = document.getElementById("table-container").getElementsByTagName("tr")
-  let td = tr[index].getElementsByTagName("td");
-  let email = td[2].textContent;
-
-  popUp('Eliminar Usuario', '¿Desea eliminar este usuario?', async () => {
-    console.log(email)
-    
-    /*
-    await fetch('http://localhost:8080/user/deleteByEmail',{
-      method: 'DELETE',
-      body: email
-    }).then(response => console.log(response.status))
-    */
-   await fetch('http://localhost:8080/user/deleteByEmail',{
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': 'your-api-key',
-        'Access-Control-Allow-Origin': '*',
-        "email": ""+email
-      }
-   })
-    
-    console.log("eliminado");
-    
-  })
-}
-
 function popUp(title, description, callback, yesBtnLabel = 'Aceptar', noBtnLabel = 'Cancelar') {
   if (modalWrap !== null) {
     modalWrap.remove();

@@ -63,64 +63,12 @@ checkRol($_SESSION['rol']);
         <div class="row card shadow z-1 m-5 mt-2 border-0">
             <div class="card-body">
                 <div id="table-container"></div>
-                <!-- <table class="table align-middle table-striped">
-                    <thead>
-                        <tr  class="table-info">
-                            <th scope="col">Nº</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Activo</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr >
-                            <td class="align-middle">1</td>
-                            <td class="align-middle">Carles</td>
-                            <td class="align-middle">Email</td>
-                            <td class="align-middle">Activo
-                            <button type="button" class="btn btn-success p-2 ms-2"> </button>
-
-                            </td>
-                            <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
-                        </tr>
-                        <tr>
-                        <td class="align-middle">2</td>
-                            <td class="align-middle">Zaida</td>
-                            <td class="align-middle">Email</td>
-                            <td class="align-middle">Activo
-                            <button type="button" class="btn btn-success p-2 ms-2"> </button>
-
-                            </td>
-                            <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
-                        </tr>
-                        <tr>
-                        <td class="align-middle">3</td>
-                            <td class="align-middle">Arnau</td>
-                            <td class="align-middle">Email</td>
-                            <td class="align-middle">Activo
-                            <button type="button" class="btn btn-success p-2 ms-2"> </button>
-
-                            </td>
-                            <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
-                        </tr>
-                        <td class="align-middle">4</td>
-                            <td class="align-middle">Pepe</td>
-                            <td class="align-middle">Email</td>
-                            <td class="align-middle">Inactivo
-                            <button type="button" class="btn btn-warning p-2 ms-2"> </button>
-
-                            </td>
-                            <td class="align-middle"><button type="button" class="btn btn-danger">Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table> -->
             </div>
         </div>
     </div>
 </body>
 
-<!-- <script src="../bd/browserifyAdminController.js"></script> -->
+<?php include("../bd/eliminarUsuario.php"); ?>
 <script src="../bd/adminController.js"></script>
 
 <link rel="stylesheet" href="../css/admin.css">
