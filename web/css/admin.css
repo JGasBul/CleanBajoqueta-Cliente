@@ -1,0 +1,31 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    /* border: 1px solid black; */
+    
+    padding: 8px;
+    text-align: center;
+    justify-content: center;
+    border-bottom: 1px solid black;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+/* ---------------------------- */
+.estadoCuadrado {
+    border-radius: 25px;
+    height: 35px;
+    width: 35px;
+  }
+.activo {
+    background-color: lime;
+}
+.inactivo {
+    background-color: red;
+}
