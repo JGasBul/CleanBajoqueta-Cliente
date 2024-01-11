@@ -83,14 +83,19 @@ public class Login extends AppCompatActivity {
                                         JSONObject responseJSON = new JSONObject(String.valueOf(response.get(0)));
                                         CifrarDescifrarAES cifrado = new CifrarDescifrarAES();
                                         String contraseñaDesencriptada = cifrado.desencriptar(responseJSON.getString("contraseña"));
+                                        String verificado = responseJSON.getString("verificado");
                                         if (contraseñaDesencriptada.equals(loginContrasenia.getText().toString())) {
-                                            Log.d(ETIQUETA_LOG, "Login Correcto ");
-                                            Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
-                                            //finish();
-                                            intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
-                                            intentToMain.putExtra("email",responseJSON.getString("email"));
-                                            intentToMain.putExtra("telefono",responseJSON.getString("telefono"));
-                                            startActivity(intentToMain);
+                                            if (verificado.equals("0")){
+                                                Toast.makeText(getApplicationContext(), "Por favor, verificar el correo", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                Log.d(ETIQUETA_LOG, "Login Correcto ");
+                                                Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
+                                                //finish();
+                                                intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
+                                                intentToMain.putExtra("email",responseJSON.getString("email"));
+                                                intentToMain.putExtra("telefono",responseJSON.getString("telefono"));
+                                                startActivity(intentToMain);
+                                            }
                                         }
                                         //Si success me responde con un 0, un toast con el message
                                         else {
