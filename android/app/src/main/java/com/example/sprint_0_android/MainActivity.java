@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView TextoMajor;
     private TextView TextoMinor;
     private TextView Textdist;
-    private TextView Med;
 
     private String uuidEscaneado ="";
 
@@ -309,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPagerMain);
         TabLayout tabLayout4 = findViewById(R.id.tabLayout4);
         Textdist = findViewById(R.id.dist);
-        Med = findViewById(R.id.med);
+
         Log.d(ETIQUETA_LOG, " distancia en oncreate"+Textdist);
 
         Intent intent = getIntent();

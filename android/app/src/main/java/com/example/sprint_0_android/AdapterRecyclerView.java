@@ -30,7 +30,21 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.hora.setText(medicionList.get(position).getHora());
         holder.temperatura.setText(medicionList.get(position).getTemperatura());
-        holder.concentracion.setText(medicionList.get(position).getConcentracion());
+        holder.concentracion.setText(medicionList.get(position).getValor());
+
+        String valorCadena = medicionList.get(position).getValor();
+        try {
+            float valorFloat = Float.parseFloat(valorCadena);
+            int valorEntero = Math.round(valorFloat);
+            holder.progreso.incrementProgressBy(valorEntero);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Error al convertir la cadena a número.");
+            e.printStackTrace();
+        }
+
+
+
 
     }
 

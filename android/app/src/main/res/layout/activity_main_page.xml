@@ -103,29 +103,18 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:progressBackgroundTint="#4CAF50"
-                            app:layout_constraintEnd_toEndOf="@+id/textView40"
-                            app:layout_constraintStart_toStartOf="@+id/textView40"
-                            app:layout_constraintTop_toBottomOf="@+id/textView40" />
-
                         <TextView
                             android:id="@+id/text_bajo"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="15dp"
                             android:gravity="center"
                             android:text="Bajo"
                             android:textColor="#4CA157"
                             android:textSize="20sp"
                             app:layout_constraintEnd_toStartOf="@+id/text_medio"
-                            app:layout_constraintStart_toStartOf="@+id/progressBar"
-                            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/salida_valor" />
 
                         <TextView
                             android:id="@+id/text_medio"
@@ -147,15 +136,15 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="Alto"
-                            android:textColor="#8C0404"
+                            android:textColor="#E80B0B"
                             android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="@+id/text_medio"
-                            app:layout_constraintEnd_toEndOf="@+id/progressBar"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/text_medio"
                             app:layout_constraintTop_toTopOf="@+id/text_medio" />
 
                         <TextView
-                            android:id="@+id/text_status_warning"
+                            android:id="@+id/salida_info"
                             android:layout_width="0dp"
                             android:layout_height="49dp"
                             android:background="#C3DBC8"
@@ -169,6 +158,18 @@
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="@+id/text_bajo"
                             app:layout_constraintTop_toBottomOf="@+id/text_medio" />
+
+                        <TextView
+                            android:id="@+id/salida_valor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="60"
+                            android:textSize="34sp"
+                            android:textStyle="bold|italic"
+                            app:layout_constraintEnd_toEndOf="@+id/textView40"
+                            app:layout_constraintStart_toStartOf="@+id/textView40"
+                            app:layout_constraintTop_toBottomOf="@+id/textView40" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -202,18 +203,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/med"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="96dp"
-                            android:text="Calidad del Aire"
-                            android:textSize="24sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                         <ProgressBar
                             android:id="@+id/progressBar2"
                             style="?android:attr/progressBarStyle"
@@ -235,10 +224,11 @@
                             android:layout_height="51dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="20dp"
-                            android:background="#C3DBC8"
                             android:gravity="center"
                             android:text="Calidad Excelente"
                             android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/esquinas"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -260,7 +250,6 @@
                             android:layout_marginStart="5dp"
                             android:text="24º C"
                             android:textSize="30sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                             app:layout_constraintEnd_toEndOf="@+id/Salida_Calidad"
                             app:layout_constraintStart_toEndOf="@+id/imageView7"
@@ -324,7 +313,7 @@
                             android:layout_height="0dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:layout_marginEnd="50dp"
+                            android:layout_marginEnd="30dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
