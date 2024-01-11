@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/hora"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
@@ -20,7 +20,6 @@
         android:id="@+id/temperatura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:text="TextView"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/hora"
@@ -29,13 +28,13 @@
 
     <TextView
         android:id="@+id/concentracion"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
+        android:layout_marginStart="53dp"
         android:text="TextView"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/temperatura"
-        app:layout_constraintStart_toEndOf="@+id/temperatura"
+        app:layout_constraintStart_toEndOf="@+id/hora"
         app:layout_constraintTop_toTopOf="@+id/temperatura" />
 
     <ProgressBar
@@ -43,11 +42,13 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="120dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/concentracion"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/concentracion"
-        app:layout_constraintTop_toTopOf="@+id/concentracion" />
+        app:layout_constraintStart_toEndOf="@+id/hora"
+        app:layout_constraintTop_toTopOf="@+id/concentracion"
+        android:progressTint="#454545"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,22 +1,22 @@
 package com.example.sprint_0_android;
 
 public class Medicion {
-    String hora;
+    String Hora;
     String Temperatura;
-    String Concentracion;
+    String Valor;
 
-    public Medicion(String hora, String temperatura, String concentracion) {
-        this.hora = hora;
-        Temperatura = temperatura;
-        Concentracion = concentracion;
+    public Medicion(String hora, String temperatura, String valor) {
+        this.Hora = hora;
+        this.Temperatura = temperatura;
+        this.Valor = valor;
     }
 
     public String getHora() {
-        return hora;
+        return Hora;
     }
 
     public void setHora(String hora) {
-        this.hora = hora;
+        Hora = hora;
     }
 
     public String getTemperatura() {
@@ -27,11 +27,11 @@ public class Medicion {
         Temperatura = temperatura;
     }
 
-    public String getConcentracion() {
-        return Concentracion;
+    public String getValor() {
+        return Valor;
     }
 
-    public void setConcentracion(String concentracion) {
-        Concentracion = concentracion;
+    public void setValor(String valor) {
+        Valor = valor;
     }
 }

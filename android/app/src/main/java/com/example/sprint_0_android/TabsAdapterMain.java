@@ -21,7 +21,7 @@ public class TabsAdapterMain extends FragmentStateAdapter {
         if (position == 0) {
             return Ajuste.newInstance(nombreUsuario, email, telefono);
         } else if (position == 1){
-            return new MainPage();
+            return MainPage.newInstance(email);
         } else if (position == 2) {
             return new MapaPage();
 
