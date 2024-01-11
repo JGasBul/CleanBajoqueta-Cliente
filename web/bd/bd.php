@@ -51,6 +51,7 @@ if (!empty($_POST["ingresar"])) {
                 //Si ambas contraseñas son iguales, consultamos los datos del usuario de la BBDD
                 if ($contraseniaLogin == $contraseniaDesCifrada & $verificado == 1) {
                     $_SESSION['usuario'] = $datos["nombreApellido"];
+                    $_SESSION['email'] = $datos["email"];
                     $_SESSION['rol'] = $datos["rol"];
                     //Si existe el usuario, se ridirige a su pagina
                     if($_SESSION['rol']==0){

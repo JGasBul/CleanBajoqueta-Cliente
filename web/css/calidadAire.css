@@ -1,0 +1,10 @@
+
+#calidadAire{
+    border-radius: 16px;
+    
+}
+
+#calidadAire h4, #calidadAire h5{
+    color: black;
+    font-weight: bold;
+}
