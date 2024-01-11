@@ -1,17 +1,32 @@
 package com.example.sprint_0_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PrivacyPolicy extends AppCompatActivity {
+    private static final String ETIQUETA_LOG = ">>>>";
+    private Button aceptarPrivacidad;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_privacypolicy);
+
+        this.aceptarPrivacidad=(Button) findViewById(R.id.buttonAceptarPolitica);
+        aceptarPrivacidad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+            }
+        });
+
     }
     //----------------------------------------------------------------------------------------------
     // onclick --> buttonAceptar()

@@ -312,119 +312,62 @@ public class MainActivity extends AppCompatActivity {
         Med = findViewById(R.id.med);
         Log.d(ETIQUETA_LOG, " distancia en oncreate"+Textdist);
 
-
-        TabsAdapterMain tabsAdapter = new TabsAdapterMain(this);
-        viewPager.setAdapter(tabsAdapter);
-        viewPager.setCurrentItem(1);
-
-
-        new TabLayoutMediator(tabLayout4, viewPager,
-                (tab, position) -> {
-                    switch (position) {
-                        case 0:
-                            tab.setIcon(R.drawable.ajustes);
-                            break;
-                        case 1:
-                            tab.setIcon(R.drawable.home);
-                            break;
-                        case 2:
-                            tab.setIcon(R.drawable.map);
-                            break;
-                    }
-                }
-        ).attach();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Para texto oscuro
-        } else {
-            getWindow().setStatusBarColor(Color.BLACK); // Para fondos claros, usa un color de fondo oscuro para la barra de estado
-        }
-
-        /*
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-
-
-        // Configura el adaptador para ViewPager
-        TabsAdapter tabsAdapter = new TabsAdapter(this);
-        viewPager.setAdapter(tabsAdapter);
-
-        // Conecta TabLayout con ViewPager2
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> {
-                    // Aquí puedes configurar el texto de cada pestaña
-                    if (position == 0) {
-                        tab.setText("Tab 1");
-                    } else {
-                        tab.setText("Tab 2");
-                    }
-                }
-        ).attach();
-
-
-
-
-        this.salidaTexto = (TextView) findViewById(R.id.salidaTexto);
-        this.TextoMajor = (TextView) findViewById(R.id.TextoMajor);
-        this.TextoMinor = (TextView) findViewById(R.id.TextoMinor);
-        this.Textdist = (TextView) findViewById(R.id.textdist);
-
-
-
         Intent intent = getIntent();
         if (intent != null) {
             String nombreUsuario = intent.getStringExtra("nombreUsuario");
             String email = intent.getStringExtra("email");
-            salidaTexto.setText("Bienvenido "+nombreUsuario);
-        }
+            String telefono = intent.getStringExtra("telefono");
 
+            TabsAdapterMain tabsAdapter = new TabsAdapterMain(this,nombreUsuario, email, telefono);
+            viewPager.setAdapter(tabsAdapter);
+            viewPager.setCurrentItem(1);
 
-         */
+            new TabLayoutMediator(tabLayout4, viewPager,
+                    (tab, position) -> {
+                        switch (position) {
+                            case 0:
+                                tab.setIcon(R.drawable.ajustes);
+                                break;
+                            case 1:
+                                tab.setIcon(R.drawable.home);
+                                break;
+                            case 2:
+                                tab.setIcon(R.drawable.map);
+                                break;
+                        }
+                    }
+            ).attach();
 
-
-        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-            return;
-        }else {
-
-            Toast.makeText(getApplicationContext(),"GPS Activado",Toast.LENGTH_SHORT).show();
-        }
-
-        Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
-
-        inicializarBlueTooth();
-
-        Log.d(ETIQUETA_LOG, " onCreate(): termina ");
-
-        Log.d("clienterestandroid", "fin onCreate()");
-
-
-        // QR SCAN
-
-        /*
-        Button btnQR = findViewById(R.id.btnQR);
-        btnQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iniciarEscaneo();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // Para texto oscuro
+            } else {
+                getWindow().setStatusBarColor(Color.BLACK); // Para fondos claros, usa un color de fondo oscuro para la barra de estado
             }
-        });
 
-         */
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-        fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-        //getLastLocation();
+                return;
+            } else {
 
+                Toast.makeText(getApplicationContext(), "GPS Activado", Toast.LENGTH_SHORT).show();
+            }
 
+            Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
 
+            inicializarBlueTooth();
 
+            Log.d(ETIQUETA_LOG, " onCreate(): termina ");
 
+            Log.d("clienterestandroid", "fin onCreate()");
 
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+            //getLastLocation();
+
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -482,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void sendNotification()
     {
-        Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/raw/audio");
+        Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/raw/alarm_notification");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity. this, "default_notification_channel_id" )
                 .setSmallIcon(R.drawable. ic_launcher_foreground )
                 .setContentTitle( "BlueSky-Danger Alert" )

@@ -50,7 +50,7 @@ public class Login extends AppCompatActivity {
     public void boton_login_aceptar(View v){
         Intent intentToMain = new Intent(this, MainActivity.class);
 
-        String urlDestino = "http://192.168.217.185:8080/user/getUserByEmail";
+        String urlDestino = "http://192.168.1.106:8080/user/getUserByEmail";
         JSONObject postData = new JSONObject();
 
         //Check si hay algún campo nulo
@@ -83,17 +83,23 @@ public class Login extends AppCompatActivity {
                                         JSONObject responseJSON = new JSONObject(String.valueOf(response.get(0)));
                                         CifrarDescifrarAES cifrado = new CifrarDescifrarAES();
                                         String contraseñaDesencriptada = cifrado.desencriptar(responseJSON.getString("contraseña"));
+                                        String verificado = responseJSON.getString("verificado");
                                         if (contraseñaDesencriptada.equals(loginContrasenia.getText().toString())) {
-                                            Log.d(ETIQUETA_LOG, "Login Correcto ");
-                                            Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
-                                            //finish();
-                                            intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
-                                            intentToMain.putExtra("email",responseJSON.getString("email"));
-                                            startActivity(intentToMain);
+                                            if (verificado.equals("0")){
+                                                Toast.makeText(getApplicationContext(), "Por favor, verificar el correo", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                Log.d(ETIQUETA_LOG, "Login Correcto ");
+                                                Toast.makeText(getApplicationContext(), "Login correcto", Toast.LENGTH_SHORT).show();
+                                                //finish();
+                                                intentToMain.putExtra("nombreUsuario",responseJSON.getString("nombreApellido"));
+                                                intentToMain.putExtra("email",responseJSON.getString("email"));
+                                                intentToMain.putExtra("telefono",responseJSON.getString("telefono"));
+                                                startActivity(intentToMain);
+                                            }
                                         }
                                         //Si success me responde con un 0, un toast con el message
                                         else {
-                                            Log.d(ETIQUETA_LOG, "Login Fallado: ");
+                                            Log.d(ETIQUETA_LOG, "onResponse: "+contraseñaDesencriptada);
                                             Toast.makeText(getApplicationContext(), "Login fallido", Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (JSONException e) {

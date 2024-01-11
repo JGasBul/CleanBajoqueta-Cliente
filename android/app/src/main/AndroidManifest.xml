@@ -45,6 +45,7 @@
             tools:replace="android:screenOrientation"></activity>
         <activity android:name=".SignUp" />
         <activity android:name=".Ajuste" />
+        <activity android:name=".PrivacyPolicy" />
         <activity android:name=".InfoActivity" />
         <activity android:name=".MainActivity" />
         <activity

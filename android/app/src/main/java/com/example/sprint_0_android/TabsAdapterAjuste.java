@@ -4,8 +4,14 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class TabsAdapterAjuste extends FragmentStateAdapter {
-    public TabsAdapterAjuste(Ajuste fa) {
+    private String nombreUsuario;
+    private String email;
+    private String telefono;
+    public TabsAdapterAjuste(Ajuste fa,String nombreUsuario,String email,String telefono) {
         super(fa);
+        this.nombreUsuario = nombreUsuario;
+        this.email = email;
+        this.telefono = telefono;
     }
 
     @Override
@@ -16,7 +22,8 @@ public class TabsAdapterAjuste extends FragmentStateAdapter {
         } else if (position == 1){
             return new FragmentSonda();
         } else if (position == 2) {
-            return new FragmentUsuario();
+            FragmentUsuario fragmentUsuario = FragmentUsuario.newInstance(nombreUsuario, email, telefono);
+            return fragmentUsuario;
         }else{
         return null;
     }}
