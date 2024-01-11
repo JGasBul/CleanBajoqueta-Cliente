@@ -3,242 +3,8 @@
 // Fichero: adminController.js
 // Descripción: Fichero JS con funciones para controlar la página del administrador
 //---------------------------------------------------------------------------------------------------------
-
 //Variables Globales
 /*
-const dataTest = [
-  {
-    "id": 1,
-    "name": "Leanne Graham",
-    "username": "Bret",
-    "email": "Sincere@april.biz",
-    "address": {
-      "street": "Kulas Light",
-      "suite": "Apt. 556",
-      "city": "Gwenborough",
-      "zipcode": "92998-3874",
-      "geo": {
-        "lat": "-37.3159",
-        "lng": "81.1496"
-      }
-    },
-    "phone": "1-770-736-8031 x56442",
-    "website": "hildegard.org",
-    "company": {
-      "name": "Romaguera-Crona",
-      "catchPhrase": "Multi-layered client-server neural-net",
-      "bs": "harness real-time e-markets"
-    }
-  },
-  {
-    "id": 2,
-    "name": "Ervin Howell",
-    "username": "Antonette",
-    "email": "Shanna@melissa.tv",
-    "address": {
-      "street": "Victor Plains",
-      "suite": "Suite 879",
-      "city": "Wisokyburgh",
-      "zipcode": "90566-7771",
-      "geo": {
-        "lat": "-43.9509",
-        "lng": "-34.4618"
-      }
-    },
-    "phone": "010-692-6593 x09125",
-    "website": "anastasia.net",
-    "company": {
-      "name": "Deckow-Crist",
-      "catchPhrase": "Proactive didactic contingency",
-      "bs": "synergize scalable supply-chains"
-    }
-  },
-  {
-    "id": 3,
-    "name": "Clementine Bauch",
-    "username": "Samantha",
-    "email": "Nathan@yesenia.net",
-    "address": {
-      "street": "Douglas Extension",
-      "suite": "Suite 847",
-      "city": "McKenziehaven",
-      "zipcode": "59590-4157",
-      "geo": {
-        "lat": "-68.6102",
-        "lng": "-47.0653"
-      }
-    },
-    "phone": "1-463-123-4447",
-    "website": "ramiro.info",
-    "company": {
-      "name": "Romaguera-Jacobson",
-      "catchPhrase": "Face to face bifurcated interface",
-      "bs": "e-enable strategic applications"
-    }
-  },
-  {
-    "id": 4,
-    "name": "Patricia Lebsack",
-    "username": "Karianne",
-    "email": "Julianne.OConner@kory.org",
-    "address": {
-      "street": "Hoeger Mall",
-      "suite": "Apt. 692",
-      "city": "South Elvis",
-      "zipcode": "53919-4257",
-      "geo": {
-        "lat": "29.4572",
-        "lng": "-164.2990"
-      }
-    },
-    "phone": "493-170-9623 x156",
-    "website": "kale.biz",
-    "company": {
-      "name": "Robel-Corkery",
-      "catchPhrase": "Multi-tiered zero tolerance productivity",
-      "bs": "transition cutting-edge web services"
-    }
-  },
-  {
-    "id": 5,
-    "name": "Chelsey Dietrich",
-    "username": "Kamren",
-    "email": "Lucio_Hettinger@annie.ca",
-    "address": {
-      "street": "Skiles Walks",
-      "suite": "Suite 351",
-      "city": "Roscoeview",
-      "zipcode": "33263",
-      "geo": {
-        "lat": "-31.8129",
-        "lng": "62.5342"
-      }
-    },
-    "phone": "(254)954-1289",
-    "website": "demarco.info",
-    "company": {
-      "name": "Keebler LLC",
-      "catchPhrase": "User-centric fault-tolerant solution",
-      "bs": "revolutionize end-to-end systems"
-    }
-  },
-  {
-    "id": 6,
-    "name": "Mrs. Dennis Schulist",
-    "username": "Leopoldo_Corkery",
-    "email": "Karley_Dach@jasper.info",
-    "address": {
-      "street": "Norberto Crossing",
-      "suite": "Apt. 950",
-      "city": "South Christy",
-      "zipcode": "23505-1337",
-      "geo": {
-        "lat": "-71.4197",
-        "lng": "71.7478"
-      }
-    },
-    "phone": "1-477-935-8478 x6430",
-    "website": "ola.org",
-    "company": {
-      "name": "Considine-Lockman",
-      "catchPhrase": "Synchronised bottom-line interface",
-      "bs": "e-enable innovative applications"
-    }
-  },
-  {
-    "id": 7,
-    "name": "Kurtis Weissnat",
-    "username": "Elwyn.Skiles",
-    "email": "Telly.Hoeger@billy.biz",
-    "address": {
-      "street": "Rex Trail",
-      "suite": "Suite 280",
-      "city": "Howemouth",
-      "zipcode": "58804-1099",
-      "geo": {
-        "lat": "24.8918",
-        "lng": "21.8984"
-      }
-    },
-    "phone": "210.067.6132",
-    "website": "elvis.io",
-    "company": {
-      "name": "Johns Group",
-      "catchPhrase": "Configurable multimedia task-force",
-      "bs": "generate enterprise e-tailers"
-    }
-  },
-  {
-    "id": 8,
-    "name": "Nicholas Runolfsdottir V",
-    "username": "Maxime_Nienow",
-    "email": "Sherwood@rosamond.me",
-    "address": {
-      "street": "Ellsworth Summit",
-      "suite": "Suite 729",
-      "city": "Aliyaview",
-      "zipcode": "45169",
-      "geo": {
-        "lat": "-14.3990",
-        "lng": "-120.7677"
-      }
-    },
-    "phone": "586.493.6943 x140",
-    "website": "jacynthe.com",
-    "company": {
-      "name": "Abernathy Group",
-      "catchPhrase": "Implemented secondary concept",
-      "bs": "e-enable extensible e-tailers"
-    }
-  },
-  {
-    "id": 9,
-    "name": "Glenna Reichert",
-    "username": "Delphine",
-    "email": "Chaim_McDermott@dana.io",
-    "address": {
-      "street": "Dayna Park",
-      "suite": "Suite 449",
-      "city": "Bartholomebury",
-      "zipcode": "76495-3109",
-      "geo": {
-        "lat": "24.6463",
-        "lng": "-168.8889"
-      }
-    },
-    "phone": "(775)976-6794 x41206",
-    "website": "conrad.com",
-    "company": {
-      "name": "Yost and Sons",
-      "catchPhrase": "Switchable contextually-based project",
-      "bs": "aggregate real-time technologies"
-    }
-  },
-  {
-    "id": 10,
-    "name": "Clementina DuBuque",
-    "username": "Moriah.Stanton",
-    "email": "Rey.Padberg@karina.biz",
-    "address": {
-      "street": "Kattie Turnpike",
-      "suite": "Suite 198",
-      "city": "Lebsackbury",
-      "zipcode": "31428-2261",
-      "geo": {
-        "lat": "-38.2386",
-        "lng": "57.2232"
-      }
-    },
-    "phone": "024-648-3804",
-    "website": "ambrose.net",
-    "company": {
-      "name": "Hoeger LLC",
-      "catchPhrase": "Centralized empowering task-force",
-      "bs": "target end-to-end models"
-    }
-  }
-];
-*/
 const dataTest = [
   {
     "id": 1,
@@ -259,11 +25,16 @@ const dataTest = [
     "activo": "false"
   }
 ];
-var consttableContainer = null;
+*/
+var data = null;                  // Data recibida de la BBDD
+var consttableContainer = null;   // Contenedor donde reside la tabla
+var modalWrap = null;             // Contenedor del PopUp de Eliminar Usuario
 //---------------------------------------------------------------------------------------------------------
 // data --> generateTable() --> table
 //---------------------------------------------------------------------------------------------------------
 async function generateTable(data) {
+  console.log("generateTable()")
+  console.log(data);
   try {
 
     /*
@@ -272,12 +43,18 @@ async function generateTable(data) {
     */
 
     let table = '<table>';
-    table += '<tr><th>Nº</th><th>Perfil</th><th>Email</th><th>Activo</th><th></th></tr>';
+    table += '<tr><th>Nº</th><th>Perfil</th><th>Email</th><th>Telefono</th><th>Activo</th><th></th></tr>';
 
-    let btnEliminar = '<button type="button">Eliminar</button>';
+    let btnEliminar = '<button type="button" onClick="eliminar(this.parentNode.parentNode)">Eliminar</button>';
+
+    var index = 1;
 
     data.forEach(item => {
-      table += `<tr><td>${item.id}</td><td>${item.name}</td><td>${item.email}</td><td>${estado(item.activo)}</td><td>${btnEliminar}</td></tr>`;
+
+      if (item.rol != 1 && item.verificado != 0) {
+        table += `<tr><td>${index}</td><td>${item.nombreApellido}</td><td>${item.email}</td><td>${item.telefono}</td><td>${estado(item.activo)}</td><td>${btnEliminar}</td></tr>`;
+        index++;
+      }
     });
     table += '</table>';
     consttableContainer = document.getElementById('table-container');
@@ -292,10 +69,10 @@ async function generateTable(data) {
 // Descripción: Recoge los datos de la tabla Usuarios de la BBDD
 //---------------------------------------------------------------------------------------------------------
 async function getUsers() {
-  var response = await fetch('http://localhost:8080/user/getUserByEmail');
-  var data = await response.json();
+  var response = await fetch('http://localhost:8080/user/getAllUsers');
+  data = await response.json();
 
-  console.log(data);
+  //console.log(data);
 }
 //---------------------------------------------------------------------------------------------------------
 // status:boolean --> estado() --> cuadrado:div
@@ -303,8 +80,8 @@ async function getUsers() {
 //---------------------------------------------------------------------------------------------------------
 function estado(status) {
   let cuadrado = '<div class="estadoCuadrado';
-  
-  if (status=='true') {
+
+  if (status == 'true') {
     console.log(status)
     cuadrado += ' activo"';
   }
@@ -312,7 +89,7 @@ function estado(status) {
     console.log('false')
     cuadrado += ' inactivo"';
   }
-  
+
   cuadrado += '></div>';
   return cuadrado;
 }
@@ -353,7 +130,84 @@ function actualizarTabla() {
   }, 1000);
 }
 //---------------------------------------------------------------------------------------------------------
+// datos:tr --> eliminar()
+// Descripción: Esta función recibe el tr del que fué seleccionado. Mediante eso, recogemos
+// el indice de la fila con el proposito de recoger el email correcto.
+// Una vez lo recogemos, enseñamos un mensaje de alerta. Si se acepta, se elimina el usuario de la BBDD.
+// Luego llamamos a actualizarTabla() para actualizar la tabla
+//---------------------------------------------------------------------------------------------------------
+function eliminar(datos) {
+  let index = datos.rowIndex;
+  console.log("Row Index: " + index)
+
+  let tr = document.getElementById("table-container").getElementsByTagName("tr")
+  let td = tr[index].getElementsByTagName("td");
+  let email = td[2].textContent;
+
+  popUp('Eliminar Usuario', '¿Desea eliminar este usuario?', async () => {
+    console.log(email)
+    
+    /*
+    await fetch('http://localhost:8080/user/deleteByEmail',{
+      method: 'DELETE',
+      body: email
+    }).then(response => console.log(response.status))
+    */
+   await fetch('http://localhost:8080/user/deleteByEmail',{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': 'your-api-key',
+        'Access-Control-Allow-Origin': '*',
+        "email": ""+email
+      }
+   })
+    
+    console.log("eliminado");
+    
+  })
+}
+
+function popUp(title, description, callback, yesBtnLabel = 'Aceptar', noBtnLabel = 'Cancelar') {
+  if (modalWrap !== null) {
+    modalWrap.remove();
+  }
+
+  modalWrap = document.createElement('div');
+  modalWrap.innerHTML = `
+    <div class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">${title}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>${description}</p>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${noBtnLabel}</button>
+            <button type="button" class="btn btn-primary modal-success-btn" data-bs-dismiss="modal">${yesBtnLabel}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modalWrap.querySelector('.modal-success-btn').onclick = callback;
+
+  document.body.append(modalWrap);
+
+  var modal = new bootstrap.Modal(modalWrap.querySelector('.modal'));
+  modal.show();
+}
+//---------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------
 // Al empezar
 //---------------------------------------------------------------------------------------------------------
-generateTable(dataTest);
+async function main() {
+  await getUsers();
+  generateTable(data);
+}
+main()
+
