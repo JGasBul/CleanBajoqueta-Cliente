@@ -13,8 +13,6 @@
     <?php include("../template/cabecera.php"); ?>
 </header>
 <!-- Fin Header -->
-
-<script src="../bd/polPriv.js"></script>
 <!------------------------------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------------------------------>
 <!-- Inicio Body -->
@@ -190,9 +188,9 @@
                             <div class="row align-items-center justify-content-center">
                                 <div class="col-5 align-items-start">
                                     <div class="form-check" id="uniform-customer_privacy">
-                                        <input class= "form-check-input recoverField" type="checkbox" value=false name="customer_privacy"
+                                        <input class= "form-check-input" type="checkbox" value="0" required name="customer_privacy"
                                             autocomplete="off">
-                                        <label class="form-check-label" for="exampleCheck2"><a type="submit" onclick="toPolitica()">Acepto
+                                        <label class="form-check-label" for="exampleCheck2"><a href="../user/politicaPrivacidadPage.php">Acepto
                                                 politica de
                                                 Privacidad</a></label>
                                     </div>
@@ -248,9 +246,5 @@
     <?php include("../template/pie.php"); ?>
 </footer>
 <!-- Fin Footer -->
-
-<script>
-    comprobarCampos();
-</script>
 
 </html>

@@ -31,7 +31,7 @@
           <a class="nav-link" href="../publico/infoadicional.php">Gases contaminantes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../publico/mapa.php">Mapa de contaminación</a>
+          <a class="nav-link" href="#">Mapa de contaminación</a>
         </li>
       </ul>
       <span class="navbar-text">

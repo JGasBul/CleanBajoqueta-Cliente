@@ -24,12 +24,6 @@ if (!empty($_POST["registrar"])) {
     $telefono = $_POST["telefonoregistro"];
     $contrasenia = $_POST["contraseniaregistro"];
     $confirmarcontrasenia = $_POST["confirmarcontraseniaregistro"];
-    if (!isset($_POST["customer_privacy"])) {
-        $customer_privacy = false;
-    } else {
-        $customer_privacy = true;
-    }
-
     //Comprobamos si sus campos estan vacios
     if (
         empty($_POST["nombreregistro"]) and
@@ -38,34 +32,16 @@ if (!empty($_POST["registrar"])) {
         empty($_POST["confirmarcontraseniaregistro"]) and
         empty($_POST["emailregistro"]) and
         empty($_POST["telefonoregistro"]) and
-        ($customer_privacy == false)
-        //$_POST["customer_privacy"] == "on"
+        empty($_POST["customer_privacy"]) and
+        $_POST["customer_privacy"] = "on"
     ) {
-        $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
+        $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono);
 
-        //var_dump($Formdata);
         $temp = new TempData($tempDataFile, json_encode($Formdata));
         $temp->putTempData();
         echo '<div class="alert alert-danger">Hay campos vacíos</div>';
     } else {
         //print("" . $nombre . "" . $apellidos . "" . $email . "" . $contrasenia . "" . $confirmarcontrasenia . "" . $telefono);
-
-        if ($customer_privacy == false) {
-            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
-
-            $temp = new TempData($tempDataFile, json_encode($Formdata));
-            $temp->putTempData();
-            echo '<div class="alert alert-danger">Política de privacidad no aceptada</div>';
-            return;
-        }
-        if ($_POST["contraseniaregistro"] == '') {
-            echo '<div class="alert alert-danger">contraseña vacia</div>';
-            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
-
-            $temp = new TempData($tempDataFile, json_encode($Formdata));
-            $temp->putTempData();
-            return;
-        }
 
         /*Comprobamos si la contraseña es la misma en los campos 'contraseña' y 'confirmar contraseña'.
         Esto es un método de seguridad anti-Bot
@@ -97,8 +73,7 @@ if (!empty($_POST["registrar"])) {
             curl_close($curl);
             //$sql = $conexionbd->query("SELECT * FROM usuario WHERE email = '$email'");
             if ($res) {
-                $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => null, 3 => $telefono, 4 => $customer_privacy);
-                //var_dump($Formdata);
+                $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => null, 3 => $telefono);
 
                 $temp = new TempData($tempDataFile, json_encode($Formdata));
                 $temp->putTempData();
@@ -122,8 +97,6 @@ if (!empty($_POST["registrar"])) {
                     echo '<div class="alert alert-danger">No esta verificado </div>';
                 } else {
 
-
-
                     //Encriptamos datos
                     $cifrado = new CifrarDescifrarAES($contrasenia);
                     $encryptedPassword = $cifrado->encriptar();
@@ -141,15 +114,14 @@ if (!empty($_POST["registrar"])) {
                         )
                     );
                     $headers = [
-                        'accept: application/json',
+                        'accept: applicaction/json',
                         'Content-Type: application/json'
                     ];
                     $fields = [
                         'email' => $email,
                         'contraseña' => $encryptedPassword,
                         'nombreApellido' => $nombreApellidos,
-                        'telefono' => $telefono,
-
+                        'telefono' => $telefono
                     ];
                     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
                     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
@@ -162,61 +134,22 @@ if (!empty($_POST["registrar"])) {
                     //Si se pudo registrar, lo llevamos a la página de Login
                     if (!$err) {
 
-
+                            
                         //Enviar correo verificación--------------------------------------------------------------------
 
 
                         // Recuperar el correo del usuario de la URL (si está disponible)
                         $correoUsuario = $email;
-
+                        
                         //Generar codigo aleatorio
-
+                        
                         $length = 20; //Longitud del codigo
                         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-                        $charactersLength = strlen($characters);
-                        $codigoAleatorio = '';
-                        for ($i = 0; $i < $length; $i++) {
-                            $codigoAleatorio .= $characters[rand(0, $charactersLength - 1)];
-                        }
-
-
-
-                        //HACER UPDATE DEL TOKEN --------------------------------
-
-                        $curl = curl_init();
-                        curl_setopt_array(
-                            $curl,
-                            array(
-                                CURLOPT_URL => "http://localhost:8080/user/updateUserByEmail",
-                                CURLOPT_RETURNTRANSFER => true,
-                                CURLOPT_TIMEOUT => 30,
-                                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                                CURLOPT_CUSTOMREQUEST => "PUT"
-                            )
-                        );
-
-                        // Agregar el email del usuario en el header
-                        $headers = [
-                            'accept: application/json',
-                            'Content-Type: application/json',
-                            'email: ' . $correoUsuario // Asegúrate de que $correoUsuario contenga el email correcto
-                        ];
-
-                        // Body con los cambios a realizar, en este caso, actualizar el token
-                        $fields = [
-                            'token' => $codigoAleatorio, // Asegúrate de que $codigoAleatorio contenga el token correcto
-                            'verificado' => 0
-                        ];
-
-                        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-                        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
-                        $res = curl_exec($curl);
-                        $res = json_decode($res, true); // Decodificar la respuesta
-                        $err = curl_error($curl);
-                        curl_close($curl);
-
-                        // Aquí puedes manejar la respuesta y los errores
-
+                            $charactersLength = strlen($characters);
+                            $codigoAleatorio = '';
+                            for ($i = 0; $i < $length; $i++) {
+                                $codigoAleatorio .= $characters[rand(0, $charactersLength - 1)];
+                            }
 
 
 
@@ -228,16 +161,73 @@ if (!empty($_POST["registrar"])) {
 
                         // Crear el mensaje en formato HTML
                         $mensaje = '
-                                    <html>
-                                    <head>
-                                    <title></title>
-                                    </head>
-                                    <body>
-                                    
-                                    <p>Haz click en el siguiente botón para verificar tu cuenta</p>
-                                    <p><a href="' . $urlRedireccion . '" style="background-color: blue; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;">Verificar Cuenta</a></p>
-                                    </body>
-                                    </html>
+                        <html>
+                        <head>
+                          <title>Recuperación de Contraseña</title>
+                          <meta charset="UTF-8">
+                          <style>
+                            body {
+                              font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                              background-color: #e8f4f8;
+                              color: #333;
+                              text-align: center;
+                              padding: 50px;
+                            }
+                            .boton {
+                              background-color: #004a7c; 
+                              color: #FFFFFF;
+                              padding: 10px 20px;
+                              text-decoration: none;
+                              display: inline-block;
+                              border-radius: 4px;
+                              font-weight: bold;
+                              transition: background-color 0.3s ease;
+                            }
+                            .boton:hover {
+                              background-color: #003354; 
+                            }
+                            .contenido {
+                              background-color: #FFFFFF;
+                              padding: 30px;
+                              border-radius: 8px;
+                              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+                              display: inline-block;
+                              max-width: 600px;
+                              margin: auto;
+                            }
+                            .footer {
+                              font-size: 12px;
+                              color: #666;
+                              margin-top: 20px;
+                            }
+                            .logo {
+                              margin-bottom: 20px;
+                            }
+                        
+                            .ii a[href] {
+                            color: #FFFFFF;
+                        }
+                        .im {
+                            color: #161616;
+                        }
+                          </style>
+                        </head>
+                        <body>
+                          <div class="contenido">
+                            <div class="logo">
+                              
+                              <img src="https://i.ibb.co/dQdYFGZ/Blue-Sky-Logo-Nofondo.png" alt="Company Logo" width="150" />
+                            </div>
+                            <h1>Verificación de tu Cuenta BlueSky</h1>
+                            <p>Para verificar tu cuenta, por favor haz click en el botón de abajo:</p>
+                            <a href="' . $urlRedireccion . '" class="boton">Verificar Cuenta</a>
+                            <div class="footer">
+                              <p>Si no solicitaste este cambio, ignora este mensaje o contáctanos.</p>
+                              <p>&copy; ' . date("Y") . ' BlueSky. Todos los derechos reservados.</p>
+                            </div>
+                          </div>
+                        </body>
+                        </html>
                                     ';
 
                         // Cabeceras para enviar el correo en formato HTML
@@ -252,10 +242,10 @@ if (!empty($_POST["registrar"])) {
                             echo "Correo enviado a: " . htmlspecialchars($correoUsuario);
                         } else {
                             echo "Error al enviar el correo, comprueba si has introducido el correo al iniciar sesión";
-
+                            
                         }
 
-
+                        
 
 
 
@@ -277,7 +267,7 @@ if (!empty($_POST["registrar"])) {
             }
         } else {
             //$Formdata = ("Nombre: ".$nombre.", Apellidos: ".$apellidos.", Email: ".$email.", Telefono: ".$telefono);
-            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono, 4 => $customer_privacy);
+            $Formdata = array(0 => $nombre, 1 => $apellidos, 2 => $email, 3 => $telefono);
 
             $temp = new TempData($tempDataFile, json_encode($Formdata));
             $temp->putTempData();
@@ -292,7 +282,6 @@ if (!empty($_POST["registrar"])) {
 //---------------------------------------------------------------------------------------------------------------------
 /*
 if ($pageWasRefreshed) {
-
     $temp = new TempData($tempDataFile, null);
     $Formdata = json_decode($temp->getTempData(), true);
 
@@ -311,7 +300,6 @@ if ($pageWasRefreshed) {
                 formFields[3].value = "' . $Formdata[3] . '";
             </script>';
     }
-
 }
 */
 ?>

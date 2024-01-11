@@ -40,16 +40,15 @@ if (!empty($_POST["ingresar"])) {
         curl_close($curl);
         //Si existe...
         if (!empty($res)) {
-            $datos = $res[0];
+            $datos=$res[0];
             if (in_array($usuario, $res[0])) {
                 $contraseniaCifrada = $res[0]["contraseña"];
-                $verificado = $res[0]["verificado"];
                 //Desciframos la contraseña
                 $cifrado = new CifrarDescifrarAES($contraseniaCifrada);
                 $contraseniaDesCifrada = $cifrado->desencriptar();
 
                 //Si ambas contraseñas son iguales, consultamos los datos del usuario de la BBDD
-                if ($contraseniaLogin == $contraseniaDesCifrada & $verificado == 1) {
+                if ($contraseniaLogin == $contraseniaDesCifrada) {
                     $_SESSION['usuario'] = $datos["nombreApellido"];
                     $_SESSION['rol'] = $datos["rol"];
                     //Si existe el usuario, se ridirige a su pagina
@@ -61,11 +60,7 @@ if (!empty($_POST["ingresar"])) {
                     }
                     
                 } else {
-                    if ($verificado == 0) {
-                        echo '<div class="alert alert-danger">El usuario no ha sido verificado, porfavor comprueba tu correo</div>';
-                    } else {
-                        echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
-                    }
+                    echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
                 }
             } else {
                 echo '<div class="alert alert-danger">Hubo un problema con la contraseña o el usuario no existe</div>';
