@@ -1,5 +1,13 @@
 @charset "UTF-8";
+
 #map {
     width: 200px;
     height: 500px;
+}
+
+.legend {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    font-weight: bold;
 }

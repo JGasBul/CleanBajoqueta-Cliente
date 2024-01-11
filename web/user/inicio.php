@@ -256,7 +256,7 @@ checkRol($_SESSION['rol']);
 
 <script>
     //Inicializar mapa
-    mapa('map');
+    mapa('map','normal');
 </script>
 
 
