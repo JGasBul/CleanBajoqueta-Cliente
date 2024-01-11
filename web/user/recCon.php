@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       padding: 50px;
     }
     .boton {
-      background-color: #004a7c; /* A darker shade matching the logo */
+        background-color: #9ed3ff; /* A darker shade matching the logo */
       color: #FFFFFF;
       padding: 10px 20px;
       text-decoration: none;
