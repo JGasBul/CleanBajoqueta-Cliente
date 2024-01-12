@@ -8,7 +8,7 @@
 // Variable Global
 var map = null;
 var miLocalizacion = null;
-
+var estacionesCargadas = false;
 var GlobalListaPuntos = null;
 
 //----------------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ function mapa(nombre, tipo) {
         attribution:
             '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
     }).addTo(map);
-
+    buscarEstaciones(38.994537, -0.168094, 80);
     console.log("mapa creado");
     var locateController = L.control.locate().addTo(map);
     locateController.start();
@@ -34,7 +34,7 @@ function mapa(nombre, tipo) {
 
     console.log("mapa Locate creado");
 
-    // Ejemplo de uso: Buscar estaciones en un radio de 80km alrededor de Gandía
+    
 
 
 
@@ -282,7 +282,7 @@ function getheatLayers(mediciones) {
 
     HeatLayerOzono = L.layerGroup(listaHeatOzonoLayers);
     HeatLayerCO = L.layerGroup(listaHeatCOLayers);
-
+    
     return [HeatLayerOzono, HeatLayerCO];
 }
 //----------------------------------------------------------------------------------------------------------
@@ -396,7 +396,7 @@ function getListaContaminantes(listaPuntos) {
 // Descripción: devuelve una lista de Contaminantes de la BBDD
 //----------------------------------------------------------------------------------------------------------
 function getTipo(medicion) {
-    buscarEstaciones(38.994537, -0.168094, 80);
+    
     if (medicion.idContaminante == 4) { return "ozono" }
     else if (medicion.idContaminante == 5) { return "co" }
     else { return "Error" }
@@ -486,6 +486,7 @@ function getCountyColor(popEst) {
 
 // Función para buscar estaciones y agregarlas al mapa
 function buscarEstaciones(local, radioKm) {
+    if(estacionesCargadas!=true){
     console.log("BUSCANDO ESTACIONES");
     var lat = local[1]; // Latitud
     var lng = local[0]; // Longitud
@@ -511,8 +512,8 @@ function buscarEstaciones(local, radioKm) {
 
     
     $.getJSON(url, function (response) {
-        if (response.status === "ok") {
-            console.log(response)
+        if (response.status === "ok" & estacionesCargadas == false) {
+            //console.log(response)
             response.data.forEach(function (estacion) {
                 var fechaHoraISO = estacion.station.time; // Fecha y hora en formato ISO 8601
                 var opciones = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -521,12 +522,12 @@ function buscarEstaciones(local, radioKm) {
                 var marcador = L.marker([estacion.lat, estacion.lon]).addTo(map);
                 marcador.bindPopup("Estación: " + estacion.station.name + "<br>Nivel AQI: " + estacion.aqi + "<br>Instante de la lectura: " + fechaHoraLocal);
                 console.log("Estaciones añadidas");
+                estacionesCargadas=true;
             });
         } else {
             console.log("No se pudo obtener la información de la API");
         }
+        estacionesCargadas=true;
     });
     
-}
-
-
+}}

@@ -4,37 +4,6 @@ include("../clases/checkRol.php");
 session_start();
 checkRol($_SESSION['rol']);
 
-//Obtain
-$curl = curl_init();
-curl_setopt_array(
-    $curl,
-    array(
-        CURLOPT_URL => "http://localhost:8080/mediciones/ultima_medicion",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET"
-    )
-);
-$headers = [
-    'accept: applicaction/json',
-    'email: ' . "testMediciones@email.com" . ''
-];
-curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-$res = curl_exec($curl);
-$res = json_decode($res, true); // because of true, it's in an array
-$err = curl_error($curl);
-curl_close($curl);
-
-if ($err) {
-    echo '<div class="alert alert-danger">Error: ' . $err . '</div>';
-} else {
-    //echo '<div class="alert alert-success"><pre>';
-    //print_r($res);
-    //echo '</pre></div>';
-}
-$_SESSION['email'] = $res[0]['email'];
-$_SESSION['instante'] = $res[0]['instante'];
 
 
 

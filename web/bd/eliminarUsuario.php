@@ -25,6 +25,10 @@ if (isset($_COOKIE["eliminar"])) {
   $res = json_decode($res, true); //because of true, it's in an array
   $err = curl_error($curl);
   curl_close($curl);
+
+  $_COOKIE["eliminar"]=null;
+
+  header("Refresh:0",true); //Resetea la página para actualizar
 }
 ?>
 
@@ -57,7 +61,6 @@ if (isset($_COOKIE["eliminar"])) {
       createCookie("eliminar", email, 0.000104167) //("nametag","valor","9 segundos en escala de dias")
 
       console.log("eliminado");
-      actualizarTabla();
     })
   }
 //---------------------------------------------------------------------------------------------------------

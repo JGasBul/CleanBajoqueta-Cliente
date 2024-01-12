@@ -176,7 +176,7 @@ async function obtenerUltima(email) {
           body: JSON.stringify({ email: email })
       });
 
-      if (response.ok && response.headers.get("Content-Type").includes("application/json")) {
+      if (response.ok) {
           const data = await response.json();
           // Ahora también consideramos una respuesta válida si `instante` es `null`.
           if (data && (data.instante || data.instante === null)) {
