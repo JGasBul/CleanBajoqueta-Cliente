@@ -33,37 +33,34 @@ var modalWrap = null;             // Contenedor del PopUp de Eliminar Usuario
 // data --> generateTable() --> table
 //---------------------------------------------------------------------------------------------------------
 async function generateTable(data) {
-  console.log("generateTable()")
+  console.log("generateTable()");
   console.log(data);
-  try {
 
-    /*
-    const response = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await response.json();
-    */
+  let table = '<table>';
+  table += '<tr><th>Nº</th><th>Perfil</th><th>Email</th><th>Telefono</th><th>Activo</th><th>Ult.Medición</th><th></th></tr>';
 
-    let table = '<table>';
-    table += '<tr><th>Nº</th><th>Perfil</th><th>Email</th><th>Telefono</th><th>Activo</th><th>Ult.Medición</th><th></th></tr>';
+  // Mover btnEliminar al ámbito correcto
+  let btnEliminar = '<button type="button" onClick="eliminar(this.parentNode.parentNode)">Eliminar</button>';
 
-    let btnEliminar = '<button type="button" onClick="eliminar(this.parentNode.parentNode)">Eliminar</button>';
-
-    var index = 1;
-
-    data.forEach(item => {
-
+  for (let i = 0; i < data.length; i++) {
+      let item = data[i];
       if (item.rol != 1 && item.verificado != 0) {
-        table += `<tr><td>${index}</td><td>${item.nombreApellido}</td><td>${item.email}</td><td>${item.telefono}</td><td>${estado(item.activo)}</td><td>${item.ultimoNodo}</td><td>${btnEliminar}</td></tr>`;
-        index++;
+          let ultimaMedicionData = await obtenerUltima(item.email);
+          let instanteUltimaMedicion = ultimaMedicionData ? ultimaMedicionData.instante : "No disponible";
+
+          table += `<tr><td>${i + 1}</td><td>${item.nombreApellido}</td><td>${item.email}</td><td>${item.telefono}</td><td>${estado(item.activo)}</td><td>${instanteUltimaMedicion}</td><td>${btnEliminar}</td></tr>`;
       }
-    });
-    table += '</table>';
-    consttableContainer = document.getElementById('table-container');
-    consttableContainer.innerHTML = table;
-  } catch (error) {
-    console.error(error);
   }
+
+  table += '</table>';
+  consttableContainer.innerHTML = table;
+
+  // Llama a actualizarTabla para aplicar funcionalidad de búsqueda
   actualizarTabla();
 }
+
+
+
 //---------------------------------------------------------------------------------------------------------
 // getUsers() --> data:JSON
 // Descripción: Recoge los datos de la tabla Usuarios de la BBDD
@@ -178,13 +175,20 @@ async function obtenerUltima(email) {
           },
           body: JSON.stringify({ email: email })
       });
-      const data = await response.json();
-      if (data.error) {
-          console.error('Error:', data.error);
-          return null;
+
+      if (response.ok && response.headers.get("Content-Type").includes("application/json")) {
+          const data = await response.json();
+          // Ahora también consideramos una respuesta válida si `instante` es `null`.
+          if (data && (data.instante || data.instante === null)) {
+              console.log("Datos obtenidos para el email:", email, data);
+              return data;
+          } else {
+              console.warn('Respuesta inválida o incompleta para el email:', email);
+              return null;
+          }
       } else {
-          console.log("Datos obtenidos para el email:", email, data);
-          return data;
+          console.error('La respuesta no es JSON:', await response.text());
+          return null;
       }
   } catch (error) {
       console.error('Error al realizar la solicitud:', error);
@@ -195,19 +199,26 @@ async function obtenerUltima(email) {
 
 
 
+
+
+
+
 //---------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------
 // Al empezar
 //---------------------------------------------------------------------------------------------------------
 async function main() {
- 
   await getUsers();
-  
-  
-
-  obtenerUltima("testMediciones@email.com")
-
-  generateTable(data);
+  if (data) {
+      await generateTable(data);
+  } else {
+      console.error('No hay datos para generar la tabla.');
+  }
 }
-main()
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  consttableContainer = document.getElementById('table-container');
+  main();
+});
+
 

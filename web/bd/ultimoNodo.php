@@ -10,7 +10,7 @@ $curl = curl_init();
 curl_setopt_array($curl, array(
     CURLOPT_URL => "http://localhost:8080/mediciones/ultima_medicion",
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 30,
+    CURLOPT_TIMEOUT => 1,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => "GET"
 ));
@@ -27,8 +27,14 @@ if ($err) {
     echo json_encode(['error' => $err]);
 } else {
     $res = json_decode($res, true); // Decodificar como array
-    $_SESSION['email'] = $res[0]['email'];
-    $_SESSION['instante'] = $res[0]['instante'];
-    echo json_encode(['email' => $_SESSION['email'], 'instante' => $_SESSION['instante']]);
+    if (!is_array($res) || !isset($res[0])) {
+        // Devolver un JSON con valores nulos si no hay mediciones o si el array está vacío
+        echo json_encode(['email' => $email, 'instante' => null]);
+    } else {
+        // Asegurarse de que el índice y el campo 'instante' estén establecidos
+        $_SESSION['email'] = $res[0]['email'] ?? $email;
+        $_SESSION['instante'] = $res[0]['instante'] ?? null;
+        echo json_encode(['email' => $_SESSION['email'], 'instante' => $_SESSION['instante']]);
+    }
 }
 ?>
